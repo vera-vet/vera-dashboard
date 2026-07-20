@@ -27,7 +27,7 @@ export function Sidebar() {
               href={href}
               className={cn(
                 "flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium transition-colors",
-                active ? "bg-vera-emerald/20 text-primary-foreground" : "text-primary-foreground/70 hover:bg-white/5",
+                active ? "bg-vera-emerald/20 text-primary-foreground" : "text-primary-foreground/70 hover:bg-primary-foreground/5",
               )}
             >
               <Icon size={18} strokeWidth={active ? 2.3 : 1.8} />
@@ -37,7 +37,7 @@ export function Sidebar() {
         })}
       </nav>
 
-      <div className="flex items-center justify-between border-t border-white/10 px-6 py-4">
+      <div className="flex items-center justify-between border-t border-primary-foreground/10 px-6 py-4">
         <span className="text-xs text-primary-foreground/60">Vet. San Rafael</span>
         <ThemeToggle />
       </div>

@@ -11,7 +11,7 @@ export function ThemeToggle() {
   useEffect(() => setMounted(true), []);
 
   if (!mounted) {
-    return <div className="h-9 w-9" aria-hidden />;
+    return <div className="h-11 w-11" aria-hidden />;
   }
 
   const isDark = theme === "dark";
@@ -21,7 +21,7 @@ export function ThemeToggle() {
       type="button"
       onClick={() => setTheme(isDark ? "light" : "dark")}
       aria-label={isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
-      className="grid h-9 w-9 place-items-center rounded-full border border-border bg-card text-foreground transition-transform hover:scale-105"
+      className="grid h-11 w-11 place-items-center rounded-full border border-border bg-card text-foreground transition-transform hover:scale-105"
     >
       {isDark ? <Sun size={16} /> : <Moon size={16} />}
     </button>

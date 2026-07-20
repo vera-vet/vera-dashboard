@@ -1,0 +1,144 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-inter);
+
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--card);
+  --color-popover-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-vera-forest: var(--vera-forest);
+  --color-vera-forest-deep: var(--vera-forest-deep);
+  --color-vera-emerald: var(--vera-emerald);
+  --color-vera-honey: var(--vera-honey);
+  --color-vera-honey-soft: var(--vera-honey-soft);
+  --color-vera-coral: var(--vera-coral);
+  --color-vera-coral-soft: var(--vera-coral-soft);
+  --color-vera-slate-info: var(--vera-slate-info);
+  --color-vera-ink: var(--vera-ink);
+  --color-vera-ink-soft: var(--vera-ink-soft);
+  --color-vera-sage: var(--vera-sage);
+  --color-whatsapp: var(--whatsapp);
+}
+
+:root {
+  --radius: 20px;
+
+  --background: #f4f1e8;
+  --foreground: #2a2a26;
+  --card: #ffffff;
+  --card-foreground: #2a2a26;
+
+  --primary: #1e3a2f;
+  --primary-foreground: #f4f1e8;
+  --secondary: #e4eae0;
+  --secondary-foreground: #1e3a2f;
+  --muted: #e4eae0;
+  --muted-foreground: #6b6b63;
+  --accent: #eef1e6;
+  --accent-foreground: #1e3a2f;
+  --destructive: #d8654f;
+  --destructive-foreground: #ffffff;
+  --border: #e2ddc9;
+  --input: #e2ddc9;
+  --ring: #3e9b6b;
+
+  --vera-forest: #1e3a2f;
+  --vera-forest-deep: #14261d;
+  --vera-emerald: #3e9b6b;
+  --vera-honey: #e0a458;
+  --vera-honey-soft: #f6e3c7;
+  --vera-coral: #d8654f;
+  --vera-coral-soft: #f5dcd5;
+  --vera-slate-info: #5a7a8c;
+  --vera-ink: #2a2a26;
+  --vera-ink-soft: #6b6b63;
+  --vera-sage: #e4eae0;
+  --whatsapp: #25d366;
+
+  --shadow-card: 0 1px 2px rgba(30, 58, 47, 0.06);
+  --shadow-elevated: 0 8px 30px -12px rgba(30, 58, 47, 0.18);
+}
+
+.dark {
+  --background: #14261d;
+  --foreground: #f4f1e8;
+  --card: #1c3227;
+  --card-foreground: #f4f1e8;
+
+  --primary: #3e9b6b;
+  --primary-foreground: #0e1a14;
+  --secondary: #22392e;
+  --secondary-foreground: #f4f1e8;
+  --muted: #22392e;
+  --muted-foreground: #a9b5ac;
+  --accent: #22392e;
+  --accent-foreground: #f4f1e8;
+  --destructive: #d8654f;
+  --destructive-foreground: #14261d;
+  --border: #2a4436;
+  --input: #2a4436;
+  --ring: #3e9b6b;
+
+  --vera-forest: #dfe9e2;
+  --vera-forest-deep: #14261d;
+  --vera-emerald: #4db683;
+  --vera-honey: #e0a458;
+  --vera-honey-soft: #3a2f1e;
+  --vera-coral: #e17a63;
+  --vera-coral-soft: #3a2420;
+  --vera-slate-info: #7fa0b3;
+  --vera-sage: #22392e;
+  --vera-ink: #f4f1e8;
+  --vera-ink-soft: #a9b5ac;
+  --whatsapp: #25d366;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.24);
+  --shadow-elevated: 0 8px 30px -12px rgba(0, 0, 0, 0.5);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html,
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+  .bg-card {
+    box-shadow: var(--shadow-card);
+  }
+}

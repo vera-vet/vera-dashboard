@@ -4,7 +4,7 @@ import { ChevronLeft, ExternalLink, MessageCircle } from "lucide-react";
 import { getPaciente, getDueno, getServiciosPorPaciente } from "@/lib/data/pacientes";
 import { getVisitasPorPaciente } from "@/lib/data/visitas";
 import { VaccineTimeline } from "@/components/shared/vaccine-timeline";
-import { edadTexto, formatFechaCorta } from "@/lib/date";
+import { edadTexto, formatFechaCorta, hoyISO } from "@/lib/date";
 
 const ESPECIE_LABEL = { perro: "Perro", gato: "Gato", otro: "Otro" } as const;
 
@@ -15,7 +15,7 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
 
   const dueno = await getDueno(paciente.duenoId);
   const servicios = await getServiciosPorPaciente(paciente.id);
-  const proximas = (await getVisitasPorPaciente(paciente.id)).filter((v) => v.fecha >= new Date().toISOString().slice(0, 10));
+  const proximas = (await getVisitasPorPaciente(paciente.id)).filter((v) => v.fecha >= hoyISO());
 
   return (
     <div>

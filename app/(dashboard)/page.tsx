@@ -13,11 +13,14 @@ export default async function InicioPage() {
   const conv = conversaciones[0];
 
   const visitasConDatos = await Promise.all(
-    visitasHoy.map(async (v) => ({
-      visita: v,
-      paciente: await getPaciente(v.pacienteId),
-      dueno: await getDueno((await getPaciente(v.pacienteId))?.duenoId ?? ""),
-    })),
+    visitasHoy.map(async (v) => {
+      const paciente = await getPaciente(v.pacienteId);
+      return {
+        visita: v,
+        paciente,
+        dueno: await getDueno(paciente?.duenoId ?? ""),
+      };
+    }),
   );
 
   const sinConfirmar = visitasHoy.filter((v) => !v.confirmada).length;

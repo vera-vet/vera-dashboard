@@ -30,11 +30,14 @@ export default async function AgendaPage() {
     dias.map(async (fecha) => ({
       fecha,
       citas: await Promise.all(
-        (porFecha.get(fecha) ?? []).map(async (v) => ({
-          visita: v,
-          paciente: await getPaciente(v.pacienteId),
-          dueno: await getDueno((await getPaciente(v.pacienteId))?.duenoId ?? ""),
-        })),
+        (porFecha.get(fecha) ?? []).map(async (v) => {
+          const paciente = await getPaciente(v.pacienteId);
+          return {
+            visita: v,
+            paciente,
+            dueno: await getDueno(paciente?.duenoId ?? ""),
+          };
+        }),
       ),
     })),
   );

@@ -1,9 +1,20 @@
+"use client";
+
 import Link from "next/link";
+import type { FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export default function LoginPage() {
+  const router = useRouter();
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    router.push("/");
+  }
+
   return (
     <main className="grid min-h-screen place-items-center bg-background px-4">
       <div className="w-full max-w-sm rounded-3xl border border-border bg-card p-8 shadow-[var(--shadow-elevated)]">
@@ -15,7 +26,7 @@ export default function LoginPage() {
           <p className="mt-1 text-sm text-muted-foreground">Ingresa para ver tu clínica</p>
         </div>
 
-        <form action="/" className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
             <Label htmlFor="email">Correo</Label>
             <Input id="email" name="email" type="email" placeholder="tu@clinica.com" required />

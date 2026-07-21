@@ -34,7 +34,11 @@ export function RegistrarClient({ pacientes }: { pacientes: Paciente[] }) {
         {pacientes.map((p) => (
           <button
             key={p.id}
-            onClick={() => setSelectedId(p.id)}
+            onClick={() => {
+              setSelectedId(p.id);
+              setTipo(null);
+              setConfirmacion(null);
+            }}
             className={
               p.id === selectedId
                 ? "flex items-center gap-2 rounded-full bg-vera-forest px-3 py-1.5 text-xs font-semibold text-primary-foreground"
@@ -70,7 +74,7 @@ export function RegistrarClient({ pacientes }: { pacientes: Paciente[] }) {
               <>
                 <div className="mb-2.5 flex items-center justify-between">
                   <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{tipoObj?.label}: elige el producto</h3>
-                  <button onClick={() => setTipo(null)} className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground">
+                  <button onClick={() => setTipo(null)} className="inline-flex items-center gap-1 min-h-11 px-3 text-xs font-medium text-muted-foreground">
                     <X size={13} /> Cancelar
                   </button>
                 </div>

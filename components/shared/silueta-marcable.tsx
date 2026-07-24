@@ -14,51 +14,78 @@ interface Props {
 }
 
 function Diagrama({ tipo }: { tipo: DiagramaTipo }) {
-  const stroke = "var(--vera-forest)";
-  const fill = "var(--vera-sage)";
+  // Silueta sólida (un solo color de relleno, sin contorno): un color plano
+  // se lee como "forma de animal" de inmediato; el contorno pálido de la
+  // versión anterior se veía como un blob irreconocible.
+  const fill = "var(--vera-forest)";
+  const resalte = "var(--card)"; // punto de brillo del ojo, contrasta contra el relleno sólido
+
   if (tipo === "ojo") {
     return (
       <svg viewBox="0 0 100 100" className="h-full w-full">
-        <path d="M5 50 Q50 15 95 50 Q50 85 5 50 Z" fill={fill} stroke={stroke} strokeWidth={2} />
-        <circle cx="50" cy="50" r="16" fill="var(--vera-forest-deep)" stroke={stroke} strokeWidth={2} />
-        <circle cx="50" cy="50" r="7" fill="black" />
+        <path d="M5 50 Q50 15 95 50 Q50 85 5 50 Z" fill="var(--vera-sage)" stroke={fill} strokeWidth={2} />
+        <circle cx="50" cy="50" r="16" fill="var(--vera-forest-deep)" stroke={fill} strokeWidth={2} />
+        <circle cx="50" cy="50" r="7" fill="var(--vera-ink)" />
       </svg>
     );
   }
+
   if (tipo === "gato") {
     return (
       <svg viewBox="0 0 100 100" className="h-full w-full">
-        <ellipse cx="55" cy="60" rx="30" ry="15" fill={fill} stroke={stroke} strokeWidth={2} />
-        <circle cx="22" cy="46" r="11" fill={fill} stroke={stroke} strokeWidth={2} />
-        <path d="M14 38 L18 26 L24 37 Z" fill={fill} stroke={stroke} strokeWidth={2} />
-        <path d="M22 36 L28 24 L32 36 Z" fill={fill} stroke={stroke} strokeWidth={2} />
-        <path d="M83 55 Q95 40 88 25" fill="none" stroke={stroke} strokeWidth={3} strokeLinecap="round" />
-        <rect x="35" y="72" width="6" height="16" rx="3" fill={fill} stroke={stroke} strokeWidth={2} />
-        <rect x="70" y="72" width="6" height="16" rx="3" fill={fill} stroke={stroke} strokeWidth={2} />
+        {/* cola, fina y curvada hacia arriba */}
+        <path d="M82 58 Q100 50 96 22 Q94 15 89 19" fill="none" stroke={fill} strokeWidth={6} strokeLinecap="round" />
+        {/* orejas puntiagudas */}
+        <path d="M11 31 L5 13 L21 27 Z" fill={fill} />
+        <path d="M25 27 L28 9 L37 29 Z" fill={fill} />
+        {/* cuerpo y cabeza (se solapan generosamente, sin huecos) */}
+        <ellipse cx="57" cy="62" rx="29" ry="15" fill={fill} />
+        <circle cx="23" cy="40" r="16" fill={fill} />
+        {/* patas */}
+        <rect x="33" y="69" width="8" height="20" rx="4" fill={fill} />
+        <rect x="47" y="71" width="8" height="22" rx="4" fill={fill} />
+        <rect x="65" y="71" width="8" height="22" rx="4" fill={fill} />
+        <rect x="79" y="69" width="8" height="20" rx="4" fill={fill} />
+        <circle cx="18" cy="38" r="2.2" fill={resalte} />
       </svg>
     );
   }
+
   if (tipo === "otro") {
     return (
       <svg viewBox="0 0 100 100" className="h-full w-full">
-        <ellipse cx="55" cy="58" rx="28" ry="16" fill={fill} stroke={stroke} strokeWidth={2} />
-        <circle cx="24" cy="48" r="12" fill={fill} stroke={stroke} strokeWidth={2} />
-        <rect x="38" y="74" width="6" height="14" rx="3" fill={fill} stroke={stroke} strokeWidth={2} />
-        <rect x="70" y="74" width="6" height="14" rx="3" fill={fill} stroke={stroke} strokeWidth={2} />
+        {/* silueta genérica de mamífero pequeño: cuerpo redondeado, orejas cortas */}
+        <path d="M80 60 Q93 57 91 44" fill="none" stroke={fill} strokeWidth={6} strokeLinecap="round" />
+        <circle cx="16" cy="31" r="7" fill={fill} />
+        <circle cx="31" cy="29" r="7" fill={fill} />
+        <ellipse cx="55" cy="63" rx="27" ry="16" fill={fill} />
+        <circle cx="26" cy="46" r="15" fill={fill} />
+        <rect x="35" y="71" width="8" height="18" rx="4" fill={fill} />
+        <rect x="49" y="73" width="8" height="18" rx="4" fill={fill} />
+        <rect x="66" y="73" width="8" height="18" rx="4" fill={fill} />
+        <rect x="77" y="71" width="8" height="18" rx="4" fill={fill} />
+        <circle cx="22" cy="44" r="2.2" fill={resalte} />
       </svg>
     );
   }
-  // perro (default)
+
+  // perro (default): hocico alargado, oreja caída, cola curva, cuerpo sobre 4 patas
   return (
     <svg viewBox="0 0 100 100" className="h-full w-full">
-      <ellipse cx="58" cy="58" rx="32" ry="16" fill={fill} stroke={stroke} strokeWidth={2} />
-      <circle cx="20" cy="46" r="13" fill={fill} stroke={stroke} strokeWidth={2} />
-      <path d="M10 38 Q4 24 16 30 Z" fill={fill} stroke={stroke} strokeWidth={2} />
-      <path d="M84 58 Q98 50 92 38" fill="none" stroke={stroke} strokeWidth={3} strokeLinecap="round" />
-      <rect x="36" y="72" width="7" height="16" rx="3" fill={fill} stroke={stroke} strokeWidth={2} />
-      <rect x="52" y="72" width="7" height="16" rx="3" fill={fill} stroke={stroke} strokeWidth={2} />
-      <rect x="70" y="72" width="7" height="16" rx="3" fill={fill} stroke={stroke} strokeWidth={2} />
-      <rect x="80" y="72" width="7" height="16" rx="3" fill={fill} stroke={stroke} strokeWidth={2} />
+      {/* cola */}
+      <path d="M80 55 Q98 45 92 24" fill="none" stroke={fill} strokeWidth={7} strokeLinecap="round" />
+      {/* oreja caída */}
+      <ellipse cx="17" cy="37" rx="8" ry="12" fill={fill} transform="rotate(-18 17 37)" />
+      {/* cuerpo, cabeza y hocico (se solapan generosamente) */}
+      <ellipse cx="55" cy="60" rx="32" ry="18" fill={fill} />
+      <circle cx="24" cy="46" r="16" fill={fill} />
+      <ellipse cx="8" cy="50" rx="9" ry="7" fill={fill} />
+      {/* patas */}
+      <rect x="30" y="66" width="9" height="22" rx="4.5" fill={fill} />
+      <rect x="46" y="68" width="9" height="24" rx="4.5" fill={fill} />
+      <rect x="66" y="68" width="9" height="24" rx="4.5" fill={fill} />
+      <rect x="80" y="66" width="9" height="22" rx="4.5" fill={fill} />
+      <circle cx="20" cy="42" r="2.2" fill={resalte} />
     </svg>
   );
 }

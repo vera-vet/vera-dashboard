@@ -7,7 +7,8 @@ export type ServicioTipo =
   | "consulta"
   | "cirugia"
   | "examen"
-  | "control";
+  | "control"
+  | "consulta_oftalmologica";
 
 export type EstadoEsquema = "al_dia" | "falta" | "vencido";
 
@@ -31,6 +32,8 @@ export interface Paciente {
   vacunasTotal: number;
   estadoEsquema: EstadoEsquema;
   faltaTexto?: string;
+  alergias: string[];
+  notasComportamiento: string[];
 }
 
 export interface ServicioVisita {
@@ -107,4 +110,28 @@ export interface SalaEsperaItem {
   pacienteId: string;
   hora: string;
   motivo: string;
+}
+
+export type DiagramaTipo = "perro" | "gato" | "otro" | "ojo";
+
+export interface Marca {
+  id: string;
+  x: number; // 0-100, porcentaje del ancho del diagrama
+  y: number; // 0-100, porcentaje del alto del diagrama
+  nota: string;
+}
+
+export interface Reporte {
+  id: string;
+  servicioVisitaId: string;
+  diagramaTipo: DiagramaTipo;
+  marcas: Marca[];
+  fotos: string[];
+}
+
+export interface Especialidad {
+  id: string;
+  nombre: string;
+  tiposServicioAsociados: ServicioTipo[];
+  diagramaId: DiagramaTipo;
 }

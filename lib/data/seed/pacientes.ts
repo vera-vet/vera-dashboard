@@ -14,6 +14,8 @@ export const PACIENTES: Paciente[] = [
     vacunasCompletas: 5,
     vacunasTotal: 5,
     estadoEsquema: "al_dia",
+    alergias: ["amoxicilina"],
+    notasComportamiento: ["Se pone nervioso con otros perros", "Babea mucho al llegar"],
   },
   {
     id: "p2",
@@ -29,6 +31,8 @@ export const PACIENTES: Paciente[] = [
     vacunasTotal: 3,
     estadoEsquema: "falta",
     faltaTexto: "Falta 2ª dosis",
+    alergias: [],
+    notasComportamiento: ["Muy tranquila, se deja revisar sin problema"],
   },
   {
     id: "p3",
@@ -44,6 +48,8 @@ export const PACIENTES: Paciente[] = [
     vacunasTotal: 5,
     estadoEsquema: "vencido",
     faltaTexto: "Refuerzo vencido",
+    alergias: [],
+    notasComportamiento: [],
   },
   {
     id: "p4",
@@ -59,6 +65,8 @@ export const PACIENTES: Paciente[] = [
     vacunasTotal: 5,
     estadoEsquema: "al_dia",
     faltaTexto: "Control de sutura pendiente",
+    alergias: [],
+    notasComportamiento: [],
   },
   {
     id: "p5",
@@ -73,6 +81,8 @@ export const PACIENTES: Paciente[] = [
     vacunasCompletas: 4,
     vacunasTotal: 4,
     estadoEsquema: "al_dia",
+    alergias: [],
+    notasComportamiento: [],
   },
   {
     id: "p6",
@@ -88,5 +98,7 @@ export const PACIENTES: Paciente[] = [
     vacunasTotal: 4,
     estadoEsquema: "falta",
     faltaTexto: "Falta 3ª dosis",
+    alergias: [],
+    notasComportamiento: [],
   },
 ];

@@ -5,6 +5,7 @@ import { getPaciente, getDueno, getServiciosPorPaciente } from "@/lib/data/pacie
 import { getVisitasPorPaciente } from "@/lib/data/visitas";
 import { VaccineTimeline } from "@/components/shared/vaccine-timeline";
 import { edadTexto, formatFechaCorta, hoyISO } from "@/lib/date";
+import { DatosClinicos } from "./datos-clinicos";
 
 const ESPECIE_LABEL = { perro: "Perro", gato: "Gato", otro: "Otro" } as const;
 
@@ -80,6 +81,8 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
               </ul>
             )}
           </div>
+
+          <DatosClinicos alergiasIniciales={paciente.alergias} notasIniciales={paciente.notasComportamiento} />
 
           <Link
             href={`/carnet/${paciente.id}`}

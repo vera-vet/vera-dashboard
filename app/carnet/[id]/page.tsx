@@ -10,6 +10,8 @@ export default async function CarnetPage({ params }: { params: Promise<{ id: str
 
   const dueno = await getDueno(paciente.duenoId);
   const vacunas = (await getServiciosPorPaciente(paciente.id)).filter((s) => s.tipo === "vacuna");
+  const todosServicios = await getServiciosPorPaciente(paciente.id);
+  const ultimaVisita = todosServicios[todosServicios.length - 1];
 
   return (
     <div className="min-h-screen bg-vera-sage py-10">
@@ -19,6 +21,12 @@ export default async function CarnetPage({ params }: { params: Promise<{ id: str
           <h1 className="mt-4 font-display text-2xl font-bold">{paciente.nombre}</h1>
           <p className="text-sm text-muted-foreground">{paciente.raza} · {edadTexto(paciente.fechaNacimiento)}</p>
         </div>
+
+        {ultimaVisita && (
+          <p className="mt-3 text-center text-xs text-muted-foreground">
+            Última visita: {ultimaVisita.producto} — {formatFechaCorta(ultimaVisita.fecha)}
+          </p>
+        )}
 
         <section className="mt-8">
           <h2 className="font-display text-lg font-semibold">Vacunas</h2>

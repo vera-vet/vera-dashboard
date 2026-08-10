@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { useState } from "react";
 import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -9,10 +9,28 @@ import { Label } from "@/components/ui/label";
 
 export default function LoginPage() {
   const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    router.push("/");
+    setError(null);
+
+    const formData = new FormData(event.currentTarget);
+    const response = await fetch("/api/session/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: formData.get("email"),
+        password: formData.get("password"),
+      }),
+    });
+
+    if (response.ok) {
+      router.push("/");
+      router.refresh();
+    } else {
+      setError("Correo o contraseña incorrectos.");
+    }
   }
 
   return (
@@ -35,16 +53,11 @@ export default function LoginPage() {
             <Label htmlFor="password">Contraseña</Label>
             <Input id="password" name="password" type="password" placeholder="••••••••" required />
           </div>
+          {error && <p className="text-sm text-destructive">{error}</p>}
           <Button type="submit" className="min-h-11 w-full bg-vera-emerald text-white hover:bg-vera-emerald/90">
             Entrar
           </Button>
         </form>
-
-        <p className="mt-6 text-center text-xs text-muted-foreground">
-          <Link href="/" className="underline hover:text-foreground">
-            Continuar como invitado (demo)
-          </Link>
-        </p>
       </div>
     </main>
   );

@@ -62,6 +62,7 @@ export interface Recordatorio {
   tipo: string;
   cuando: string;
   mensaje: string;
+  estado: "pendiente" | "pausado" | "enviado" | "cumplido";
 }
 
 export interface Mensaje {

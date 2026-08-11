@@ -26,14 +26,14 @@ export function mapSalaEsperaItem(api: ApiSalaEsperaItem): SalaEsperaItem {
   return { pacienteId: String(api.paciente), hora: api.hora, motivo: api.motivo };
 }
 
-async function fetchList<T>(path: string, mapper: (api: any) => T): Promise<T[]> {
+async function fetchList<A, T>(path: string, mapper: (api: A) => T): Promise<T[]> {
   const response = await apiFetch(path);
   if (!response.ok) throw new Error(`No se pudo cargar ${path} (${response.status})`);
-  const data = await response.json();
+  const data: A[] = await response.json();
   return data.map(mapper);
 }
 
-async function fetchOne<T>(path: string, mapper: (api: any) => T): Promise<T | undefined> {
+async function fetchOne<A, T>(path: string, mapper: (api: A) => T): Promise<T | undefined> {
   const response = await apiFetch(path);
   if (response.status === 404) return undefined;
   if (!response.ok) throw new Error(`No se pudo cargar ${path} (${response.status})`);

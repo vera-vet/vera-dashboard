@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { mapEspecialidad, resolverDiagramaTipo } from "./especialidades";
+import { mapEspecialidad } from "./especialidades";
+import { resolverDiagramaTipo } from "./diagrama";
 import type { ApiEspecialidad } from "@/lib/api/types";
 import type { Especialidad } from "@/lib/data/types";
 

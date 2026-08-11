@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Bug, Check, Eye, Scissors, Shield, Stethoscope, Syringe, X } from "lucide-react";
 import type { Paciente, ServicioTipo, Especialidad, Marca } from "@/lib/data/types";
-import { resolverDiagramaTipo } from "@/lib/data/especialidades";
+import { resolverDiagramaTipo } from "@/lib/data/diagrama";
 import { SiluetaMarcable } from "@/components/shared/silueta-marcable";
 import { Textarea } from "@/components/ui/textarea";
 import { registrarServicio } from "./actions";

@@ -63,11 +63,13 @@ export function RegistrarClient({ pacientes, especialidades }: { pacientes: Paci
     setFotos([]);
   }
 
-  async function registrar(nombreProducto: string) {
+  async function registrar(nombreProducto: string, tipoOverride?: ServicioTipo) {
     if (!paciente) return;
-    const diagramaTipo = tipo ? resolverDiagramaTipo(tipo, especialidades, paciente.especie) : undefined;
+    const tipoActual = tipoOverride ?? tipo;
+    if (!tipoActual) return;
+    const diagramaTipo = resolverDiagramaTipo(tipoActual, especialidades, paciente.especie);
     const resultado = await registrarServicio(paciente.id, {
-      tipo: tipo!,
+      tipo: tipoActual,
       producto: nombreProducto,
       marcas: marcas.length ? marcas.map(({ x, y, nota }) => ({ x, y, nota })) : undefined,
       fotos: fotos.length ? fotos : undefined,
@@ -224,7 +226,7 @@ export function RegistrarClient({ pacientes, especialidades }: { pacientes: Paci
                       key={prod}
                       onClick={() => {
                         setTipo(t);
-                        registrar(prod);
+                        registrar(prod, t);
                       }}
                       className="inline-flex items-center gap-1.5 rounded-full border px-3.5 py-2 text-[13px] font-semibold text-white"
                       style={{ backgroundColor: "var(--vera-emerald)", borderColor: "var(--vera-emerald)" }}

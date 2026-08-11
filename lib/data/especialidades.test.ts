@@ -1,9 +1,21 @@
 import { describe, expect, it } from "vitest";
-import { resolverDiagramaTipo } from "./especialidades";
+import { mapEspecialidad, resolverDiagramaTipo } from "./especialidades";
+import type { ApiEspecialidad } from "@/lib/api/types";
 import type { Especialidad } from "@/lib/data/types";
 
+describe("mapEspecialidad", () => {
+  it("maps snake_case API fields to the frontend shape", () => {
+    const api: ApiEspecialidad = {
+      id: 1, nombre: "Oftalmología", tipos_servicio_asociados: ["consulta_oftalmologica"], diagrama_id: "ojo",
+    };
+    expect(mapEspecialidad(api)).toEqual({
+      id: "1", nombre: "Oftalmología", tiposServicioAsociados: ["consulta_oftalmologica"], diagramaId: "ojo",
+    });
+  });
+});
+
 const especialidades: Especialidad[] = [
-  { id: "esp1", nombre: "Oftalmología", tiposServicioAsociados: ["consulta_oftalmologica"], diagramaId: "ojo" },
+  { id: "1", nombre: "Oftalmología", tiposServicioAsociados: ["consulta_oftalmologica"], diagramaId: "ojo" },
 ];
 
 describe("resolverDiagramaTipo", () => {

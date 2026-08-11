@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { ChevronLeft, ExternalLink, MessageCircle } from "lucide-react";
 import { getPaciente, getDueno, getServiciosPorPaciente } from "@/lib/data/pacientes";
 import { getVisitasPorPaciente } from "@/lib/data/visitas";
-import { getReportePorServicio } from "@/lib/data/reportes";
 import { VaccineTimeline } from "@/components/shared/vaccine-timeline";
 import { edadTexto, formatFechaCorta, hoyISO } from "@/lib/date";
 import { DatosClinicos } from "./datos-clinicos";
@@ -19,7 +18,6 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
   const dueno = await getDueno(paciente.duenoId);
   const servicios = await getServiciosPorPaciente(paciente.id);
   const proximas = (await getVisitasPorPaciente(paciente.id)).filter((v) => v.fecha >= hoyISO());
-  const reportesPorServicio = await Promise.all(servicios.map((s) => getReportePorServicio(s.id)));
 
   return (
     <div>
@@ -54,8 +52,8 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
           <h2 className="mb-3 mt-8 font-display text-lg font-bold">Historial clínico</h2>
           <ol className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
             {servicios.length === 0 && <li className="p-6 text-center text-sm text-muted-foreground">Sin visitas registradas.</li>}
-            {servicios.map((s, i) => (
-              <HistorialItem key={s.id} servicio={s} reporte={reportesPorServicio[i]} />
+            {servicios.map((s) => (
+              <HistorialItem key={s.id} servicio={s} reporte={s.reporte} />
             ))}
           </ol>
         </section>

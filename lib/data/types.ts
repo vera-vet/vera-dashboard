@@ -44,6 +44,7 @@ export interface ServicioVisita {
   fecha: string;
   vet: string;
   aplicada: boolean;
+  reporte?: Reporte;
 }
 
 export interface Visita {

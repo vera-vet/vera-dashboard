@@ -1,7 +1,6 @@
-import { SERVICIOS } from "@/lib/data/seed/servicios";
 import { apiFetch } from "@/lib/api/client";
-import type { ApiDueno, ApiPaciente } from "@/lib/api/types";
-import type { Dueno, EstadoEsquema, Especie, Paciente, ServicioVisita } from "@/lib/data/types";
+import type { ApiDueno, ApiMarca, ApiPaciente, ApiReporte, ApiServicioVisita } from "@/lib/api/types";
+import type { Dueno, DiagramaTipo, EstadoEsquema, Especie, Marca, Paciente, Reporte, ServicioTipo, ServicioVisita } from "@/lib/data/types";
 
 export function mapDueno(api: ApiDueno): Dueno {
   return { id: String(api.id), nombre: api.nombre, whatsapp: api.whatsapp };
@@ -27,6 +26,33 @@ export function mapPaciente(api: ApiPaciente): Paciente {
   };
 }
 
+export function mapMarca(api: ApiMarca): Marca {
+  return { id: String(api.id), x: api.x, y: api.y, nota: api.nota };
+}
+
+export function mapReporte(api: ApiReporte, servicioVisitaId: string): Reporte {
+  return {
+    id: String(api.id),
+    servicioVisitaId,
+    diagramaTipo: api.diagrama_tipo as DiagramaTipo,
+    marcas: api.marcas.map(mapMarca),
+    fotos: api.fotos,
+  };
+}
+
+export function mapServicioVisita(api: ApiServicioVisita): ServicioVisita {
+  return {
+    id: String(api.id),
+    pacienteId: String(api.paciente),
+    tipo: api.tipo as ServicioTipo,
+    producto: api.producto,
+    fecha: api.fecha,
+    vet: api.vet,
+    aplicada: api.aplicada,
+    reporte: api.reporte ? mapReporte(api.reporte, String(api.id)) : undefined,
+  };
+}
+
 export async function getPacientes(): Promise<Paciente[]> {
   const response = await apiFetch("/api/pacientes/");
   if (!response.ok) throw new Error(`No se pudieron cargar los pacientes (${response.status})`);
@@ -49,7 +75,10 @@ export async function getDueno(id: string): Promise<Dueno | undefined> {
 }
 
 export async function getServiciosPorPaciente(pacienteId: string): Promise<ServicioVisita[]> {
-  return SERVICIOS.filter((s) => s.pacienteId === pacienteId);
+  const response = await apiFetch(`/api/pacientes/${pacienteId}/servicios/`);
+  if (!response.ok) throw new Error(`No se pudieron cargar los servicios del paciente ${pacienteId} (${response.status})`);
+  const data: ApiServicioVisita[] = await response.json();
+  return data.map(mapServicioVisita);
 }
 
 export async function getPendientesVacunas(): Promise<Paciente[]> {

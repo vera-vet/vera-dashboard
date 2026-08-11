@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { mapDueno, mapPaciente, getServiciosPorPaciente } from "./pacientes";
-import type { ApiDueno, ApiPaciente } from "@/lib/api/types";
+import { mapDueno, mapPaciente, mapServicioVisita } from "./pacientes";
+import type { ApiDueno, ApiPaciente, ApiServicioVisita } from "@/lib/api/types";
 
 describe("mapDueno", () => {
   it("maps snake_case API fields to the frontend shape", () => {
@@ -37,9 +37,31 @@ describe("mapPaciente", () => {
   });
 });
 
-describe("getServiciosPorPaciente", () => {
-  it("returns only services for the requested patient", async () => {
-    const result = await getServiciosPorPaciente("p1");
-    expect(result.every((s) => s.pacienteId === "p1")).toBe(true);
+describe("mapServicioVisita", () => {
+  it("maps snake_case API fields and renames paciente to pacienteId", () => {
+    const api: ApiServicioVisita = {
+      id: 1, paciente: 10, tipo: "vacuna", producto: "Rabia", fecha: "2022-08-10", vet: "Dra. Ramírez",
+      aplicada: true, reporte: null,
+    };
+    expect(mapServicioVisita(api)).toEqual({
+      id: "1", pacienteId: "10", tipo: "vacuna", producto: "Rabia", fecha: "2022-08-10",
+      vet: "Dra. Ramírez", aplicada: true, reporte: undefined,
+    });
+  });
+
+  it("maps a nested reporte when present", () => {
+    const api: ApiServicioVisita = {
+      id: 1, paciente: 10, tipo: "vacuna", producto: "Rabia", fecha: "2022-08-10", vet: "Dra. Ramírez",
+      aplicada: true,
+      reporte: {
+        id: 7, diagrama_tipo: "perro", fotos: [],
+        marcas: [{ id: 1, x: 30, y: 60, nota: "Aplicada en el cuarto trasero izquierdo" }],
+      },
+    };
+    const result = mapServicioVisita(api);
+    expect(result.reporte).toEqual({
+      id: "7", servicioVisitaId: "1", diagramaTipo: "perro", fotos: [],
+      marcas: [{ id: "1", x: 30, y: 60, nota: "Aplicada en el cuarto trasero izquierdo" }],
+    });
   });
 });

@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Bug, Check, Eye, Scissors, Shield, Stethoscope, Syringe, X } from "lucide-react";
 import type { Paciente, ServicioTipo, Especialidad, Marca } from "@/lib/data/types";
 import { resolverDiagramaTipo } from "@/lib/data/especialidades";
 import { SiluetaMarcable } from "@/components/shared/silueta-marcable";
 import { Textarea } from "@/components/ui/textarea";
+import { registrarServicio } from "./actions";
 
 interface Producto {
   nombre: string;
@@ -44,6 +46,7 @@ const TIPOS: { key: ServicioTipo; label: string; icon: typeof Syringe; productos
 ];
 
 export function RegistrarClient({ pacientes, especialidades }: { pacientes: Paciente[]; especialidades: Especialidad[] }) {
+  const router = useRouter();
   const [selectedId, setSelectedId] = useState(pacientes[0]?.id ?? "");
   const [tipo, setTipo] = useState<ServicioTipo | null>(null);
   const [productoElegido, setProductoElegido] = useState<Producto | null>(null);
@@ -60,9 +63,22 @@ export function RegistrarClient({ pacientes, especialidades }: { pacientes: Paci
     setFotos([]);
   }
 
-  function registrar(nombreProducto: string) {
+  async function registrar(nombreProducto: string) {
     if (!paciente) return;
-    setConfirmacion(`${paciente.nombre} · ${nombreProducto}. Vera programó el recordatorio automáticamente.`);
+    const diagramaTipo = tipo ? resolverDiagramaTipo(tipo, especialidades, paciente.especie) : undefined;
+    const resultado = await registrarServicio(paciente.id, {
+      tipo: tipo!,
+      producto: nombreProducto,
+      marcas: marcas.length ? marcas.map(({ x, y, nota }) => ({ x, y, nota })) : undefined,
+      fotos: fotos.length ? fotos : undefined,
+      diagramaTipo,
+    });
+    if (resultado.ok) {
+      setConfirmacion(`${paciente.nombre} · ${nombreProducto}. Vera programó el recordatorio automáticamente.`);
+      router.refresh();
+    } else {
+      setConfirmacion(`No se pudo registrar ${nombreProducto}. Intenta de nuevo.`);
+    }
     setTipo(null);
     resetPasoFinal();
     setTimeout(() => setConfirmacion(null), 6000);

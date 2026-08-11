@@ -50,7 +50,7 @@ export interface ServicioVisita {
 export interface Visita {
   id: string;
   pacienteId: string;
-  fechaOffsetDias: number;
+  fecha: string;
   hora?: string;
   motivo: string;
   confirmada: boolean;

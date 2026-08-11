@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { decodeJwtExp, isExpiringSoon } from "@/lib/api/jwt";
+import { accessCookieOptions } from "@/lib/api/session-cookie";
 
 export async function middleware(request: NextRequest) {
   const accessToken = request.cookies.get("access_token")?.value;
@@ -37,12 +38,7 @@ export async function middleware(request: NextRequest) {
     }
 
     const response = NextResponse.next();
-    response.cookies.set("access_token", access, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      path: "/",
-    });
+    response.cookies.set("access_token", access, accessCookieOptions());
     return response;
   }
 

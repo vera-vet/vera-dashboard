@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Plus, X } from "lucide-react";
+import { actualizarDatosClinicos } from "./actions";
 
 function ChipList({
   titulo,
@@ -66,9 +67,27 @@ function ChipList({
   );
 }
 
-export function DatosClinicos({ alergiasIniciales, notasIniciales }: { alergiasIniciales: string[]; notasIniciales: string[] }) {
+export function DatosClinicos({
+  pacienteId,
+  alergiasIniciales,
+  notasIniciales,
+}: {
+  pacienteId: string;
+  alergiasIniciales: string[];
+  notasIniciales: string[];
+}) {
   const [alergias, setAlergias] = useState(alergiasIniciales);
   const [notas, setNotas] = useState(notasIniciales);
+
+  async function guardar(nuevasAlergias: string[], nuevasNotas: string[]) {
+    const resultado = await actualizarDatosClinicos(pacienteId, {
+      alergias: nuevasAlergias, notasComportamiento: nuevasNotas,
+    });
+    if (!resultado.ok) {
+      setAlergias(alergias);
+      setNotas(notas);
+    }
+  }
 
   return (
     <div className="rounded-2xl border border-border bg-card p-5">
@@ -77,16 +96,32 @@ export function DatosClinicos({ alergiasIniciales, notasIniciales }: { alergiasI
         <ChipList
           titulo="Alergias"
           items={alergias}
-          onAdd={(v) => setAlergias((prev) => [...prev, v])}
-          onRemove={(v) => setAlergias((prev) => prev.filter((x) => x !== v))}
+          onAdd={(v) => {
+            const next = [...alergias, v];
+            setAlergias(next);
+            guardar(next, notas);
+          }}
+          onRemove={(v) => {
+            const next = alergias.filter((x) => x !== v);
+            setAlergias(next);
+            guardar(next, notas);
+          }}
           placeholder="Ej. amoxicilina"
           tono="coral"
         />
         <ChipList
           titulo="Notas de comportamiento"
           items={notas}
-          onAdd={(v) => setNotas((prev) => [...prev, v])}
-          onRemove={(v) => setNotas((prev) => prev.filter((x) => x !== v))}
+          onAdd={(v) => {
+            const next = [...notas, v];
+            setNotas(next);
+            guardar(alergias, next);
+          }}
+          onRemove={(v) => {
+            const next = notas.filter((x) => x !== v);
+            setNotas(next);
+            guardar(alergias, next);
+          }}
           placeholder="Ej. se pone nervioso con otros perros"
           tono="sage"
         />

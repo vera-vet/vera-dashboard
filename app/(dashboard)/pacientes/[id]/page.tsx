@@ -75,7 +75,7 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
             )}
           </div>
 
-          <DatosClinicos alergiasIniciales={paciente.alergias} notasIniciales={paciente.notasComportamiento} />
+          <DatosClinicos pacienteId={paciente.id} alergiasIniciales={paciente.alergias} notasIniciales={paciente.notasComportamiento} />
 
           <Link
             href={`/carnet/${paciente.id}`}

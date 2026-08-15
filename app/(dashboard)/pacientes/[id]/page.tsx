@@ -78,7 +78,7 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
           <DatosClinicos pacienteId={paciente.id} alergiasIniciales={paciente.alergias} notasIniciales={paciente.notasComportamiento} />
 
           <Link
-            href={`/carnet/${paciente.id}`}
+            href={`/carnet/${paciente.carnetToken}`}
             className="flex items-center justify-between rounded-2xl border border-border bg-card p-4 hover:bg-secondary/50"
           >
             <div>

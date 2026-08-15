@@ -23,6 +23,7 @@ export function mapPaciente(api: ApiPaciente): Paciente {
     faltaTexto: api.falta_texto || undefined,
     alergias: api.alergias,
     notasComportamiento: api.notas_comportamiento,
+    carnetToken: api.carnet_token,
   };
 }
 

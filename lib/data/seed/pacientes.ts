@@ -16,6 +16,7 @@ export const PACIENTES: Paciente[] = [
     estadoEsquema: "al_dia",
     alergias: ["amoxicilina"],
     notasComportamiento: ["Se pone nervioso con otros perros", "Babea mucho al llegar"],
+    carnetToken: "11111111-1111-1111-1111-111111111111",
   },
   {
     id: "p2",
@@ -33,6 +34,7 @@ export const PACIENTES: Paciente[] = [
     faltaTexto: "Falta 2ª dosis",
     alergias: [],
     notasComportamiento: ["Muy tranquila, se deja revisar sin problema"],
+    carnetToken: "22222222-2222-2222-2222-222222222222",
   },
   {
     id: "p3",
@@ -50,6 +52,7 @@ export const PACIENTES: Paciente[] = [
     faltaTexto: "Refuerzo vencido",
     alergias: [],
     notasComportamiento: [],
+    carnetToken: "33333333-3333-3333-3333-333333333333",
   },
   {
     id: "p4",
@@ -67,6 +70,7 @@ export const PACIENTES: Paciente[] = [
     faltaTexto: "Control de sutura pendiente",
     alergias: [],
     notasComportamiento: [],
+    carnetToken: "44444444-4444-4444-4444-444444444444",
   },
   {
     id: "p5",
@@ -83,6 +87,7 @@ export const PACIENTES: Paciente[] = [
     estadoEsquema: "al_dia",
     alergias: [],
     notasComportamiento: [],
+    carnetToken: "55555555-5555-5555-5555-555555555555",
   },
   {
     id: "p6",
@@ -100,5 +105,6 @@ export const PACIENTES: Paciente[] = [
     faltaTexto: "Falta 3ª dosis",
     alergias: [],
     notasComportamiento: [],
+    carnetToken: "66666666-6666-6666-6666-666666666666",
   },
 ];

@@ -34,6 +34,7 @@ export interface Paciente {
   faltaTexto?: string;
   alergias: string[];
   notasComportamiento: string[];
+  carnetToken: string;
 }
 
 export interface ServicioVisita {

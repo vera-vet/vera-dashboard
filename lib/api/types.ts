@@ -45,6 +45,7 @@ export interface ApiPaciente {
   falta_texto: string;
   alergias: string[];
   notas_comportamiento: string[];
+  carnet_token: string;
 }
 
 export interface ApiVisita {

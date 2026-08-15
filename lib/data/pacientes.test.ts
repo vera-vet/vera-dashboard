@@ -17,12 +17,14 @@ describe("mapPaciente", () => {
       fecha_nacimiento: "2022-04-10", foto_url: "https://example.com/rocky.jpg", esterilizado: true,
       vacunas_completas: 5, vacunas_total: 5, estado_esquema: "al_dia", falta_texto: "",
       alergias: ["amoxicilina"], notas_comportamiento: ["Se pone nervioso"],
+      carnet_token: "11111111-1111-1111-1111-111111111111",
     };
     expect(mapPaciente(api)).toEqual({
       id: "1", nombre: "Rocky", especie: "perro", raza: "Labrador", sexo: "M",
       fechaNacimiento: "2022-04-10", fotoUrl: "https://example.com/rocky.jpg", duenoId: "5",
       esterilizado: true, vacunasCompletas: 5, vacunasTotal: 5, estadoEsquema: "al_dia",
       faltaTexto: undefined, alergias: ["amoxicilina"], notasComportamiento: ["Se pone nervioso"],
+      carnetToken: "11111111-1111-1111-1111-111111111111",
     });
   });
 
@@ -32,6 +34,7 @@ describe("mapPaciente", () => {
       fecha_nacimiento: "2025-04-20", foto_url: "", esterilizado: false,
       vacunas_completas: 1, vacunas_total: 3, estado_esquema: "al_dia", falta_texto: "",
       alergias: [], notas_comportamiento: [],
+      carnet_token: "22222222-2222-2222-2222-222222222222",
     };
     expect(mapPaciente(api).faltaTexto).toBeUndefined();
   });

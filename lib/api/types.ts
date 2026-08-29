@@ -32,6 +32,7 @@ export interface ApiServicioVisita {
 export interface ApiPaciente {
   id: number;
   dueno: number;
+  dueno_nombre: string;
   nombre: string;
   especie: string;
   raza: string;

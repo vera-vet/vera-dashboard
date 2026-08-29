@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ChevronRight, Search } from "lucide-react";
-import { getPacientes, getDueno } from "@/lib/data/pacientes";
+import { getPacientes } from "@/lib/data/pacientes";
 import { UrgencyBadge } from "@/components/shared/urgency-badge";
 import { edadTexto } from "@/lib/date";
 
@@ -8,9 +8,6 @@ const ESPECIE_LABEL = { perro: "Perro", gato: "Gato", otro: "Otro" } as const;
 
 export default async function PacientesPage() {
   const pacientes = await getPacientes();
-  const conDuenos = await Promise.all(
-    pacientes.map(async (p) => ({ paciente: p, dueno: await getDueno(p.duenoId) })),
-  );
 
   return (
     <div>
@@ -28,7 +25,7 @@ export default async function PacientesPage() {
       </div>
 
       <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
-        {conDuenos.map(({ paciente, dueno }) => (
+        {pacientes.map((paciente) => (
           <li key={paciente.id}>
             <Link
               href={`/pacientes/${paciente.id}`}
@@ -38,7 +35,7 @@ export default async function PacientesPage() {
               <div className="min-w-0 flex-1">
                 <div className="font-display text-base font-bold">{paciente.nombre}</div>
                 <div className="truncate text-xs text-muted-foreground">
-                  {ESPECIE_LABEL[paciente.especie]} · {paciente.raza} · {edadTexto(paciente.fechaNacimiento)} · {dueno?.nombre}
+                  {ESPECIE_LABEL[paciente.especie]} · {paciente.raza} · {edadTexto(paciente.fechaNacimiento)} · {paciente.duenoNombre}
                 </div>
               </div>
               {paciente.estadoEsquema !== "al_dia" && (

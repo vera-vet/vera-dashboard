@@ -27,6 +27,7 @@ export interface Paciente {
   fechaNacimiento: string;
   fotoUrl: string;
   duenoId: string;
+  duenoNombre: string;
   esterilizado: boolean;
   vacunasCompletas: number;
   vacunasTotal: number;

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ChevronLeft, ExternalLink, MessageCircle } from "lucide-react";
 import { getPaciente, getDueno, getServiciosPorPaciente } from "@/lib/data/pacientes";
 import { getVisitasPorPaciente } from "@/lib/data/visitas";
+import { getNotasConsultaPorPaciente } from "@/lib/data/notas-consulta";
 import { VaccineTimeline } from "@/components/shared/vaccine-timeline";
 import { edadTexto, formatFechaCorta, hoyISO } from "@/lib/date";
 import { DatosClinicos } from "./datos-clinicos";
@@ -18,6 +19,7 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
   const dueno = await getDueno(paciente.duenoId);
   const servicios = await getServiciosPorPaciente(paciente.id);
   const proximas = (await getVisitasPorPaciente(paciente.id)).filter((v) => v.fecha >= hoyISO());
+  const notas = await getNotasConsultaPorPaciente(paciente.id);
 
   return (
     <div>
@@ -54,6 +56,21 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
             {servicios.length === 0 && <li className="p-6 text-center text-sm text-muted-foreground">Sin visitas registradas.</li>}
             {servicios.map((s) => (
               <HistorialItem key={s.id} servicio={s} reporte={s.reporte} />
+            ))}
+          </ol>
+
+          <h2 className="mb-3 mt-8 font-display text-lg font-bold">Transcripciones</h2>
+          <ol className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
+            {notas.length === 0 && <li className="p-6 text-center text-sm text-muted-foreground">Sin transcripciones registradas.</li>}
+            {notas.map((n) => (
+              <li key={n.id} className="p-4">
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span className="font-semibold">{n.empleadoNombre}</span>
+                  <span>{formatFechaCorta(n.fechaHora)}</span>
+                </div>
+                <p className="mt-2 text-sm">{n.transcripcion}</p>
+                {n.servicioVisitaId && <p className="mt-2 text-xs text-vera-emerald">Conectada a un servicio registrado</p>}
+              </li>
             ))}
           </ol>
         </section>

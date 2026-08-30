@@ -5,7 +5,7 @@ import { getPaciente, getDueno, getServiciosPorPaciente } from "@/lib/data/pacie
 import { getVisitasPorPaciente } from "@/lib/data/visitas";
 import { getNotasConsultaPorPaciente } from "@/lib/data/notas-consulta";
 import { VaccineTimeline } from "@/components/shared/vaccine-timeline";
-import { edadTexto, formatFechaCorta, hoyISO } from "@/lib/date";
+import { edadTexto, formatFechaCorta, formatFechaHoraCorta, hoyISO } from "@/lib/date";
 import { DatosClinicos } from "./datos-clinicos";
 import { HistorialItem } from "./historial-item";
 
@@ -66,7 +66,7 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
               <li key={n.id} className="p-4">
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span className="font-semibold">{n.empleadoNombre}</span>
-                  <span>{formatFechaCorta(n.fechaHora)}</span>
+                  <span>{formatFechaHoraCorta(n.fechaHora)}</span>
                 </div>
                 <p className="mt-2 text-sm">{n.transcripcion}</p>
                 {n.servicioVisitaId && <p className="mt-2 text-xs text-vera-emerald">Conectada a un servicio registrado</p>}

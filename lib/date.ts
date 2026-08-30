@@ -31,3 +31,15 @@ export function formatFechaCorta(iso: string): string {
     month: "short",
   });
 }
+
+// For full ISO 8601 datetimes (date + time + offset), e.g. NotaConsulta.fechaHora.
+// Unlike formatFechaCorta, this must NOT append "T00:00:00" — the string already
+// carries a time and timezone offset, and doing so would produce an invalid date.
+export function formatFechaHoraCorta(iso: string): string {
+  return new Date(iso).toLocaleString("es-SV", {
+    day: "numeric",
+    month: "short",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}

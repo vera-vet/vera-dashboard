@@ -62,7 +62,7 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
           <h2 className="mb-3 mt-8 font-display text-lg font-bold">Transcripciones</h2>
           <ol className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
             {notas.length === 0 && <li className="p-6 text-center text-sm text-muted-foreground">Sin transcripciones registradas.</li>}
-            {notas.map((n) => (
+            {[...notas].reverse().map((n) => (
               <li key={n.id} className="p-4">
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span className="font-semibold">{n.empleadoNombre}</span>

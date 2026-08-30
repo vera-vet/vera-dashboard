@@ -41,5 +41,6 @@ export function formatFechaHoraCorta(iso: string): string {
     month: "short",
     hour: "numeric",
     minute: "2-digit",
+    timeZone: "America/El_Salvador",
   });
 }

@@ -1,6 +1,7 @@
 "use server";
 
 import { apiFetch } from "@/lib/api/client";
+import { hoyISO, toLocalISODate } from "@/lib/date";
 
 interface RegistrarServicioInput {
   tipo: string;
@@ -35,11 +36,15 @@ export async function buscarNotaConsultaSinConectar(pacienteId: string): Promise
   if (!response.ok) return null;
 
   const notas: { id: number; fecha_hora: string; servicio_visita: number | null }[] = await response.json();
-  const hoy = new Date().toISOString().slice(0, 10);
-  const sinConectar = notas.filter((n) => !n.servicio_visita && n.fecha_hora.slice(0, 10) === hoy);
+  const hoy = hoyISO();
+  const sinConectar = notas.filter((n) => !n.servicio_visita && toLocalISODate(new Date(n.fecha_hora)) === hoy);
   if (sinConectar.length === 0) return null;
 
   const masReciente = sinConectar[sinConectar.length - 1];
-  const hora = new Date(masReciente.fecha_hora).toLocaleTimeString("es-SV", { hour: "numeric", minute: "2-digit" });
+  const hora = new Date(masReciente.fecha_hora).toLocaleTimeString("es-SV", {
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: "America/El_Salvador",
+  });
   return { id: String(masReciente.id), hora };
 }

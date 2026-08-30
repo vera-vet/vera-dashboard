@@ -77,6 +77,6 @@ describe("formatFechaHoraCorta", () => {
     const result = formatFechaHoraCorta("2026-08-30T13:59:41.809445-06:00");
     expect(result).not.toBe("Invalid Date");
     expect(result).toMatch(/30 ago/);
-    expect(result).toMatch(/1:59|13:59/);
+    expect(result).toMatch(/1:59/);
   });
 });

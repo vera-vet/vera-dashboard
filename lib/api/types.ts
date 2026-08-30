@@ -64,6 +64,8 @@ export interface ApiVisita {
 export interface ApiRecordatorio {
   id: number;
   paciente: number;
+  paciente_nombre: string;
+  paciente_foto_url: string;
   tipo: string;
   programado_para: string;
   mensaje: string;

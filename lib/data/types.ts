@@ -64,6 +64,8 @@ export interface Visita {
 export interface Recordatorio {
   id: string;
   pacienteId: string;
+  pacienteNombre: string;
+  pacienteFotoUrl: string;
   tipo: string;
   cuando: string;
   mensaje: string;

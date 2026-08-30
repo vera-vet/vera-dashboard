@@ -7,6 +7,8 @@ export function mapRecordatorio(api: ApiRecordatorio): Recordatorio {
   return {
     id: String(api.id),
     pacienteId: String(api.paciente),
+    pacienteNombre: api.paciente_nombre,
+    pacienteFotoUrl: api.paciente_foto_url,
     tipo: api.tipo,
     cuando: formatFechaHora(api.programado_para),
     mensaje: api.mensaje,

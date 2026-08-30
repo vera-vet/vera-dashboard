@@ -7,12 +7,15 @@ describe("mapRecordatorio", () => {
     const hoy5pm = new Date();
     hoy5pm.setHours(17, 0, 0, 0);
     const api: ApiRecordatorio = {
-      id: 1, paciente: 10, tipo: "Recordatorio de cita", programado_para: hoy5pm.toISOString(),
+      id: 1, paciente: 10, paciente_nombre: "Rocky", paciente_foto_url: "https://example.com/rocky.jpg",
+      tipo: "Recordatorio de cita", programado_para: hoy5pm.toISOString(),
       mensaje: "Le recordamos la cita de Rocky.", estado: "pendiente",
     };
     const result = mapRecordatorio(api);
     expect(result.id).toBe("1");
     expect(result.pacienteId).toBe("10");
+    expect(result.pacienteNombre).toBe("Rocky");
+    expect(result.pacienteFotoUrl).toBe("https://example.com/rocky.jpg");
     expect(result.tipo).toBe("Recordatorio de cita");
     expect(result.mensaje).toBe("Le recordamos la cita de Rocky.");
     expect(result.estado).toBe("pendiente");

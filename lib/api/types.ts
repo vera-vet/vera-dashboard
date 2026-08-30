@@ -104,7 +104,11 @@ export interface ApiEstacion {
 export interface ApiSesionActiva {
   id: number;
   paciente: number;
+  paciente_nombre: string;
+  paciente_foto_url: string;
+  dueno_nombre: string;
   empleado: number;
+  empleado_nombre: string;
   estacion: number;
   motivo: string;
   inicio: string;
@@ -114,6 +118,8 @@ export interface ApiSesionActiva {
 export interface ApiSalaEsperaItem {
   id: number;
   paciente: number;
+  paciente_nombre: string;
+  paciente_foto_url: string;
   hora: string;
   motivo: string;
 }

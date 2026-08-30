@@ -14,7 +14,11 @@ export function mapSesionActiva(api: ApiSesionActiva): SesionActiva {
   return {
     id: String(api.id),
     pacienteId: String(api.paciente),
+    pacienteNombre: api.paciente_nombre,
+    pacienteFotoUrl: api.paciente_foto_url,
+    duenoNombre: api.dueno_nombre,
     empleadoId: String(api.empleado),
+    empleadoNombre: api.empleado_nombre,
     estacionId: String(api.estacion),
     motivo: api.motivo,
     inicio: api.inicio,
@@ -23,7 +27,13 @@ export function mapSesionActiva(api: ApiSesionActiva): SesionActiva {
 }
 
 export function mapSalaEsperaItem(api: ApiSalaEsperaItem): SalaEsperaItem {
-  return { pacienteId: String(api.paciente), hora: api.hora, motivo: api.motivo };
+  return {
+    pacienteId: String(api.paciente),
+    pacienteNombre: api.paciente_nombre,
+    pacienteFotoUrl: api.paciente_foto_url,
+    hora: api.hora,
+    motivo: api.motivo,
+  };
 }
 
 async function fetchList<A, T>(path: string, mapper: (api: A) => T): Promise<T[]> {

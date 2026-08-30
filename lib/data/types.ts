@@ -106,7 +106,11 @@ export interface Estacion {
 export interface SesionActiva {
   id: string;
   pacienteId: string;
+  pacienteNombre: string;
+  pacienteFotoUrl: string;
+  duenoNombre: string;
   empleadoId: string;
+  empleadoNombre: string;
   estacionId: string;
   motivo: string;
   inicio: string;
@@ -115,6 +119,8 @@ export interface SesionActiva {
 
 export interface SalaEsperaItem {
   pacienteId: string;
+  pacienteNombre: string;
+  pacienteFotoUrl: string;
   hora: string;
   motivo: string;
 }

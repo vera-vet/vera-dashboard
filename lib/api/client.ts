@@ -8,11 +8,22 @@ export function buildAuthHeaders(token: string | undefined, extra?: HeadersInit)
   };
 }
 
+export function buildAuthHeadersForBody(
+  token: string | undefined,
+  body: BodyInit | null | undefined,
+  extra?: HeadersInit,
+): HeadersInit {
+  if (body instanceof FormData) {
+    return { ...extra, ...(token ? { Authorization: `Bearer ${token}` } : {}) };
+  }
+  return buildAuthHeaders(token, extra);
+}
+
 export async function apiFetch(path: string, init?: RequestInit): Promise<Response> {
   const token = (await cookies()).get("access_token")?.value;
   return fetch(`${process.env.DJANGO_API_URL}${path}`, {
     ...init,
-    headers: buildAuthHeaders(token, init?.headers),
+    headers: buildAuthHeadersForBody(token, init?.body, init?.headers),
     cache: "no-store",
   });
 }

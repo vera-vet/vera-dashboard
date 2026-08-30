@@ -8,6 +8,7 @@ interface RegistrarServicioInput {
   marcas?: { x: number; y: number; nota: string }[];
   fotos?: string[];
   diagramaTipo?: string;
+  notaConsultaId?: string;
 }
 
 export async function registrarServicio(pacienteId: string, datos: RegistrarServicioInput): Promise<{ ok: boolean }> {
@@ -19,6 +20,7 @@ export async function registrarServicio(pacienteId: string, datos: RegistrarServ
   if (datos.marcas?.length) body.marcas = datos.marcas;
   if (datos.fotos?.length) body.fotos = datos.fotos;
   if (datos.diagramaTipo) body.diagrama_tipo = datos.diagramaTipo;
+  if (datos.notaConsultaId) body.nota_consulta_id = datos.notaConsultaId;
 
   const response = await apiFetch(`/api/pacientes/${pacienteId}/registrar-servicio/`, {
     method: "POST",
@@ -26,4 +28,18 @@ export async function registrarServicio(pacienteId: string, datos: RegistrarServ
   });
 
   return { ok: response.ok };
+}
+
+export async function buscarNotaConsultaSinConectar(pacienteId: string): Promise<{ id: string; hora: string } | null> {
+  const response = await apiFetch(`/api/pacientes/${pacienteId}/notas-consulta/`);
+  if (!response.ok) return null;
+
+  const notas: { id: number; fecha_hora: string; servicio_visita: number | null }[] = await response.json();
+  const hoy = new Date().toISOString().slice(0, 10);
+  const sinConectar = notas.filter((n) => !n.servicio_visita && n.fecha_hora.slice(0, 10) === hoy);
+  if (sinConectar.length === 0) return null;
+
+  const masReciente = sinConectar[sinConectar.length - 1];
+  const hora = new Date(masReciente.fecha_hora).toLocaleTimeString("es-SV", { hour: "numeric", minute: "2-digit" });
+  return { id: String(masReciente.id), hora };
 }

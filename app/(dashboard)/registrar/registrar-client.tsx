@@ -7,7 +7,7 @@ import type { Paciente, ServicioTipo, Especialidad, Marca } from "@/lib/data/typ
 import { resolverDiagramaTipo } from "@/lib/data/diagrama";
 import { SiluetaMarcable } from "@/components/shared/silueta-marcable";
 import { Textarea } from "@/components/ui/textarea";
-import { registrarServicio } from "./actions";
+import { registrarServicio, buscarNotaConsultaSinConectar } from "./actions";
 
 interface Producto {
   nombre: string;
@@ -68,12 +68,20 @@ export function RegistrarClient({ pacientes, especialidades }: { pacientes: Paci
     const tipoActual = tipoOverride ?? tipo;
     if (!tipoActual) return;
     const diagramaTipo = resolverDiagramaTipo(tipoActual, especialidades, paciente.especie);
+
+    let notaConsultaId: string | undefined;
+    const notaSinConectar = await buscarNotaConsultaSinConectar(paciente.id);
+    if (notaSinConectar && window.confirm(`¿Conectar con la transcripción de las ${notaSinConectar.hora}?`)) {
+      notaConsultaId = notaSinConectar.id;
+    }
+
     const resultado = await registrarServicio(paciente.id, {
       tipo: tipoActual,
       producto: nombreProducto,
       marcas: marcas.length ? marcas.map(({ x, y, nota }) => ({ x, y, nota })) : undefined,
       fotos: fotos.length ? fotos : undefined,
       diagramaTipo,
+      notaConsultaId,
     });
     if (resultado.ok) {
       setConfirmacion(`${paciente.nombre} · ${nombreProducto}. Vera programó el recordatorio automáticamente.`);

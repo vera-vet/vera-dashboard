@@ -1,5 +1,6 @@
 import { Clock } from "lucide-react";
 import { getSesionesActivas, getSalaEspera, getEstaciones } from "@/lib/data/sala";
+import { GrabarConsultaButton } from "./grabar-consulta-button";
 
 export default async function SalaPage() {
   const [sesiones, espera, estaciones] = await Promise.all([getSesionesActivas(), getSalaEspera(), getEstaciones()]);
@@ -49,6 +50,7 @@ export default async function SalaPage() {
                     <Clock size={12} /> desde {sesion.inicio}
                   </span>
                 </div>
+                <GrabarConsultaButton pacienteId={sesion.pacienteId} empleadoId={sesion.empleadoId} />
               </>
             ) : (
               <p className="mt-3 text-xs text-muted-foreground">Sin sesión activa</p>

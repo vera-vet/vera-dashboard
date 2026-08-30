@@ -1,6 +1,6 @@
 import { apiFetch } from "@/lib/api/client";
 import type { ApiVisita } from "@/lib/api/types";
-import type { Visita } from "@/lib/data/types";
+import type { EstadoEsquema, Visita } from "@/lib/data/types";
 
 export function mapVisita(api: ApiVisita): Visita {
   return {
@@ -9,6 +9,8 @@ export function mapVisita(api: ApiVisita): Visita {
     pacienteNombre: api.paciente_nombre,
     pacienteFotoUrl: api.paciente_foto_url,
     duenoNombre: api.dueno_nombre,
+    pacienteEstadoEsquema: api.paciente_estado_esquema as EstadoEsquema,
+    pacienteFaltaTexto: api.paciente_falta_texto || undefined,
     fecha: api.fecha,
     hora: api.hora ?? undefined,
     motivo: api.motivo,

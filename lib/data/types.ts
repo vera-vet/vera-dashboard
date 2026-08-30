@@ -55,6 +55,8 @@ export interface Visita {
   pacienteNombre: string;
   pacienteFotoUrl: string;
   duenoNombre: string;
+  pacienteEstadoEsquema: EstadoEsquema;
+  pacienteFaltaTexto?: string;
   fecha: string;
   hora?: string;
   motivo: string;

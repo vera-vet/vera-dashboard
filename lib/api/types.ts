@@ -55,6 +55,8 @@ export interface ApiVisita {
   paciente_nombre: string;
   paciente_foto_url: string;
   dueno_nombre: string;
+  paciente_estado_esquema: string;
+  paciente_falta_texto: string;
   fecha: string;
   hora: string | null;
   motivo: string;

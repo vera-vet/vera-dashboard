@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, MessageCircle } from "lucide-react";
 import { MetricHero } from "@/components/shared/metric-hero";
+import { UrgencyBadge } from "@/components/shared/urgency-badge";
 import { WhatsAppBubble } from "@/components/shared/whatsapp-bubble";
 import { getVisitasHoy } from "@/lib/data/visitas";
 import { getConversaciones } from "@/lib/data/recordatorios";
@@ -46,6 +47,9 @@ export default async function InicioPage() {
                     </div>
                     <p className="mt-0.5 truncate text-sm text-muted-foreground">{visita.motivo}</p>
                   </div>
+                  {visita.pacienteEstadoEsquema !== "al_dia" && (
+                    <UrgencyBadge estado={visita.pacienteEstadoEsquema} texto={visita.pacienteFaltaTexto} />
+                  )}
                 </Link>
               </li>
             ))}

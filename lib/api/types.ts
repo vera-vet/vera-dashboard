@@ -134,3 +134,13 @@ export interface ApiEspecialidad {
   tipos_servicio_asociados: string[];
   diagrama_id: string;
 }
+
+export interface ApiNotaConsulta {
+  id: number;
+  paciente: number;
+  empleado: number;
+  empleado_nombre: string;
+  fecha_hora: string;
+  transcripcion: string;
+  servicio_visita: number | null;
+}

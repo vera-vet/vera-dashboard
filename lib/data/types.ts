@@ -152,3 +152,13 @@ export interface Especialidad {
   tiposServicioAsociados: ServicioTipo[];
   diagramaId: DiagramaTipo;
 }
+
+export interface NotaConsulta {
+  id: string;
+  pacienteId: string;
+  empleadoId: string;
+  empleadoNombre: string;
+  fechaHora: string;
+  transcripcion: string;
+  servicioVisitaId?: string;
+}

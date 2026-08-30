@@ -52,6 +52,9 @@ export interface ApiPaciente {
 export interface ApiVisita {
   id: number;
   paciente: number;
+  paciente_nombre: string;
+  paciente_foto_url: string;
+  dueno_nombre: string;
   fecha: string;
   hora: string | null;
   motivo: string;

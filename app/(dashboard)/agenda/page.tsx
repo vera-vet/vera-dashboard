@@ -1,5 +1,4 @@
 import { getVisitasProximas } from "@/lib/data/visitas";
-import { getPaciente, getDueno } from "@/lib/data/pacientes";
 import { hoyISO } from "@/lib/date";
 
 const DIAS = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
@@ -26,22 +25,6 @@ export default async function AgendaPage() {
     porFecha.set(v.fecha, [...(porFecha.get(v.fecha) ?? []), v]);
   }
 
-  const visitasConDatos = await Promise.all(
-    dias.map(async (fecha) => ({
-      fecha,
-      citas: await Promise.all(
-        (porFecha.get(fecha) ?? []).map(async (v) => {
-          const paciente = await getPaciente(v.pacienteId);
-          return {
-            visita: v,
-            paciente,
-            dueno: await getDueno(paciente?.duenoId ?? ""),
-          };
-        }),
-      ),
-    })),
-  );
-
   return (
     <div>
       <header className="pb-6">
@@ -50,7 +33,7 @@ export default async function AgendaPage() {
       </header>
 
       <div className="grid gap-3 lg:grid-cols-7">
-        {visitasConDatos.map(({ fecha, citas }, i) => (
+        {dias.map((fecha, i) => (
           <div key={fecha} className="rounded-2xl border border-border bg-card p-3">
             <div className="mb-2 text-center">
               <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{DIAS[i]}</div>
@@ -59,7 +42,7 @@ export default async function AgendaPage() {
               </div>
             </div>
             <ul className="space-y-2">
-              {citas.map(({ visita, paciente, dueno }) => (
+              {(porFecha.get(fecha) ?? []).map((visita) => (
                 <li
                   key={visita.id}
                   className={
@@ -69,10 +52,10 @@ export default async function AgendaPage() {
                   }
                 >
                   <div className="font-semibold">{visita.hora}</div>
-                  <div className="truncate">{paciente?.nombre} · {dueno?.nombre}</div>
+                  <div className="truncate">{visita.pacienteNombre} · {visita.duenoNombre}</div>
                 </li>
               ))}
-              {citas.length === 0 && <li className="py-4 text-center text-[11px] text-muted-foreground">—</li>}
+              {(porFecha.get(fecha) ?? []).length === 0 && <li className="py-4 text-center text-[11px] text-muted-foreground">—</li>}
             </ul>
           </div>
         ))}

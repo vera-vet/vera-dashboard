@@ -52,6 +52,9 @@ export interface ServicioVisita {
 export interface Visita {
   id: string;
   pacienteId: string;
+  pacienteNombre: string;
+  pacienteFotoUrl: string;
+  duenoNombre: string;
   fecha: string;
   hora?: string;
   motivo: string;

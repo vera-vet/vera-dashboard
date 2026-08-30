@@ -1,9 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, MessageCircle } from "lucide-react";
 import { MetricHero } from "@/components/shared/metric-hero";
-import { UrgencyBadge } from "@/components/shared/urgency-badge";
 import { WhatsAppBubble } from "@/components/shared/whatsapp-bubble";
-import { getPaciente, getDueno } from "@/lib/data/pacientes";
 import { getVisitasHoy } from "@/lib/data/visitas";
 import { getConversaciones } from "@/lib/data/recordatorios";
 
@@ -11,17 +9,6 @@ export default async function InicioPage() {
   const visitasHoy = await getVisitasHoy();
   const conversaciones = await getConversaciones();
   const conv = conversaciones[0];
-
-  const visitasConDatos = await Promise.all(
-    visitasHoy.map(async (v) => {
-      const paciente = await getPaciente(v.pacienteId);
-      return {
-        visita: v,
-        paciente,
-        dueno: await getDueno(paciente?.duenoId ?? ""),
-      };
-    }),
-  );
 
   const sinConfirmar = visitasHoy.filter((v) => !v.confirmada).length;
 
@@ -45,23 +32,20 @@ export default async function InicioPage() {
         <section>
           <h2 className="mb-4 font-display text-xl font-bold">Pacientes que vuelven esta semana</h2>
           <ul className="space-y-3">
-            {visitasConDatos.map(({ visita, paciente, dueno }) => (
+            {visitasHoy.map((visita) => (
               <li key={visita.id}>
                 <Link
-                  href={`/pacientes/${paciente?.id}`}
+                  href={`/pacientes/${visita.pacienteId}`}
                   className="flex items-center gap-4 rounded-2xl border border-border bg-card p-4 transition-shadow hover:shadow-[var(--shadow-elevated)]"
                 >
-                  {paciente && <img src={paciente.fotoUrl} alt={paciente.nombre} className="h-14 w-14 rounded-full object-cover" />}
+                  <img src={visita.pacienteFotoUrl} alt={visita.pacienteNombre} className="h-14 w-14 rounded-full object-cover" />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-baseline gap-2">
-                      <span className="font-display text-base font-bold">{paciente?.nombre}</span>
-                      <span className="truncate text-xs text-muted-foreground">· {dueno?.nombre}</span>
+                      <span className="font-display text-base font-bold">{visita.pacienteNombre}</span>
+                      <span className="truncate text-xs text-muted-foreground">· {visita.duenoNombre}</span>
                     </div>
                     <p className="mt-0.5 truncate text-sm text-muted-foreground">{visita.motivo}</p>
                   </div>
-                  {paciente && paciente.estadoEsquema !== "al_dia" && (
-                    <UrgencyBadge estado={paciente.estadoEsquema} texto={paciente.faltaTexto} />
-                  )}
                 </Link>
               </li>
             ))}

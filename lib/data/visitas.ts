@@ -6,6 +6,9 @@ export function mapVisita(api: ApiVisita): Visita {
   return {
     id: String(api.id),
     pacienteId: String(api.paciente),
+    pacienteNombre: api.paciente_nombre,
+    pacienteFotoUrl: api.paciente_foto_url,
+    duenoNombre: api.dueno_nombre,
     fecha: api.fecha,
     hora: api.hora ?? undefined,
     motivo: api.motivo,
@@ -28,8 +31,8 @@ export async function getVisitasProximas(): Promise<Visita[]> {
 }
 
 export async function getVisitasPorPaciente(pacienteId: string): Promise<Visita[]> {
-  const response = await apiFetch("/api/visitas/");
+  const response = await apiFetch(`/api/visitas/?paciente=${pacienteId}`);
   if (!response.ok) throw new Error(`No se pudieron cargar las visitas (${response.status})`);
   const data: ApiVisita[] = await response.json();
-  return data.map(mapVisita).filter((v) => v.pacienteId === pacienteId);
+  return data.map(mapVisita);
 }

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronLeft, ExternalLink, MessageCircle } from "lucide-react";
+import { ChevronLeft, Download, ExternalLink, MessageCircle } from "lucide-react";
 import { getPaciente, getDueno, getServiciosPorPaciente } from "@/lib/data/pacientes";
 import { getVisitasPorPaciente } from "@/lib/data/visitas";
 import { getNotasConsultaPorPaciente } from "@/lib/data/notas-consulta";
@@ -42,6 +42,12 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
         <button className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-whatsapp px-4 text-sm font-semibold text-white">
           <MessageCircle size={16} /> Escribir a {dueno?.nombre.split(" ")[0]}
         </button>
+        <a
+          href={`/api/pacientes/${paciente.id}/expediente-pdf/`}
+          className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border bg-card px-4 text-sm font-semibold text-foreground hover:bg-secondary/50"
+        >
+          <Download size={16} /> Descargar PDF
+        </a>
       </section>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">

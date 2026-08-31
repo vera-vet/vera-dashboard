@@ -38,7 +38,7 @@ export default async function SalaPage() {
             {sesion ? (
               <>
                 <div className="mt-3 flex items-center gap-3">
-                  <img src={sesion.pacienteFotoUrl} alt={sesion.pacienteNombre} className="h-12 w-12 rounded-full object-cover" />
+                  <img src={sesion.pacienteFotoUrl || undefined} alt={sesion.pacienteNombre} className="h-12 w-12 rounded-full object-cover" />
                   <div className="min-w-0">
                     <div className="truncate font-display text-base font-bold">{sesion.pacienteNombre}</div>
                     <div className="truncate text-xs text-muted-foreground">{sesion.duenoNombre}</div>
@@ -71,7 +71,7 @@ export default async function SalaPage() {
               <div className="rounded-xl bg-vera-sage px-2.5 py-1.5 text-center font-display text-sm font-bold text-vera-emerald">
                 {item.hora}
               </div>
-              <img src={item.pacienteFotoUrl} alt={item.pacienteNombre} className="h-10 w-10 rounded-full object-cover" />
+              <img src={item.pacienteFotoUrl || undefined} alt={item.pacienteNombre} className="h-10 w-10 rounded-full object-cover" />
               <div className="min-w-0 flex-1">
                 <div className="truncate text-sm font-semibold">{item.pacienteNombre}</div>
                 <div className="truncate text-xs text-muted-foreground">{item.motivo}</div>

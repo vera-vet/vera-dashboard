@@ -18,7 +18,7 @@ export function ReminderQueueItem({ recordatorio, pacienteNombre, fotoUrl }: Pro
   return (
     <li className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4">
       {fotoUrl ? (
-        <img src={fotoUrl} alt={pacienteNombre} className="h-10 w-10 shrink-0 rounded-full object-cover" />
+        <img src={fotoUrl || undefined} alt={pacienteNombre} className="h-10 w-10 shrink-0 rounded-full object-cover" />
       ) : (
         <div className="h-10 w-10 shrink-0 rounded-full bg-muted" />
       )}

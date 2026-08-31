@@ -31,7 +31,7 @@ export default async function PacientesPage() {
               href={`/pacientes/${paciente.id}`}
               className="flex items-center gap-4 px-5 py-4 transition-colors hover:bg-secondary/50"
             >
-              <img src={paciente.fotoUrl} alt={paciente.nombre} className="h-12 w-12 rounded-full object-cover" />
+              <img src={paciente.fotoUrl || undefined} alt={paciente.nombre} className="h-12 w-12 rounded-full object-cover" />
               <div className="min-w-0 flex-1">
                 <div className="font-display text-base font-bold">{paciente.nombre}</div>
                 <div className="truncate text-xs text-muted-foreground">

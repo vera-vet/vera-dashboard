@@ -120,7 +120,7 @@ export function RegistrarClient({ pacientes, especialidades }: { pacientes: Paci
                 : "flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-secondary"
             }
           >
-            <img src={p.fotoUrl} alt={p.nombre} className="h-5 w-5 rounded-full object-cover" />
+            <img src={p.fotoUrl || undefined} alt={p.nombre} className="h-5 w-5 rounded-full object-cover" />
             {p.nombre}
           </button>
         ))}

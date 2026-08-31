@@ -28,7 +28,7 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
       </Link>
 
       <section className="flex flex-wrap items-center gap-6 pb-6">
-        <img src={paciente.fotoUrl} alt={paciente.nombre} className="h-24 w-24 rounded-full object-cover" />
+        <img src={paciente.fotoUrl || undefined} alt={paciente.nombre} className="h-24 w-24 rounded-full object-cover" />
         <div className="min-w-0 flex-1">
           <h1 className="font-display text-3xl font-bold text-vera-forest">{paciente.nombre}</h1>
           <p className="mt-1 text-sm text-muted-foreground">

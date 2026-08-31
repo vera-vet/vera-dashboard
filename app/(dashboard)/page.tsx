@@ -63,12 +63,18 @@ export default async function InicioPage() {
             </span>
             <h3 className="font-display text-sm font-bold">Vera responde</h3>
           </div>
-          <p className="mb-2 text-xs text-muted-foreground">{conv.duenoNombre} · sobre {conv.pacienteNombre}</p>
-          <div className="space-y-1.5">
-            {conv.mensajes.map((m) => (
-              <WhatsAppBubble key={m.id} mensaje={m} />
-            ))}
-          </div>
+          {conv ? (
+            <>
+              <p className="mb-2 text-xs text-muted-foreground">{conv.duenoNombre} · sobre {conv.pacienteNombre}</p>
+              <div className="space-y-1.5">
+                {conv.mensajes.map((m) => (
+                  <WhatsAppBubble key={m.id} mensaje={m} />
+                ))}
+              </div>
+            </>
+          ) : (
+            <p className="mb-2 text-xs text-muted-foreground">Sin conversaciones todavía.</p>
+          )}
           <Link
             href="/recordatorios"
             className="mt-4 flex items-center justify-center gap-1 rounded-xl border border-border py-2.5 text-xs font-semibold text-vera-emerald hover:bg-secondary"

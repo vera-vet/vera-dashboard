@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Share2 } from "lucide-react";
 import type { Clinica, Comparticion } from "@/lib/data/types";
@@ -11,17 +11,37 @@ export function CompartirPanel({ pacienteId, comparticionesIniciales }: { pacien
   const [query, setQuery] = useState("");
   const [resultados, setResultados] = useState<Clinica[]>([]);
   const [buscando, setBuscando] = useState(false);
+  const [mensajeError, setMensajeError] = useState<string | null>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const ultimaQueryRef = useRef("");
 
-  async function buscar(texto: string) {
-    setQuery(texto);
-    if (texto.trim().length < 2) {
-      setResultados([]);
-      return;
-    }
-    setBuscando(true);
+  function mostrarError(mensaje: string) {
+    setMensajeError(mensaje);
+    setTimeout(() => setMensajeError(null), 5000);
+  }
+
+  async function ejecutarBusqueda(texto: string) {
     const clinicas = await buscarClinicas(texto);
+    if (ultimaQueryRef.current !== texto) return; // respuesta obsoleta, se descarta
     setResultados(clinicas);
     setBuscando(false);
+  }
+
+  function buscar(texto: string) {
+    setQuery(texto);
+    ultimaQueryRef.current = texto;
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    if (texto.trim().length < 2) {
+      setResultados([]);
+      setBuscando(false);
+      return;
+    }
+
+    setBuscando(true);
+    debounceRef.current = setTimeout(() => {
+      ejecutarBusqueda(texto);
+    }, 250);
   }
 
   async function compartir(clinicaId: string) {
@@ -30,12 +50,18 @@ export function CompartirPanel({ pacienteId, comparticionesIniciales }: { pacien
       setQuery("");
       setResultados([]);
       router.refresh();
+    } else {
+      mostrarError("No se pudo compartir. Intenta de nuevo.");
     }
   }
 
   async function revocar(shareId: string) {
     const resultado = await revocarComparticion(pacienteId, shareId);
-    if (resultado.ok) router.refresh();
+    if (resultado.ok) {
+      router.refresh();
+    } else {
+      mostrarError("No se pudo revocar. Intenta de nuevo.");
+    }
   }
 
   const activas = comparticionesIniciales.filter((c) => c.activo);
@@ -53,6 +79,8 @@ export function CompartirPanel({ pacienteId, comparticionesIniciales }: { pacien
         placeholder="Buscar clínica por nombre…"
         className="mt-3 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
       />
+
+      {mensajeError && <p className="mt-2 text-xs text-vera-coral">{mensajeError}</p>}
 
       {buscando && <p className="mt-2 text-xs text-muted-foreground">Buscando…</p>}
 

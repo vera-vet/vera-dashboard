@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Download } from "lucide-react";
 import { getPacienteCompartido, getServiciosCompartido, getNotasConsultaCompartido } from "@/lib/data/comparticiones";
 import { edadTexto, formatFechaCorta, formatFechaHoraCorta } from "@/lib/date";
 import { RegistrarVisitaForm } from "./registrar-visita-form";
@@ -21,10 +21,20 @@ export default async function PacienteCompartidoPage({ params }: { params: Promi
         <ChevronLeft size={14} /> Compartidos
       </Link>
 
-      <h1 className="font-display text-3xl font-bold text-vera-forest">{paciente.nombre}</h1>
-      <p className="mt-1 text-sm text-muted-foreground">
-        {ESPECIE_LABEL[paciente.especie]} · {paciente.raza} · {edadTexto(paciente.fechaNacimiento)} · {paciente.sexo === "M" ? "Macho" : "Hembra"}
-      </p>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 className="font-display text-3xl font-bold text-vera-forest">{paciente.nombre}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {ESPECIE_LABEL[paciente.especie]} · {paciente.raza} · {edadTexto(paciente.fechaNacimiento)} · {paciente.sexo === "M" ? "Macho" : "Hembra"}
+          </p>
+        </div>
+        <a
+          href={`/api/pacientes-compartidos/${paciente.id}/expediente-pdf/`}
+          className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border bg-card px-4 text-sm font-semibold text-foreground hover:bg-secondary/50"
+        >
+          <Download size={16} /> Descargar PDF
+        </a>
+      </div>
       {paciente.alergias.length > 0 && (
         <p className="mt-2 text-sm"><span className="font-semibold">Alergias:</span> {paciente.alergias.join(", ")}</p>
       )}

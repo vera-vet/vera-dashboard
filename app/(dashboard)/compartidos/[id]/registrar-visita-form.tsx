@@ -18,19 +18,26 @@ export function RegistrarVisitaForm({ pacienteId }: { pacienteId: string }) {
   const [producto, setProducto] = useState("");
   const [vet, setVet] = useState("");
   const [mensaje, setMensaje] = useState<string | null>(null);
+  const [enviando, setEnviando] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (enviando) return;
     if (!producto.trim() || !vet.trim()) return;
 
-    const resultado = await registrarVisitaCompartida(pacienteId, { tipo, producto, vet });
-    if (resultado.ok) {
-      setMensaje("Visita registrada.");
-      setProducto("");
-      setVet("");
-      router.refresh();
-    } else {
-      setMensaje("No se pudo registrar. Intenta de nuevo.");
+    setEnviando(true);
+    try {
+      const resultado = await registrarVisitaCompartida(pacienteId, { tipo, producto, vet });
+      if (resultado.ok) {
+        setMensaje("Visita registrada.");
+        setProducto("");
+        setVet("");
+        router.refresh();
+      } else {
+        setMensaje("No se pudo registrar. Intenta de nuevo.");
+      }
+    } finally {
+      setEnviando(false);
     }
     setTimeout(() => setMensaje(null), 5000);
   }
@@ -61,8 +68,12 @@ export function RegistrarVisitaForm({ pacienteId }: { pacienteId: string }) {
         className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
       />
 
-      <button type="submit" className="w-full rounded-xl bg-vera-emerald px-4 py-2 text-sm font-semibold text-white">
-        Registrar
+      <button
+        type="submit"
+        disabled={enviando}
+        className="w-full rounded-xl bg-vera-emerald px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {enviando ? "Registrando…" : "Registrar"}
       </button>
 
       {mensaje && <p className="text-xs text-muted-foreground">{mensaje}</p>}

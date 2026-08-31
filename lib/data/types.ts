@@ -162,3 +162,19 @@ export interface NotaConsulta {
   transcripcion: string;
   servicioVisitaId?: string;
 }
+
+export interface Clinica {
+  id: string;
+  nombre: string;
+}
+
+export interface Comparticion {
+  id: string;
+  pacienteId: string;
+  clinicaId: string;
+  clinicaNombre: string;
+  otorgadoPorNombre: string;
+  otorgadoEn: string;
+  revocadoEn: string | null;
+  activo: boolean;
+}

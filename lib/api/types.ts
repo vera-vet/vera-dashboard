@@ -144,3 +144,20 @@ export interface ApiNotaConsulta {
   transcripcion: string;
   servicio_visita: number | null;
 }
+
+export interface ApiClinica {
+  id: number;
+  nombre: string;
+}
+
+export interface ApiPacienteCompartido {
+  id: number;
+  paciente: number;
+  clinica: number;
+  clinica_nombre: string;
+  otorgado_por: number;
+  otorgado_por_nombre: string;
+  otorgado_en: string;
+  revocado_en: string | null;
+  activo: boolean;
+}

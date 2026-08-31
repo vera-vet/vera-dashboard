@@ -4,10 +4,12 @@ import { ChevronLeft, Download, ExternalLink, MessageCircle } from "lucide-react
 import { getPaciente, getDueno, getServiciosPorPaciente } from "@/lib/data/pacientes";
 import { getVisitasPorPaciente } from "@/lib/data/visitas";
 import { getNotasConsultaPorPaciente } from "@/lib/data/notas-consulta";
+import { getComparticionesPorPaciente } from "@/lib/data/comparticiones";
 import { VaccineTimeline } from "@/components/shared/vaccine-timeline";
 import { edadTexto, formatFechaCorta, formatFechaHoraCorta, hoyISO } from "@/lib/date";
 import { DatosClinicos } from "./datos-clinicos";
 import { HistorialItem } from "./historial-item";
+import { CompartirPanel } from "./compartir-panel";
 
 const ESPECIE_LABEL = { perro: "Perro", gato: "Gato", otro: "Otro" } as const;
 
@@ -20,6 +22,7 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
   const servicios = await getServiciosPorPaciente(paciente.id);
   const proximas = (await getVisitasPorPaciente(paciente.id)).filter((v) => v.fecha >= hoyISO());
   const notas = await getNotasConsultaPorPaciente(paciente.id);
+  const comparticiones = await getComparticionesPorPaciente(paciente.id);
 
   return (
     <div>
@@ -99,6 +102,8 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
           </div>
 
           <DatosClinicos pacienteId={paciente.id} alergiasIniciales={paciente.alergias} notasIniciales={paciente.notasComportamiento} />
+
+          <CompartirPanel pacienteId={paciente.id} comparticionesIniciales={comparticiones} />
 
           <Link
             href={`/carnet/${paciente.carnetToken}`}

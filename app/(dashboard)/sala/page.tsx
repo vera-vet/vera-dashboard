@@ -1,9 +1,11 @@
-import { Clock } from "lucide-react";
-import { getSesionesActivas, getSalaEspera, getEstaciones } from "@/lib/data/sala";
-import { GrabarConsultaButton } from "./grabar-consulta-button";
+import { getSesionesActivas, getSalaEspera, getEstaciones, getEmpleados } from "@/lib/data/sala";
+import { getPacientes } from "@/lib/data/pacientes";
+import { EstacionCard } from "./estacion-card";
 
 export default async function SalaPage() {
-  const [sesiones, espera, estaciones] = await Promise.all([getSesionesActivas(), getSalaEspera(), getEstaciones()]);
+  const [sesiones, espera, estaciones, empleados, pacientes] = await Promise.all([
+    getSesionesActivas(), getSalaEspera(), getEstaciones(), getEmpleados(), getPacientes(),
+  ]);
 
   const tarjetas = estaciones.map((estacion) => {
     const sesion = sesiones.find((s) => s.estacionId === estacion.id);
@@ -19,43 +21,7 @@ export default async function SalaPage() {
 
       <div className="grid gap-3 sm:grid-cols-2">
         {tarjetas.map(({ estacion, sesion }) => (
-          <div
-            key={estacion.id}
-            className={
-              sesion
-                ? "rounded-2xl border border-vera-emerald bg-vera-sage p-4"
-                : "rounded-2xl border border-dashed border-border bg-card p-4"
-            }
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wide text-vera-emerald">{estacion.nombre}</span>
-              {sesion ? (
-                <span className="rounded-full bg-vera-emerald px-2 py-0.5 text-[10px] font-medium text-white">en curso</span>
-              ) : (
-                <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">Libre</span>
-              )}
-            </div>
-            {sesion ? (
-              <>
-                <div className="mt-3 flex items-center gap-3">
-                  <img src={sesion.pacienteFotoUrl || undefined} alt={sesion.pacienteNombre} className="h-12 w-12 rounded-full object-cover" />
-                  <div className="min-w-0">
-                    <div className="truncate font-display text-base font-bold">{sesion.pacienteNombre}</div>
-                    <div className="truncate text-xs text-muted-foreground">{sesion.duenoNombre}</div>
-                  </div>
-                </div>
-                <div className="mt-3 flex items-center justify-between border-t border-border/60 pt-3 text-xs">
-                  <span className="font-medium">{sesion.empleadoNombre}</span>
-                  <span className="flex items-center gap-1 text-muted-foreground">
-                    <Clock size={12} /> desde {sesion.inicio}
-                  </span>
-                </div>
-                <GrabarConsultaButton pacienteId={sesion.pacienteId} empleadoId={sesion.empleadoId} />
-              </>
-            ) : (
-              <p className="mt-3 text-xs text-muted-foreground">Sin sesión activa</p>
-            )}
-          </div>
+          <EstacionCard key={estacion.id} estacion={estacion} sesion={sesion} pacientes={pacientes} empleados={empleados} />
         ))}
       </div>
 

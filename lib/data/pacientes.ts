@@ -89,3 +89,10 @@ export async function getPendientesVacunas(): Promise<Paciente[]> {
   const data: ApiPaciente[] = await response.json();
   return data.map(mapPaciente);
 }
+
+export async function buscarDuenoPorWhatsapp(whatsapp: string): Promise<Dueno | undefined> {
+  const response = await apiFetch(`/api/duenos/?whatsapp=${encodeURIComponent(whatsapp)}`);
+  if (!response.ok) throw new Error(`No se pudo buscar el dueño (${response.status})`);
+  const data: ApiDueno[] = await response.json();
+  return data.length > 0 ? mapDueno(data[0]) : undefined;
+}

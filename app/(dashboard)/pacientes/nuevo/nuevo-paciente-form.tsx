@@ -90,7 +90,12 @@ export function NuevoPacienteForm() {
           <input
             type="text"
             value={whatsapp}
-            onChange={(e) => setWhatsapp(e.target.value)}
+            onChange={(e) => {
+              setWhatsapp(e.target.value);
+              setDuenoId(null);
+              setDuenoNombreExistente(null);
+              setMensaje(null);
+            }}
             placeholder="WhatsApp del dueño"
             className="flex-1 rounded-xl border border-border bg-background px-3 py-2 text-sm"
           />

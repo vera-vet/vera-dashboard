@@ -15,8 +15,8 @@ export function ProductoForm({ producto, onCerrar }: { producto?: Producto; onCe
   const router = useRouter();
   const [nombre, setNombre] = useState(producto?.nombre ?? "");
   const [categoria, setCategoria] = useState<ProductoCategoria>(producto?.categoria ?? "medicina");
-  const [precio, setPrecio] = useState(producto?.precio ?? 0);
-  const [cantidad, setCantidad] = useState(producto?.cantidad ?? 0);
+  const [precio, setPrecio] = useState(producto ? String(producto.precio) : "");
+  const [cantidad, setCantidad] = useState(producto ? String(producto.cantidad) : "");
   const [fotoUrl, setFotoUrl] = useState(producto?.fotoUrl ?? "");
   const [guardando, setGuardando] = useState(false);
   const [mensaje, setMensaje] = useState<string | null>(null);
@@ -28,8 +28,12 @@ export function ProductoForm({ producto, onCerrar }: { producto?: Producto; onCe
       setMensaje("Escribe el nombre del producto.");
       return;
     }
+    if (!precio || Number.isNaN(Number(precio)) || Number(precio) < 0) {
+      setMensaje("Escribe un precio válido.");
+      return;
+    }
     setGuardando(true);
-    const datos = { nombre, categoria, precio, cantidad, fotoUrl };
+    const datos = { nombre, categoria, precio: Number(precio), cantidad: Number(cantidad) || 0, fotoUrl };
     const resultado = producto ? await actualizarProducto(producto.id, datos) : await crearProducto(datos);
     setGuardando(false);
     if (resultado.ok) {
@@ -58,14 +62,14 @@ export function ProductoForm({ producto, onCerrar }: { producto?: Producto; onCe
         <div className="w-1/2">
           <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Precio</label>
           <input
-            type="number" min={0} step="0.01" value={precio} onChange={(e) => setPrecio(Number(e.target.value))}
+            type="number" min={0} step="0.01" value={precio} onChange={(e) => setPrecio(e.target.value)}
             className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
           />
         </div>
         <div className="w-1/2">
           <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Cantidad en stock</label>
           <input
-            type="number" min={0} value={cantidad} onChange={(e) => setCantidad(Number(e.target.value))}
+            type="number" min={0} value={cantidad} onChange={(e) => setCantidad(e.target.value)}
             className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
           />
         </div>

@@ -1,6 +1,7 @@
 "use server";
 
 import { apiFetch } from "@/lib/api/client";
+import { getMe } from "@/lib/data/usuario";
 
 interface ProductoInput {
   nombre: string;
@@ -11,6 +12,8 @@ interface ProductoInput {
 }
 
 export async function crearProducto(datos: ProductoInput): Promise<{ ok: boolean }> {
+  const { esAdmin } = await getMe();
+  if (!esAdmin) return { ok: false };
   const response = await apiFetch("/api/productos/", {
     method: "POST",
     body: JSON.stringify({
@@ -25,6 +28,8 @@ export async function crearProducto(datos: ProductoInput): Promise<{ ok: boolean
 }
 
 export async function actualizarProducto(id: string, datos: ProductoInput): Promise<{ ok: boolean }> {
+  const { esAdmin } = await getMe();
+  if (!esAdmin) return { ok: false };
   const response = await apiFetch(`/api/productos/${id}/`, {
     method: "PATCH",
     body: JSON.stringify({
@@ -35,5 +40,12 @@ export async function actualizarProducto(id: string, datos: ProductoInput): Prom
       foto_url: datos.fotoUrl,
     }),
   });
+  return { ok: response.ok };
+}
+
+export async function borrarProducto(id: string): Promise<{ ok: boolean }> {
+  const { esAdmin } = await getMe();
+  if (!esAdmin) return { ok: false };
+  const response = await apiFetch(`/api/productos/${id}/`, { method: "DELETE" });
   return { ok: response.ok };
 }

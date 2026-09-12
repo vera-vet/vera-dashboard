@@ -161,3 +161,18 @@ export interface ApiPacienteCompartido {
   revocado_en: string | null;
   activo: boolean;
 }
+
+export interface ApiProducto {
+  id: number;
+  nombre: string;
+  categoria: string;
+  precio: string;
+  cantidad: number;
+  foto_url: string;
+}
+
+export interface ApiUsuario {
+  email: string;
+  nombre: string;
+  es_admin: boolean;
+}

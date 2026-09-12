@@ -178,3 +178,20 @@ export interface Comparticion {
   revocadoEn: string | null;
   activo: boolean;
 }
+
+export type ProductoCategoria = "medicina" | "alimento" | "accesorio";
+
+export interface Producto {
+  id: string;
+  nombre: string;
+  categoria: ProductoCategoria;
+  precio: number;
+  cantidad: number;
+  fotoUrl: string;
+}
+
+export interface Usuario {
+  email: string;
+  nombre: string;
+  esAdmin: boolean;
+}

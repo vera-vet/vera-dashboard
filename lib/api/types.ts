@@ -176,3 +176,22 @@ export interface ApiUsuario {
   nombre: string;
   es_admin: boolean;
 }
+
+export interface ApiPedidoItem {
+  id: number;
+  producto: number | null;
+  producto_nombre: string;
+  cantidad: number;
+  precio_unitario: string;
+}
+
+export interface ApiPedido {
+  id: number;
+  dueno: number;
+  dueno_nombre: string;
+  tipo_entrega: string;
+  direccion_entrega: string;
+  estado: string;
+  creado_en: string;
+  items: ApiPedidoItem[];
+}

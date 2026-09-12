@@ -27,3 +27,12 @@ export async function apiFetch(path: string, init?: RequestInit): Promise<Respon
     cache: "no-store",
   });
 }
+
+export async function apiFetchTienda(path: string, init?: RequestInit): Promise<Response> {
+  const token = (await cookies()).get("dueno_token")?.value;
+  return fetch(`${process.env.DJANGO_API_URL}${path}`, {
+    ...init,
+    headers: buildAuthHeadersForBody(token, init?.body, init?.headers),
+    cache: "no-store",
+  });
+}

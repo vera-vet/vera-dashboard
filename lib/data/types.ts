@@ -195,3 +195,25 @@ export interface Usuario {
   nombre: string;
   esAdmin: boolean;
 }
+
+export type TipoEntrega = "retiro" | "domicilio";
+export type EstadoPedido = "pendiente_pago" | "pagado" | "en_proceso" | "entregado" | "cancelado" | "pago_sin_stock";
+
+export interface PedidoItem {
+  id: string;
+  productoId: string | null;
+  productoNombre: string;
+  cantidad: number;
+  precioUnitario: number;
+}
+
+export interface Pedido {
+  id: string;
+  duenoId: string;
+  duenoNombre: string;
+  tipoEntrega: TipoEntrega;
+  direccionEntrega: string;
+  estado: EstadoPedido;
+  creadoEn: string;
+  items: PedidoItem[];
+}

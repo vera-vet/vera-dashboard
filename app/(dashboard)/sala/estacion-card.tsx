@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Clock } from "lucide-react";
-import type { Empleado, Estacion, Paciente, SesionActiva } from "@/lib/data/types";
+import type { Empleado, Estacion, SesionActiva } from "@/lib/data/types";
 import { GrabarConsultaButton } from "./grabar-consulta-button";
 import { NuevaSesionForm } from "./nueva-sesion-form";
 
@@ -14,7 +14,7 @@ export function EstacionCard({
 }: {
   estacion: Estacion;
   sesion: SesionActiva | null;
-  pacientes: Paciente[];
+  pacientes: { id: string; nombre: string }[];
   empleados: Empleado[];
 }) {
   const [formularioAbierto, setFormularioAbierto] = useState(false);

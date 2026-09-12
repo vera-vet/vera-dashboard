@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import type { Empleado, Paciente } from "@/lib/data/types";
+import type { Empleado } from "@/lib/data/types";
 import { crearSesionActiva } from "./actions";
 
 export function NuevaSesionForm({
@@ -12,7 +12,7 @@ export function NuevaSesionForm({
   onCerrar,
 }: {
   estacionId: string;
-  pacientes: Paciente[];
+  pacientes: { id: string; nombre: string }[];
   empleados: Empleado[];
   onCerrar: () => void;
 }) {

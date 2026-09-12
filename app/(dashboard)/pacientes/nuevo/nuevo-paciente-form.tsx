@@ -15,9 +15,11 @@ export function NuevoPacienteForm() {
   const [paso, setPaso] = useState<"dueno" | "paciente">("dueno");
   const [whatsapp, setWhatsapp] = useState("");
   const [buscando, setBuscando] = useState(false);
+  const [whatsappBuscado, setWhatsappBuscado] = useState<string | null>(null);
   const [duenoId, setDuenoId] = useState<string | null>(null);
   const [duenoNombreExistente, setDuenoNombreExistente] = useState<string | null>(null);
   const [duenoNombreNuevo, setDuenoNombreNuevo] = useState("");
+  const [guardandoDueno, setGuardandoDueno] = useState(false);
   const [mensaje, setMensaje] = useState<string | null>(null);
 
   const [nombre, setNombre] = useState("");
@@ -33,18 +35,28 @@ export function NuevoPacienteForm() {
   async function buscar() {
     if (!whatsapp.trim()) return;
     setBuscando(true);
-    const dueno = await buscarDueno(whatsapp);
-    if (dueno) {
-      setDuenoId(dueno.id);
-      setDuenoNombreExistente(dueno.nombre);
-    } else {
-      setDuenoId(null);
-      setDuenoNombreExistente(null);
+    try {
+      const dueno = await buscarDueno(whatsapp);
+      if (dueno) {
+        setDuenoId(dueno.id);
+        setDuenoNombreExistente(dueno.nombre);
+      } else {
+        setDuenoId(null);
+        setDuenoNombreExistente(null);
+      }
+      setWhatsappBuscado(whatsapp.trim());
+    } catch {
+      setMensaje("No se pudo buscar. Intenta de nuevo.");
+    } finally {
+      setBuscando(false);
     }
-    setBuscando(false);
   }
 
   async function continuarConDueno() {
+    if (whatsappBuscado !== whatsapp.trim()) {
+      setMensaje("Busca el número primero.");
+      return;
+    }
     if (duenoId) {
       setPaso("paciente");
       return;
@@ -53,13 +65,19 @@ export function NuevoPacienteForm() {
       setMensaje("Escribe el nombre del dueño.");
       return;
     }
-    const resultado = await crearDueno({ nombre: duenoNombreNuevo, whatsapp });
-    if (!resultado.ok || !resultado.id) {
-      setMensaje("No se pudo crear el dueño. Intenta de nuevo.");
-      return;
+    if (guardandoDueno) return;
+    setGuardandoDueno(true);
+    try {
+      const resultado = await crearDueno({ nombre: duenoNombreNuevo, whatsapp });
+      if (!resultado.ok || !resultado.id) {
+        setMensaje("No se pudo crear el dueño. Intenta de nuevo.");
+        return;
+      }
+      setDuenoId(resultado.id);
+      setPaso("paciente");
+    } finally {
+      setGuardandoDueno(false);
     }
-    setDuenoId(resultado.id);
-    setPaso("paciente");
   }
 
   async function guardarPaciente(e: React.FormEvent) {
@@ -94,6 +112,8 @@ export function NuevoPacienteForm() {
               setWhatsapp(e.target.value);
               setDuenoId(null);
               setDuenoNombreExistente(null);
+              setWhatsappBuscado(null);
+              setDuenoNombreNuevo("");
               setMensaje(null);
             }}
             placeholder="WhatsApp del dueño"
@@ -112,7 +132,7 @@ export function NuevoPacienteForm() {
           <p className="text-sm text-vera-emerald">Encontrado: {duenoNombreExistente}</p>
         )}
 
-        {!duenoId && whatsapp.trim() && !buscando && (
+        {whatsappBuscado === whatsapp.trim() && !duenoId && !buscando && (
           <input
             type="text"
             value={duenoNombreNuevo}
@@ -127,9 +147,10 @@ export function NuevoPacienteForm() {
         <button
           type="button"
           onClick={continuarConDueno}
-          className="w-full rounded-xl bg-vera-emerald px-4 py-2 text-sm font-semibold text-white"
+          disabled={guardandoDueno}
+          className="w-full rounded-xl bg-vera-emerald px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
         >
-          Continuar
+          {guardandoDueno ? "Guardando…" : "Continuar"}
         </button>
       </div>
     );
@@ -158,10 +179,13 @@ export function NuevoPacienteForm() {
         <option value="H">Hembra</option>
       </select>
 
-      <input
-        type="date" value={fechaNacimiento} onChange={(e) => setFechaNacimiento(e.target.value)}
-        className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
-      />
+      <div>
+        <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Fecha de nacimiento</label>
+        <input
+          type="date" value={fechaNacimiento} onChange={(e) => setFechaNacimiento(e.target.value)}
+          className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
+        />
+      </div>
 
       <label className="flex items-center gap-2 text-sm">
         <input type="checkbox" checked={esterilizado} onChange={(e) => setEsterilizado(e.target.checked)} />
@@ -169,14 +193,20 @@ export function NuevoPacienteForm() {
       </label>
 
       <div className="flex gap-2">
-        <input
-          type="number" min={0} value={vacunasCompletas} onChange={(e) => setVacunasCompletas(Number(e.target.value))}
-          placeholder="Vacunas completas" className="w-1/2 rounded-xl border border-border bg-background px-3 py-2 text-sm"
-        />
-        <input
-          type="number" min={0} value={vacunasTotal} onChange={(e) => setVacunasTotal(Number(e.target.value))}
-          placeholder="Vacunas totales" className="w-1/2 rounded-xl border border-border bg-background px-3 py-2 text-sm"
-        />
+        <div className="w-1/2">
+          <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Vacunas completas</label>
+          <input
+            type="number" min={0} value={vacunasCompletas} onChange={(e) => setVacunasCompletas(Number(e.target.value))}
+            placeholder="Vacunas completas" className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
+          />
+        </div>
+        <div className="w-1/2">
+          <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Vacunas totales</label>
+          <input
+            type="number" min={0} value={vacunasTotal} onChange={(e) => setVacunasTotal(Number(e.target.value))}
+            placeholder="Vacunas totales" className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
+          />
+        </div>
       </div>
 
       {mensaje && <p className="text-xs text-vera-coral">{mensaje}</p>}

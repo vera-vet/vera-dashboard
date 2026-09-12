@@ -12,6 +12,8 @@ export default async function SalaPage() {
     return { estacion, sesion: sesion ?? null };
   });
 
+  const opcionesPaciente = pacientes.map(({ id, nombre }) => ({ id, nombre }));
+
   return (
     <div>
       <header className="pb-6">
@@ -21,7 +23,7 @@ export default async function SalaPage() {
 
       <div className="grid gap-3 sm:grid-cols-2">
         {tarjetas.map(({ estacion, sesion }) => (
-          <EstacionCard key={estacion.id} estacion={estacion} sesion={sesion} pacientes={pacientes} empleados={empleados} />
+          <EstacionCard key={estacion.id} estacion={estacion} sesion={sesion} pacientes={opcionesPaciente} empleados={empleados} />
         ))}
       </div>
 

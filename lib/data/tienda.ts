@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { apiFetch, apiFetchTienda } from "@/lib/api/client";
 import type { ApiPedido, ApiPedidoItem, ApiProducto } from "@/lib/api/types";
 import { mapProducto } from "@/lib/data/productos";
@@ -28,6 +29,7 @@ export function mapPedido(api: ApiPedido): Pedido {
 
 export async function getCatalogoTienda(): Promise<Producto[]> {
   const response = await apiFetchTienda("/api/tienda/productos/");
+  if (response.status === 401) redirect("/tienda");
   if (!response.ok) throw new Error(`No se pudo cargar el catálogo (${response.status})`);
   const data: ApiProducto[] = await response.json();
   return data.map(mapProducto);
@@ -35,6 +37,7 @@ export async function getCatalogoTienda(): Promise<Producto[]> {
 
 export async function getMisPedidos(): Promise<Pedido[]> {
   const response = await apiFetchTienda("/api/tienda/mis-pedidos/");
+  if (response.status === 401) redirect("/tienda");
   if (!response.ok) throw new Error(`No se pudieron cargar tus pedidos (${response.status})`);
   const data: ApiPedido[] = await response.json();
   return data.map(mapPedido);

@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { vaciarCarrito } from "../carrito";
 
 function AccederContent() {
   const router = useRouter();
@@ -22,6 +23,7 @@ function AccederContent() {
       .then((r) => r.json())
       .then((data) => {
         if (data.ok) {
+          vaciarCarrito();
           router.push("/tienda/catalogo");
         } else {
           setError(data.error || "No se pudo entrar. Pide un link nuevo.");

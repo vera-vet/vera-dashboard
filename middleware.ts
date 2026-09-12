@@ -4,6 +4,17 @@ import { decodeJwtExp, isExpiringSoon } from "@/lib/api/jwt";
 import { accessCookieOptions } from "@/lib/api/session-cookie";
 
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  if (pathname === "/tienda" || pathname.startsWith("/tienda/acceder")) {
+    return NextResponse.next();
+  }
+  if (pathname.startsWith("/tienda")) {
+    return request.cookies.get("dueno_token")
+      ? NextResponse.next()
+      : NextResponse.redirect(new URL("/tienda", request.url));
+  }
+
   const accessToken = request.cookies.get("access_token")?.value;
   const refreshToken = request.cookies.get("refresh_token")?.value;
 
@@ -46,5 +57,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!login|carnet|tienda|api/session|api/tienda|_next|favicon.ico).*)"],
+  matcher: ["/((?!login|carnet|api/session|api/tienda|_next|favicon.ico).*)"],
 };

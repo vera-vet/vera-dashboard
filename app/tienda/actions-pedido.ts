@@ -1,6 +1,7 @@
 "use server";
 
 import { apiFetchTienda } from "@/lib/api/client";
+import { getMisPedidos } from "@/lib/data/tienda";
 import type { TipoEntrega } from "@/lib/data/types";
 
 interface ItemPedidoInput {
@@ -28,6 +29,9 @@ export async function crearPedido(
 }
 
 export async function confirmarPagoSimulado(pedidoId: string): Promise<{ ok: boolean; estado?: string }> {
+  const mios = await getMisPedidos();
+  if (!mios.some((p) => p.id === pedidoId)) return { ok: false };
+
   const response = await apiFetchTienda("/api/tienda/pagos/webhook/", {
     method: "POST",
     body: JSON.stringify({ pedido_id: Number(pedidoId) }),

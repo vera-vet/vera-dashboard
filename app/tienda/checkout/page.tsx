@@ -40,6 +40,11 @@ export default function CheckoutPage() {
     }
   }
 
+  function vaciar() {
+    vaciarCarrito();
+    setCarrito([]);
+  }
+
   if (carrito.length === 0) {
     return <p className="text-sm text-muted-foreground">Tu carrito está vacío.</p>;
   }
@@ -78,6 +83,13 @@ export default function CheckoutPage() {
         className="w-full rounded-xl bg-vera-emerald px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
       >
         {guardando ? "Procesando…" : "Pagar"}
+      </button>
+
+      <button
+        type="button" onClick={vaciar} disabled={guardando}
+        className="w-full rounded-xl border border-border px-4 py-2 text-sm font-semibold text-vera-coral disabled:opacity-60"
+      >
+        Vaciar carrito
       </button>
     </div>
   );

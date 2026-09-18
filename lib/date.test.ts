@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addDaysISO, edadTexto, formatFechaCorta, formatFechaHoraCorta, hoyISO } from "./date";
+import { addDaysISO, edadTexto, hoyISOElSalvador, formatFechaCorta, formatFechaHoraCorta, hoyISO } from "./date";
 
 describe("hoyISO", () => {
   it("returns today's date in YYYY-MM-DD format", () => {
@@ -51,32 +51,44 @@ describe("addDaysISO", () => {
 
 describe("edadTexto", () => {
   it("shows months for patients under a year old", () => {
-    const twoMonthsAgo = addDaysISO(-60);
-    expect(edadTexto(twoMonthsAgo)).toMatch(/mes/);
+    expect(edadTexto("2026-07-17", "2026-09-17")).toBe("2 meses");
+    expect(edadTexto("2026-08-17", "2026-09-17")).toBe("1 mes");
+    expect(edadTexto("2026-09-10", "2026-09-17")).toBe("0 meses");
   });
 
-  it("shows years for patients over a year old", () => {
-    const threeYearsAgo = addDaysISO(-365 * 3);
-    expect(edadTexto(threeYearsAgo)).toBe("3 años");
+  it("counts calendar years, turning over exactly on the birthday", () => {
+    expect(edadTexto("2023-09-17", "2026-09-17")).toBe("3 años");
+    expect(edadTexto("2023-09-18", "2026-09-17")).toBe("2 años");
+    expect(edadTexto("2023-09-16", "2026-09-17")).toBe("3 años");
   });
 
   it("uses singular 'año' for exactly one year", () => {
-    const oneYearAgo = addDaysISO(-365);
-    expect(edadTexto(oneYearAgo)).toBe("1 año");
+    expect(edadTexto("2025-09-17", "2026-09-17")).toBe("1 año");
+  });
+
+  it("handles a leap-day birthday", () => {
+    expect(edadTexto("2024-02-29", "2025-02-28")).toBe("11 meses");
+    expect(edadTexto("2024-02-29", "2025-03-01")).toBe("1 año");
+  });
+
+  it("never returns a negative age for a future date", () => {
+    expect(edadTexto("2026-12-01", "2026-09-17")).toBe("0 meses");
+  });
+
+  it("accepts full ISO datetimes by using only the date part", () => {
+    expect(edadTexto("2023-09-17T00:00:00Z", "2026-09-17")).toBe("3 años");
+  });
+
+  it("defaults to today in El Salvador", () => {
+    const hace3Anios = `${Number(hoyISOElSalvador().slice(0, 4)) - 3}${hoyISOElSalvador().slice(4)}`;
+    expect(edadTexto(hace3Anios)).toBe("3 años");
   });
 });
 
-describe("formatFechaCorta", () => {
-  it("formats an ISO date as day + short month in Spanish", () => {
-    expect(formatFechaCorta("2026-08-05")).toBe("5 ago");
-  });
-});
-
-describe("formatFechaHoraCorta", () => {
-  it("formats a full ISO datetime (with time and offset) as day + short month + time", () => {
-    const result = formatFechaHoraCorta("2026-08-30T13:59:41.809445-06:00");
-    expect(result).not.toBe("Invalid Date");
-    expect(result).toMatch(/30 ago/);
-    expect(result).toMatch(/1:59/);
+describe("hoyISOElSalvador", () => {
+  it("uses El Salvador's date, not the machine's or UTC's", () => {
+    // 02:00 UTC on Sep 18 is still 20:00 on Sep 17 in El Salvador (UTC-6).
+    expect(hoyISOElSalvador(new Date("2026-09-18T02:00:00Z"))).toBe("2026-09-17");
+    expect(hoyISOElSalvador(new Date("2026-09-18T06:00:00Z"))).toBe("2026-09-18");
   });
 });

@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { BarChart3, Bell, CalendarDays, Home, LayoutGrid, PawPrint, PlusCircle, Syringe } from "lucide-react";
+import { BarChart3, Bell, CalendarDays, Home, LayoutGrid, PawPrint, PlusCircle, Receipt, Settings, Share2, ShoppingBag, Syringe } from "lucide-react";
 
 export interface NavItem {
   href: string;
@@ -11,9 +11,13 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/", label: "Inicio", icon: Home },
   { href: "/recordatorios", label: "Recordatorios", icon: Bell },
   { href: "/pacientes", label: "Pacientes", icon: PawPrint },
+  { href: "/compartidos", label: "Compartidos", icon: Share2 },
   { href: "/agenda", label: "Agenda", icon: CalendarDays },
   { href: "/vacunas", label: "Vacunas", icon: Syringe },
   { href: "/sala", label: "Sala", icon: LayoutGrid },
+  { href: "/inventario", label: "Inventario", icon: ShoppingBag },
+  { href: "/pedidos", label: "Pedidos", icon: Receipt },
   { href: "/registrar", label: "Registrar", icon: PlusCircle },
   { href: "/reportes", label: "Reportes", icon: BarChart3 },
+  { href: "/ajustes", label: "Ajustes", icon: Settings },
 ];

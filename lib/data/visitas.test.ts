@@ -1,28 +1,27 @@
 import { describe, expect, it } from "vitest";
-import { hoyISO } from "@/lib/date";
-import { getVisitasHoy, getVisitasPorPaciente, getVisitasProximas } from "./visitas";
+import { mapVisita } from "./visitas";
+import type { ApiVisita } from "@/lib/api/types";
 
-describe("getVisitasHoy", () => {
-  it("only returns visits with offset 0, resolved to today's real date", async () => {
-    const result = await getVisitasHoy();
-    expect(result.length).toBeGreaterThan(0);
-    expect(result.every((v) => v.fecha === hoyISO())).toBe(true);
+describe("mapVisita", () => {
+  it("maps snake_case API fields, renaming paciente to pacienteId", () => {
+    const api: ApiVisita = {
+      id: 1, paciente: 10, paciente_nombre: "Rocky", paciente_foto_url: "https://example.com/rocky.jpg",
+      dueno_nombre: "María López", paciente_estado_esquema: "al_dia", paciente_falta_texto: "",
+      fecha: "2026-08-15", hora: "09:00", motivo: "Refuerzo anual", confirmada: true,
+    };
+    expect(mapVisita(api)).toEqual({
+      id: "1", pacienteId: "10", pacienteNombre: "Rocky", pacienteFotoUrl: "https://example.com/rocky.jpg",
+      duenoNombre: "María López", pacienteEstadoEsquema: "al_dia", pacienteFaltaTexto: undefined,
+      fecha: "2026-08-15", hora: "09:00", motivo: "Refuerzo anual", confirmada: true,
+    });
   });
-});
 
-describe("getVisitasProximas", () => {
-  it("returns visits sorted chronologically", async () => {
-    const result = await getVisitasProximas();
-    const fechas = result.map((v) => v.fecha + (v.hora ?? ""));
-    const sorted = [...fechas].sort();
-    expect(fechas).toEqual(sorted);
-  });
-});
-
-describe("getVisitasPorPaciente", () => {
-  it("filters visits to a single patient", async () => {
-    const result = await getVisitasPorPaciente("p1");
-    expect(result.every((v) => v.pacienteId === "p1")).toBe(true);
-    expect(result.length).toBeGreaterThan(0);
+  it("maps a null hora to undefined", () => {
+    const api: ApiVisita = {
+      id: 2, paciente: 10, paciente_nombre: "Rocky", paciente_foto_url: "", dueno_nombre: "María López",
+      paciente_estado_esquema: "falta", paciente_falta_texto: "Falta 2ª dosis",
+      fecha: "2026-08-15", hora: null, motivo: "Control", confirmada: false,
+    };
+    expect(mapVisita(api).hora).toBeUndefined();
   });
 });

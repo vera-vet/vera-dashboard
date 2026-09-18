@@ -1,13 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { LogOut } from "lucide-react";
 import { NAV_ITEMS } from "./nav-items";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  async function handleLogout() {
+    await fetch("/api/session/logout", { method: "POST" });
+    router.push("/login");
+    router.refresh();
+  }
 
   return (
     <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-border bg-primary text-primary-foreground lg:flex">
@@ -39,7 +47,17 @@ export function Sidebar() {
 
       <div className="flex items-center justify-between border-t border-primary-foreground/10 px-6 py-4">
         <span className="text-xs text-primary-foreground/60">Vet. San Rafael</span>
-        <ThemeToggle />
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="grid h-9 w-9 place-items-center rounded-xl text-primary-foreground/70 transition-colors hover:bg-primary-foreground/5 hover:text-primary-foreground"
+            aria-label="Cerrar sesión"
+          >
+            <LogOut size={18} strokeWidth={1.8} />
+          </button>
+        </div>
       </div>
     </aside>
   );

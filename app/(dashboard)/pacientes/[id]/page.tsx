@@ -1,10 +1,15 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronLeft, ExternalLink, MessageCircle } from "lucide-react";
+import { ChevronLeft, Download, ExternalLink, MessageCircle } from "lucide-react";
 import { getPaciente, getDueno, getServiciosPorPaciente } from "@/lib/data/pacientes";
 import { getVisitasPorPaciente } from "@/lib/data/visitas";
+import { getNotasConsultaPorPaciente } from "@/lib/data/notas-consulta";
+import { getComparticionesPorPaciente } from "@/lib/data/comparticiones";
 import { VaccineTimeline } from "@/components/shared/vaccine-timeline";
-import { edadTexto, formatFechaCorta, hoyISO } from "@/lib/date";
+import { edadTexto, formatFechaCorta, formatFechaHoraCorta, hoyISO } from "@/lib/date";
+import { DatosClinicos } from "./datos-clinicos";
+import { HistorialItem } from "./historial-item";
+import { CompartirPanel } from "./compartir-panel";
 
 const ESPECIE_LABEL = { perro: "Perro", gato: "Gato", otro: "Otro" } as const;
 
@@ -16,6 +21,8 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
   const dueno = await getDueno(paciente.duenoId);
   const servicios = await getServiciosPorPaciente(paciente.id);
   const proximas = (await getVisitasPorPaciente(paciente.id)).filter((v) => v.fecha >= hoyISO());
+  const notas = await getNotasConsultaPorPaciente(paciente.id);
+  const comparticiones = await getComparticionesPorPaciente(paciente.id);
 
   return (
     <div>
@@ -24,7 +31,7 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
       </Link>
 
       <section className="flex flex-wrap items-center gap-6 pb-6">
-        <img src={paciente.fotoUrl} alt={paciente.nombre} className="h-24 w-24 rounded-full object-cover" />
+        <img src={paciente.fotoUrl || undefined} alt={paciente.nombre} className="h-24 w-24 rounded-full object-cover" />
         <div className="min-w-0 flex-1">
           <h1 className="font-display text-3xl font-bold text-vera-forest">{paciente.nombre}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -38,6 +45,12 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
         <button className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-whatsapp px-4 text-sm font-semibold text-white">
           <MessageCircle size={16} /> Escribir a {dueno?.nombre.split(" ")[0]}
         </button>
+        <a
+          href={`/api/pacientes/${paciente.id}/expediente-pdf/`}
+          className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border bg-card px-4 text-sm font-semibold text-foreground hover:bg-secondary/50"
+        >
+          <Download size={16} /> Descargar PDF
+        </a>
       </section>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
@@ -51,14 +64,21 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
           <ol className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
             {servicios.length === 0 && <li className="p-6 text-center text-sm text-muted-foreground">Sin visitas registradas.</li>}
             {servicios.map((s) => (
-              <li key={s.id} className="flex items-center gap-4 px-5 py-4">
-                <div className="min-w-0 flex-1">
-                  <div className="font-display text-sm font-bold">{s.producto}</div>
-                  <div className="text-xs text-muted-foreground">{formatFechaCorta(s.fecha)} · {s.vet}</div>
+              <HistorialItem key={s.id} servicio={s} reporte={s.reporte} />
+            ))}
+          </ol>
+
+          <h2 className="mb-3 mt-8 font-display text-lg font-bold">Transcripciones</h2>
+          <ol className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
+            {notas.length === 0 && <li className="p-6 text-center text-sm text-muted-foreground">Sin transcripciones registradas.</li>}
+            {[...notas].reverse().map((n) => (
+              <li key={n.id} className="p-4">
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span className="font-semibold">{n.empleadoNombre}</span>
+                  <span>{formatFechaHoraCorta(n.fechaHora)}</span>
                 </div>
-                <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-                  {s.tipo}
-                </span>
+                <p className="mt-2 text-sm">{n.transcripcion}</p>
+                {n.servicioVisitaId && <p className="mt-2 text-xs text-vera-emerald">Conectada a un servicio registrado</p>}
               </li>
             ))}
           </ol>
@@ -81,8 +101,12 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
             )}
           </div>
 
+          <DatosClinicos pacienteId={paciente.id} alergiasIniciales={paciente.alergias} notasIniciales={paciente.notasComportamiento} />
+
+          <CompartirPanel pacienteId={paciente.id} comparticionesIniciales={comparticiones} />
+
           <Link
-            href={`/carnet/${paciente.id}`}
+            href={`/carnet/${paciente.carnetToken}`}
             className="flex items-center justify-between rounded-2xl border border-border bg-card p-4 hover:bg-secondary/50"
           >
             <div>

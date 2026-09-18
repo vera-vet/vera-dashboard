@@ -1,25 +1,40 @@
-import { VISITAS } from "@/lib/data/seed/visitas";
-import { addDaysISO } from "@/lib/date";
-import type { Visita } from "@/lib/data/types";
+import { apiFetch } from "@/lib/api/client";
+import type { ApiVisita } from "@/lib/api/types";
+import type { EstadoEsquema, Visita } from "@/lib/data/types";
 
-export interface VisitaResuelta extends Visita {
-  fecha: string;
+export function mapVisita(api: ApiVisita): Visita {
+  return {
+    id: String(api.id),
+    pacienteId: String(api.paciente),
+    pacienteNombre: api.paciente_nombre,
+    pacienteFotoUrl: api.paciente_foto_url,
+    duenoNombre: api.dueno_nombre,
+    pacienteEstadoEsquema: api.paciente_estado_esquema as EstadoEsquema,
+    pacienteFaltaTexto: api.paciente_falta_texto || undefined,
+    fecha: api.fecha,
+    hora: api.hora ?? undefined,
+    motivo: api.motivo,
+    confirmada: api.confirmada,
+  };
 }
 
-function resolver(v: Visita): VisitaResuelta {
-  return { ...v, fecha: addDaysISO(v.fechaOffsetDias) };
+export async function getVisitasHoy(): Promise<Visita[]> {
+  const response = await apiFetch("/api/visitas/hoy/");
+  if (!response.ok) throw new Error(`No se pudieron cargar las visitas de hoy (${response.status})`);
+  const data: ApiVisita[] = await response.json();
+  return data.map(mapVisita);
 }
 
-export async function getVisitasHoy(): Promise<VisitaResuelta[]> {
-  return VISITAS.filter((v) => v.fechaOffsetDias === 0).map(resolver);
+export async function getVisitasProximas(): Promise<Visita[]> {
+  const response = await apiFetch("/api/visitas/proximas/");
+  if (!response.ok) throw new Error(`No se pudieron cargar las próximas visitas (${response.status})`);
+  const data: ApiVisita[] = await response.json();
+  return data.map(mapVisita);
 }
 
-export async function getVisitasProximas(): Promise<VisitaResuelta[]> {
-  return VISITAS.map(resolver).sort((a, b) => (a.fecha + (a.hora ?? "")).localeCompare(b.fecha + (b.hora ?? "")));
-}
-
-export async function getVisitasPorPaciente(pacienteId: string): Promise<VisitaResuelta[]> {
-  return VISITAS.filter((v) => v.pacienteId === pacienteId)
-    .map(resolver)
-    .sort((a, b) => (a.fecha + (a.hora ?? "")).localeCompare(b.fecha + (b.hora ?? "")));
+export async function getVisitasPorPaciente(pacienteId: string): Promise<Visita[]> {
+  const response = await apiFetch(`/api/visitas/?paciente=${pacienteId}`);
+  if (!response.ok) throw new Error(`No se pudieron cargar las visitas (${response.status})`);
+  const data: ApiVisita[] = await response.json();
+  return data.map(mapVisita);
 }

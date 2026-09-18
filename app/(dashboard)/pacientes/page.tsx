@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { ChevronRight, Search } from "lucide-react";
-import { getPacientes, getDueno } from "@/lib/data/pacientes";
+import { ChevronRight, Search, UserPlus } from "lucide-react";
+import { getPacientes } from "@/lib/data/pacientes";
 import { UrgencyBadge } from "@/components/shared/urgency-badge";
 import { edadTexto } from "@/lib/date";
 
@@ -8,15 +8,20 @@ const ESPECIE_LABEL = { perro: "Perro", gato: "Gato", otro: "Otro" } as const;
 
 export default async function PacientesPage() {
   const pacientes = await getPacientes();
-  const conDuenos = await Promise.all(
-    pacientes.map(async (p) => ({ paciente: p, dueno: await getDueno(p.duenoId) })),
-  );
 
   return (
     <div>
-      <header className="pb-6">
-        <h1 className="font-display text-3xl font-bold text-vera-forest">Pacientes</h1>
-        <p className="mt-1 text-sm text-muted-foreground">{pacientes.length} en la clínica</p>
+      <header className="flex items-center justify-between pb-6">
+        <div>
+          <h1 className="font-display text-3xl font-bold text-vera-forest">Pacientes</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{pacientes.length} en la clínica</p>
+        </div>
+        <Link
+          href="/pacientes/nuevo"
+          className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-vera-emerald px-4 text-sm font-semibold text-white"
+        >
+          <UserPlus size={16} /> Nuevo paciente
+        </Link>
       </header>
 
       <div className="mb-5 flex items-center gap-2 rounded-2xl border border-border bg-card px-4">
@@ -28,17 +33,17 @@ export default async function PacientesPage() {
       </div>
 
       <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
-        {conDuenos.map(({ paciente, dueno }) => (
+        {pacientes.map((paciente) => (
           <li key={paciente.id}>
             <Link
               href={`/pacientes/${paciente.id}`}
               className="flex items-center gap-4 px-5 py-4 transition-colors hover:bg-secondary/50"
             >
-              <img src={paciente.fotoUrl} alt={paciente.nombre} className="h-12 w-12 rounded-full object-cover" />
+              <img src={paciente.fotoUrl || undefined} alt={paciente.nombre} className="h-12 w-12 rounded-full object-cover" />
               <div className="min-w-0 flex-1">
                 <div className="font-display text-base font-bold">{paciente.nombre}</div>
                 <div className="truncate text-xs text-muted-foreground">
-                  {ESPECIE_LABEL[paciente.especie]} · {paciente.raza} · {edadTexto(paciente.fechaNacimiento)} · {dueno?.nombre}
+                  {ESPECIE_LABEL[paciente.especie]} · {paciente.raza} · {edadTexto(paciente.fechaNacimiento)} · {paciente.duenoNombre}
                 </div>
               </div>
               {paciente.estadoEsquema !== "al_dia" && (

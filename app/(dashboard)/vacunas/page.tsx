@@ -1,10 +1,9 @@
 import { MessageCircle } from "lucide-react";
-import { getPendientesVacunas, getDueno } from "@/lib/data/pacientes";
+import { getPendientesVacunas } from "@/lib/data/pacientes";
 import { UrgencyBadge } from "@/components/shared/urgency-badge";
 
 export default async function VacunasPage() {
   const pendientes = await getPendientesVacunas();
-  const conDuenos = await Promise.all(pendientes.map(async (p) => ({ paciente: p, dueno: await getDueno(p.duenoId) })));
 
   return (
     <div>
@@ -14,12 +13,12 @@ export default async function VacunasPage() {
       </header>
 
       <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
-        {conDuenos.map(({ paciente, dueno }) => (
+        {pendientes.map((paciente) => (
           <li key={paciente.id} className="flex items-center gap-4 px-5 py-4">
-            <img src={paciente.fotoUrl} alt={paciente.nombre} className="h-12 w-12 rounded-full object-cover" />
+            <img src={paciente.fotoUrl || undefined} alt={paciente.nombre} className="h-12 w-12 rounded-full object-cover" />
             <div className="min-w-0 flex-1">
               <div className="font-display text-base font-bold">{paciente.nombre}</div>
-              <div className="truncate text-xs text-muted-foreground">{dueno?.nombre}</div>
+              <div className="truncate text-xs text-muted-foreground">{paciente.duenoNombre}</div>
             </div>
             <UrgencyBadge estado={paciente.estadoEsquema} texto={paciente.faltaTexto} />
             <button className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-xl bg-whatsapp px-3 text-xs font-semibold text-white">
@@ -27,7 +26,7 @@ export default async function VacunasPage() {
             </button>
           </li>
         ))}
-        {conDuenos.length === 0 && (
+        {pendientes.length === 0 && (
           <li className="p-10 text-center">
             <p className="font-display text-lg font-bold">Todos al día</p>
             <p className="mt-1 text-sm text-muted-foreground">No hay vacunas pendientes esta semana.</p>

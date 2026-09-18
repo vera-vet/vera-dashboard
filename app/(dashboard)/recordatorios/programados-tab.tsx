@@ -1,8 +1,8 @@
 import { ReminderQueueItem } from "@/components/shared/reminder-queue-item";
-import type { Paciente, Recordatorio } from "@/lib/data/types";
+import type { Recordatorio } from "@/lib/data/types";
 
 interface Props {
-  recordatorios: { recordatorio: Recordatorio; paciente: Paciente | undefined }[];
+  recordatorios: Recordatorio[];
 }
 
 export function ProgramadosTab({ recordatorios }: Props) {
@@ -12,12 +12,12 @@ export function ProgramadosTab({ recordatorios }: Props) {
         Estos son los recordatorios que Vera enviará. Puedes pausarlos o editarlos antes de que salgan.
       </p>
       <ul className="space-y-3">
-        {recordatorios.map(({ recordatorio, paciente }) => (
+        {recordatorios.map((recordatorio) => (
           <ReminderQueueItem
             key={recordatorio.id}
             recordatorio={recordatorio}
-            pacienteNombre={paciente?.nombre ?? "—"}
-            fotoUrl={paciente?.fotoUrl}
+            pacienteNombre={recordatorio.pacienteNombre}
+            fotoUrl={recordatorio.pacienteFotoUrl}
           />
         ))}
       </ul>

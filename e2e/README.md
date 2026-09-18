@@ -53,3 +53,10 @@ npx playwright test --ui                        # interactive
 test passes, Playwright reports that as a failure, and the marker has to be removed.
 
 - `home.spec.ts`: the home greeting is hardcoded to "Buenos días, Dra. Ramírez" for every user.
+
+## CI
+
+This repo's CI (`.github/workflows/ci.yml`) runs lint, types, unit tests and the build only: it
+needs no secrets. This E2E suite runs in **`vera-api`'s CI**. `vera-api` is private but this repo is
+public, so it can check this repo out (`staging`) without credentials and run the suite against
+the API under test.

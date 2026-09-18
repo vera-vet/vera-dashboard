@@ -15,11 +15,22 @@ export function addDaysISO(days: number, from: Date = new Date()): string {
   return toLocalISODate(d);
 }
 
-export function edadTexto(fechaNacimiento: string): string {
-  const nacida = new Date(fechaNacimiento);
-  const meses = Math.floor(
-    (Date.now() - nacida.getTime()) / (1000 * 60 * 60 * 24 * 30.44),
-  );
+// Fecha de hoy (YYYY-MM-DD) en El Salvador, sin importar la zona horaria del servidor
+// (en producción los server components suelen correr en UTC).
+export function hoyISOElSalvador(ahora: Date = new Date()): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/El_Salvador" }).format(ahora);
+}
+
+// Meses calendario cumplidos, igual que `edad_texto` en vera-api. Aritmética pura sobre
+// "YYYY-MM-DD": no parsea a Date, así que no depende de la zona horaria (antes se usaba
+// `new Date(iso)`, que es medianoche UTC, dividido entre meses de 30.44 días, y cerca de un
+// cumpleaños mostraba un año menos).
+export function edadTexto(fechaNacimiento: string, hoy: string = hoyISOElSalvador()): string {
+  const [ny, nm, nd] = fechaNacimiento.slice(0, 10).split("-").map(Number);
+  const [hy, hm, hd] = hoy.slice(0, 10).split("-").map(Number);
+  let meses = (hy - ny) * 12 + (hm - nm);
+  if (hd < nd) meses -= 1;
+  meses = Math.max(meses, 0);
   if (meses < 12) return `${meses} ${meses === 1 ? "mes" : "meses"}`;
   const anios = Math.floor(meses / 12);
   return `${anios} ${anios === 1 ? "año" : "años"}`;

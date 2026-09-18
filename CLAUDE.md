@@ -68,8 +68,9 @@ npm run dev                        # http://localhost:3000
 - **UI:**
   - Componentes shadcn en `components/ui/`, compartidos en `components/shared/`, shell y
     navegación en `components/app-shell/`.
-  - Colores de marca como tokens `vera-*` en `app/globals.css` (`vera-forest`, `vera-emerald`,
-    `vera-honey`, `vera-coral`…); fuentes Fraunces (display) e Inter.
+  - Colores de marca como tokens `vera-*` en `app/globals.css`; fuentes Fraunces (display) e Inter.
+  - **Guía de marca:** `../vera-api/docs/negocio/marca.md` (repo privado). Leerla antes de
+    cualquier cambio visual o de copy: paleta, tipografía, reglas de UI y tono.
 - **Público sin sesión:** `/login`, `/carnet/[token]` (carnet de vacunas) y la tienda.
 
 ## Convenciones
@@ -88,3 +89,5 @@ npm run dev                        # http://localhost:3000
 - La home muestra un saludo hardcodeado ("Buenos días, Dra. Ramírez") para todos los usuarios.
   Está marcado con `test.fail()` en `e2e/home.spec.ts`.
 - Varias `<label>` de formularios no están asociadas a su input (falta `htmlFor`).
+- La paleta de `app/globals.css` no sigue la línea gráfica v1.0: hay que migrar los tokens a los
+  colores de la guía de marca.

@@ -5,7 +5,7 @@ clínico, recordatorios y conversaciones por WhatsApp, reportes, inventario y pe
 tienda en línea para dueños de mascotas y el carnet digital de vacunas.
 
 Consume la API de `vera-api` (Django), siempre desde el servidor: el navegador nunca habla
-directo con la API. Guía técnica detallada, para personas y para Claude Code: [`CLAUDE.md`](CLAUDE.md).
+directo con la API. Guía técnica detallada y reglas de trabajo (personas y agentes de IA): [`AGENTS.md`](AGENTS.md). **Todo cambio entra por PR.**
 
 ## Stack
 

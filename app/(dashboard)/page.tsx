@@ -6,12 +6,15 @@ import { WhatsAppBubble } from "@/components/shared/whatsapp-bubble";
 import { getVisitasHoy } from "@/lib/data/visitas";
 import { getConversaciones } from "@/lib/data/recordatorios";
 import { formatTasa, getResumenReportes } from "@/lib/data/reportes";
+import { getMe } from "@/lib/data/usuario";
+import { fechaLargaElSalvador, saludoSegunHora } from "@/lib/date";
 
 export default async function InicioPage() {
-  const [visitasHoy, conversaciones, resumen] = await Promise.all([
+  const [visitasHoy, conversaciones, resumen, usuario] = await Promise.all([
     getVisitasHoy(),
     getConversaciones(),
     getResumenReportes(),
+    getMe(),
   ]);
   const conv = conversaciones[0];
 
@@ -19,9 +22,11 @@ export default async function InicioPage() {
     <div>
       <header className="pb-8">
         <p className="text-sm font-medium text-muted-foreground">
-          {new Date().toLocaleDateString("es-SV", { weekday: "long", day: "numeric", month: "long" })}
+          {fechaLargaElSalvador()}
         </p>
-        <h1 className="mt-1 font-display text-3xl font-bold text-vera-forest lg:text-4xl">Buenos días, Dra. Ramírez</h1>
+        <h1 className="mt-1 font-display text-3xl font-bold text-vera-forest lg:text-4xl">
+          {saludoSegunHora()}, {usuario.nombre || usuario.email}
+        </h1>
       </header>
 
       <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">

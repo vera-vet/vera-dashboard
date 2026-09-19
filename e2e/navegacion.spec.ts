@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 const SECCIONES: [ruta: string, titulo: string | RegExp][] = [
-  ["/", /Buenos (días|tardes|noches)/],
+  ["/", /^Buen(os días|as tardes|as noches), /],
   ["/agenda", "Agenda"],
   ["/pacientes", "Pacientes"],
   ["/pacientes/nuevo", "Nuevo paciente"],

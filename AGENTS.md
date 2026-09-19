@@ -101,8 +101,6 @@ npm run dev                        # http://localhost:3000
 
 ## Problemas conocidos
 
-- La home muestra un saludo hardcodeado ("Buenos días, Dra. Ramírez") para todos los usuarios.
-  Está marcado con `test.fail()` en `e2e/home.spec.ts`.
 - Varias `<label>` de formularios no están asociadas a su input (falta `htmlFor`).
 - La paleta de `app/globals.css` no sigue la línea gráfica v1.0: hay que migrar los tokens a los
   colores de la guía de marca.

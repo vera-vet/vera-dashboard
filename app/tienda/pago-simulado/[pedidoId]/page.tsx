@@ -23,10 +23,10 @@ export default function PagoSimuladoPage({ params }: { params: Promise<{ pedidoI
   if (estado === "pagado") {
     return (
       <div className="space-y-4 text-center">
-        <p className="text-sm text-vera-emerald">¡Pago confirmado! Tu pedido #{pedidoId} está en proceso.</p>
+        <p className="text-sm text-vera-apoyo">¡Pago confirmado! Tu pedido #{pedidoId} está en proceso.</p>
         <button
           type="button" onClick={() => router.push("/tienda/pedidos")}
-          className="w-full rounded-xl bg-vera-emerald px-4 py-2 text-sm font-semibold text-white"
+          className="w-full rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
         >
           Ver mis pedidos
         </button>
@@ -35,7 +35,7 @@ export default function PagoSimuladoPage({ params }: { params: Promise<{ pedidoI
   }
 
   if (estado === "pago_sin_stock") {
-    return <p className="text-sm text-vera-coral">Se cobró el pedido, pero ya no había stock suficiente. La clínica te contactará.</p>;
+    return <p className="text-sm text-vera-coral-fuerte">Se cobró el pedido, pero ya no había stock suficiente. La clínica te contactará.</p>;
   }
 
   return (
@@ -43,7 +43,7 @@ export default function PagoSimuladoPage({ params }: { params: Promise<{ pedidoI
       <p className="text-sm text-muted-foreground">Pantalla de pago simulado (desarrollo) -- pedido #{pedidoId}.</p>
       <button
         type="button" onClick={pagar} disabled={procesando}
-        className="w-full rounded-xl bg-vera-emerald px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
+        className="w-full rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-60"
       >
         {procesando ? "Procesando…" : "Simular pago exitoso"}
       </button>

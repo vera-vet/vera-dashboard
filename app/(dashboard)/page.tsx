@@ -25,7 +25,7 @@ export default async function InicioPage() {
         <p className="text-sm font-medium text-muted-foreground">
           {fechaLargaElSalvador()}
         </p>
-        <h1 className="mt-1 font-display text-3xl font-bold text-vera-forest lg:text-4xl">
+        <h1 className="mt-1 font-display text-3xl font-bold text-vera-verde lg:text-4xl">
           {saludoSegunHora()}, {usuario.nombre || usuario.email}
         </h1>
       </header>
@@ -67,7 +67,7 @@ export default async function InicioPage() {
         <aside className="rounded-2xl border border-border bg-card p-5">
           <div className="mb-3 flex items-center gap-2">
             <span className="grid h-6 w-6 place-items-center rounded-full bg-whatsapp">
-              <MessageCircle size={12} className="text-white" />
+              <MessageCircle size={12} className="text-whatsapp-foreground" />
             </span>
             <h3 className="font-display text-sm font-bold">Vera responde</h3>
           </div>
@@ -85,7 +85,7 @@ export default async function InicioPage() {
           )}
           <Link
             href="/recordatorios"
-            className="mt-4 flex items-center justify-center gap-1 rounded-xl border border-border py-2.5 text-xs font-semibold text-vera-emerald hover:bg-secondary"
+            className="mt-4 flex items-center justify-center gap-1 rounded-xl border border-border py-2.5 text-xs font-semibold text-vera-apoyo hover:bg-secondary"
           >
             Ver todas las conversaciones <ArrowUpRight size={13} />
           </Link>

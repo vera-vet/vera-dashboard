@@ -14,7 +14,7 @@ export function NuevoProductoSection() {
   return (
     <button
       type="button" onClick={() => setAbierto(true)}
-      className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-vera-emerald px-4 text-sm font-semibold text-white"
+      className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground"
     >
       <PlusCircle size={16} /> Nuevo producto
     </button>

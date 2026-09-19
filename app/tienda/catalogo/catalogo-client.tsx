@@ -28,7 +28,7 @@ export function CatalogoClient({ productos }: { productos: Producto[] }) {
       {totalItems > 0 && (
         <Link
           href="/tienda/checkout"
-          className="block rounded-xl bg-vera-emerald px-4 py-2 text-center text-sm font-semibold text-white"
+          className="block rounded-xl bg-primary px-4 py-2 text-center text-sm font-semibold text-primary-foreground"
         >
           Ver carrito ({totalItems})
         </Link>

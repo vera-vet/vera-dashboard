@@ -117,7 +117,7 @@ export function RegistrarClient({ pacientes, especialidades }: { pacientes: Paci
             }}
             className={
               p.id === selectedId
-                ? "flex items-center gap-2 rounded-full bg-vera-forest px-3 py-1.5 text-xs font-semibold text-primary-foreground"
+                ? "flex items-center gap-2 rounded-full bg-vera-verde px-3 py-1.5 text-xs font-semibold text-primary-foreground"
                 : "flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-secondary"
             }
           >
@@ -138,9 +138,9 @@ export function RegistrarClient({ pacientes, especialidades }: { pacientes: Paci
                     <button
                       key={key}
                       onClick={() => setTipo(key)}
-                      className="flex flex-col items-start gap-2 rounded-2xl border border-border bg-card p-4 text-left hover:border-vera-emerald"
+                      className="flex flex-col items-start gap-2 rounded-2xl border border-border bg-card p-4 text-left hover:border-vera-apoyo"
                     >
-                      <Icon size={20} className="text-vera-emerald" />
+                      <Icon size={20} className="text-vera-apoyo" />
                       <span className="font-display text-sm font-bold">{label}</span>
                     </button>
                   ))}
@@ -159,7 +159,7 @@ export function RegistrarClient({ pacientes, especialidades }: { pacientes: Paci
                     <button
                       key={prod.nombre}
                       onClick={() => setProductoElegido(prod)}
-                      className="rounded-xl bg-vera-emerald px-4 py-3 text-left text-sm font-semibold text-white"
+                      className="rounded-xl bg-primary px-4 py-3 text-left text-sm font-semibold text-primary-foreground"
                     >
                       {prod.nombre}
                     </button>
@@ -176,7 +176,7 @@ export function RegistrarClient({ pacientes, especialidades }: { pacientes: Paci
                 </div>
 
                 {alergiaEnConflicto && (
-                  <div className="mb-4 rounded-xl border border-vera-coral bg-vera-coral-soft p-3 text-sm text-vera-coral">
+                  <div className="mb-4 rounded-xl border border-vera-coral bg-vera-coral-soft p-3 text-sm text-vera-coral-fuerte">
                     <strong className="font-semibold">Alerta de alergia:</strong> {paciente.nombre} tiene registrada una alergia a{" "}
                     <strong className="font-semibold">{alergiaEnConflicto}</strong>, presente en este producto.
                   </div>
@@ -191,13 +191,13 @@ export function RegistrarClient({ pacientes, especialidades }: { pacientes: Paci
                 />
 
                 <div className="mt-4">
-                  <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Fotos</label>
+                  <p id="registrar-fotos" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Fotos</p>
                   <div className="mt-2 flex flex-wrap items-center gap-2">
                     {fotos.map((url, i) => (
                       <img key={i} src={url} alt="" className="h-16 w-16 rounded-lg object-cover" />
                     ))}
                     <label className="grid h-16 w-16 cursor-pointer place-items-center rounded-lg border border-dashed border-border text-xs text-muted-foreground">
-                      <input type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleFotoChange(e.target.files)} />
+                      <input type="file" accept="image/*" multiple aria-labelledby="registrar-fotos" className="hidden" onChange={(e) => handleFotoChange(e.target.files)} />
                       + Foto
                     </label>
                   </div>
@@ -212,7 +212,7 @@ export function RegistrarClient({ pacientes, especialidades }: { pacientes: Paci
                   </button>
                   <button
                     onClick={() => registrar(productoElegido.nombre)}
-                    className="min-h-11 rounded-xl bg-vera-emerald px-4 text-sm font-semibold text-white"
+                    className="min-h-11 rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground"
                   >
                     Guardar reporte y confirmar
                   </button>
@@ -237,8 +237,7 @@ export function RegistrarClient({ pacientes, especialidades }: { pacientes: Paci
                         setTipo(t);
                         registrar(prod, t);
                       }}
-                      className="inline-flex items-center gap-1.5 rounded-full border px-3.5 py-2 text-[13px] font-semibold text-white"
-                      style={{ backgroundColor: "var(--vera-emerald)", borderColor: "var(--vera-emerald)" }}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-primary bg-primary px-3.5 py-2 text-[13px] font-semibold text-primary-foreground"
                     >
                       <Check size={13} /> {prod}
                     </button>
@@ -248,8 +247,8 @@ export function RegistrarClient({ pacientes, especialidades }: { pacientes: Paci
             )}
 
             <div className="mt-5">
-              <label className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Nota clínica (opcional)</label>
-              <Textarea rows={3} placeholder="Escribe la nota…" className="mt-2" />
+              <label htmlFor="registrar-nota" className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">Nota clínica (opcional)</label>
+              <Textarea id="registrar-nota" rows={3} placeholder="Escribe la nota…" className="mt-2" />
             </div>
           </section>
 
@@ -266,8 +265,7 @@ export function RegistrarClient({ pacientes, especialidades }: { pacientes: Paci
 
       {confirmacion && (
         <div
-          className="fixed bottom-24 left-1/2 z-40 flex w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 items-start gap-3 rounded-xl border p-4 shadow-lg lg:bottom-8"
-          style={{ backgroundColor: "var(--vera-emerald)", borderColor: "var(--vera-emerald)", color: "white" }}
+          className="fixed bottom-24 left-1/2 z-40 flex w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 items-start gap-3 rounded-xl border border-primary bg-primary p-4 text-primary-foreground shadow-lg lg:bottom-8"
           role="status"
         >
           <Check size={18} className="mt-0.5 shrink-0" />

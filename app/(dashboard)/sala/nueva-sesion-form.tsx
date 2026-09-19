@@ -87,10 +87,10 @@ export function NuevaSesionForm({
         placeholder="Motivo" className="w-full rounded-lg border border-border bg-background px-2 py-1.5 text-xs"
       />
 
-      {mensaje && <p className="text-[11px] text-vera-coral">{mensaje}</p>}
+      {mensaje && <p className="text-[11px] text-vera-coral-fuerte">{mensaje}</p>}
 
       <div className="flex gap-2">
-        <button type="submit" disabled={guardando} className="flex-1 rounded-lg bg-vera-emerald px-2 py-1.5 text-xs font-semibold text-white disabled:opacity-60">
+        <button type="submit" disabled={guardando} className="flex-1 rounded-lg bg-primary px-2 py-1.5 text-xs font-semibold text-primary-foreground disabled:opacity-60">
           {guardando ? "Guardando…" : "Iniciar"}
         </button>
         <button type="button" onClick={onCerrar} className="rounded-lg border border-border px-2 py-1.5 text-xs">

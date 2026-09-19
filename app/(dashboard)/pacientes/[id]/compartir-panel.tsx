@@ -80,7 +80,7 @@ export function CompartirPanel({ pacienteId, comparticionesIniciales }: { pacien
         className="mt-3 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
       />
 
-      {mensajeError && <p className="mt-2 text-xs text-vera-coral">{mensajeError}</p>}
+      {mensajeError && <p className="mt-2 text-xs text-vera-coral-fuerte">{mensajeError}</p>}
 
       {buscando && <p className="mt-2 text-xs text-muted-foreground">Buscando…</p>}
 
@@ -105,7 +105,7 @@ export function CompartirPanel({ pacienteId, comparticionesIniciales }: { pacien
           {activas.map((c) => (
             <div key={c.id} className="flex items-center justify-between text-sm">
               <span>{c.clinicaNombre}</span>
-              <button onClick={() => revocar(c.id)} className="text-xs font-semibold text-vera-coral hover:underline">
+              <button onClick={() => revocar(c.id)} className="text-xs font-semibold text-vera-coral-fuerte hover:underline">
                 Revocar
               </button>
             </div>

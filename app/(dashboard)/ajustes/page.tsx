@@ -17,7 +17,7 @@ export default async function AjustesPage() {
   return (
     <div>
       <header className="pb-6">
-        <h1 className="font-display text-3xl font-bold text-vera-forest">Ajustes</h1>
+        <h1 className="font-display text-3xl font-bold text-vera-verde">Ajustes</h1>
         <p className="mt-1 text-sm text-muted-foreground">Especialidades de tu clínica y qué tipos de servicio las activan.</p>
       </header>
 
@@ -31,7 +31,7 @@ export default async function AjustesPage() {
                 {esp.tiposServicioAsociados.map((tipo) => (
                   <span
                     key={tipo}
-                    className="rounded-full bg-vera-sage px-2.5 py-1 text-xs font-medium text-vera-emerald"
+                    className="rounded-full bg-vera-menta-suave px-2.5 py-1 text-xs font-medium text-vera-apoyo"
                   >
                     {TIPO_SERVICIO_LABEL[tipo] ?? tipo}
                   </span>

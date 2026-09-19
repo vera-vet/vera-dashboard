@@ -23,7 +23,7 @@ export function ReminderQueueItem({ recordatorio, pacienteNombre, fotoUrl }: Pro
         <div className="flex flex-wrap items-baseline gap-x-2">
           <span className="font-display text-sm font-bold">{pacienteNombre}</span>
           <span className="text-xs text-muted-foreground">· {recordatorio.tipo}</span>
-          <span className={pausado ? "ml-auto text-xs font-medium text-vera-honey" : "ml-auto text-xs font-medium text-vera-emerald"}>
+          <span className={pausado ? "ml-auto text-xs font-medium text-vera-tinta-suave" : "ml-auto text-xs font-medium text-vera-apoyo"}>
             {recordatorio.cuando}
           </span>
         </div>
@@ -38,7 +38,7 @@ export function ReminderQueueItem({ recordatorio, pacienteNombre, fotoUrl }: Pro
             />
             <button
               onClick={() => setEditando(false)}
-              className="min-h-11 rounded-xl bg-vera-emerald px-3 py-2 text-xs font-semibold text-white"
+              className="min-h-11 rounded-xl bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground"
             >
               Guardar
             </button>

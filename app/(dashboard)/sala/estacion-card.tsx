@@ -24,14 +24,14 @@ export function EstacionCard({
     <div
       className={
         sesion
-          ? "rounded-2xl border border-vera-emerald bg-vera-sage p-4"
+          ? "rounded-2xl border border-vera-apoyo bg-vera-menta-suave p-4"
           : "rounded-2xl border border-dashed border-border bg-card p-4"
       }
     >
       <div className="flex items-center justify-between">
-        <span className="text-xs font-semibold uppercase tracking-wide text-vera-emerald">{estacion.nombre}</span>
+        <span className="text-xs font-semibold uppercase tracking-wide text-vera-apoyo">{estacion.nombre}</span>
         {sesion ? (
-          <span className="rounded-full bg-vera-emerald px-2 py-0.5 text-[10px] font-medium text-white">en curso</span>
+          <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-medium text-primary-foreground">en curso</span>
         ) : (
           <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">Libre</span>
         )}
@@ -63,7 +63,7 @@ export function EstacionCard({
       ) : (
         <button
           onClick={() => setFormularioAbierto(true)}
-          className="mt-3 w-full rounded-lg border border-dashed border-border py-2 text-xs font-semibold text-muted-foreground hover:border-vera-emerald hover:text-vera-emerald"
+          className="mt-3 w-full rounded-lg border border-dashed border-border py-2 text-xs font-semibold text-muted-foreground hover:border-vera-apoyo hover:text-vera-apoyo"
         >
           + Nueva sesión
         </button>

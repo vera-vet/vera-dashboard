@@ -85,7 +85,7 @@ export function GrabarConsultaButton({ pacienteId, empleadoId }: { pacienteId: s
     return (
       <button
         onClick={detenerGrabacion}
-        className="mt-3 inline-flex min-h-9 items-center gap-1.5 rounded-lg bg-vera-coral px-3 text-xs font-semibold text-white"
+        className="mt-3 inline-flex min-h-9 items-center gap-1.5 rounded-lg bg-vera-coral-fuerte px-3 text-xs font-semibold text-white"
       >
         <Square size={13} /> Detener
       </button>
@@ -97,7 +97,7 @@ export function GrabarConsultaButton({ pacienteId, empleadoId }: { pacienteId: s
   if (estado === "listo") {
     return (
       <div className="mt-3 flex items-center gap-3">
-        <p className="text-xs text-vera-emerald">Nota guardada ✓</p>
+        <p className="text-xs text-vera-apoyo">Nota guardada ✓</p>
         <button onClick={reiniciar} className="text-xs font-semibold text-muted-foreground underline hover:text-foreground">
           Grabar otra consulta
         </button>
@@ -106,7 +106,7 @@ export function GrabarConsultaButton({ pacienteId, empleadoId }: { pacienteId: s
   }
   return (
     <div className="mt-3 flex items-center gap-3">
-      <p className="text-xs text-vera-coral">{mensajeError}</p>
+      <p className="text-xs text-vera-coral-fuerte">{mensajeError}</p>
       <button onClick={reiniciar} className="text-xs font-semibold text-muted-foreground underline hover:text-foreground">
         Intentar de nuevo
       </button>

@@ -18,7 +18,7 @@ export default async function SalaPage() {
   return (
     <div>
       <header className="pb-6">
-        <h1 className="font-display text-3xl font-bold text-vera-forest">Sala</h1>
+        <h1 className="font-display text-3xl font-bold text-vera-verde">Sala</h1>
         <p className="mt-1 text-sm text-muted-foreground">Quién atiende a quién, en vivo.</p>
       </header>
 
@@ -37,7 +37,7 @@ export default async function SalaPage() {
         <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
           {espera.map((item) => (
             <li key={item.pacienteId} className="flex items-center gap-3 px-5 py-4">
-              <div className="rounded-xl bg-vera-sage px-2.5 py-1.5 text-center font-display text-sm font-bold text-vera-emerald">
+              <div className="rounded-xl bg-vera-menta-suave px-2.5 py-1.5 text-center font-display text-sm font-bold text-vera-apoyo">
                 {item.hora}
               </div>
               <AvatarPaciente nombre={item.pacienteNombre} fotoUrl={item.pacienteFotoUrl} tamano={40} />

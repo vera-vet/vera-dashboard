@@ -25,8 +25,8 @@ export default async function CarnetPage({ params }: { params: Promise<{ token: 
   if (!carnet) notFound();
 
   return (
-    <div className="min-h-screen bg-vera-sage py-10">
-      <div className="mx-auto w-full max-w-[390px] rounded-[36px] border-8 border-vera-forest bg-card p-6 shadow-[var(--shadow-elevated)]">
+    <div className="min-h-screen bg-vera-menta-suave py-10">
+      <div className="mx-auto w-full max-w-[390px] rounded-[36px] border-8 border-vera-verde bg-card p-6 shadow-[var(--shadow-elevated)]">
         <div className="text-center">
           <AvatarPaciente nombre={carnet.nombre} fotoUrl={carnet.foto_url} tamano={112} className="mx-auto" />
           <h1 className="mt-4 font-display text-2xl font-bold">{carnet.nombre}</h1>
@@ -37,12 +37,12 @@ export default async function CarnetPage({ params }: { params: Promise<{ token: 
           <h2 className="font-display text-lg font-semibold">Vacunas</h2>
           <ul className="mt-3 space-y-2">
             {carnet.vacunas.map((v, i) => (
-              <li key={i} className="flex items-center justify-between rounded-2xl bg-vera-sage p-3">
+              <li key={i} className="flex items-center justify-between rounded-2xl bg-vera-menta-suave p-3">
                 <div>
                   <div className="font-medium">{v.producto}</div>
-                  <div className="text-xs text-vera-emerald">{formatFechaCorta(v.fecha)}</div>
+                  <div className="text-xs text-vera-apoyo">{formatFechaCorta(v.fecha)}</div>
                 </div>
-                <Check size={20} className="text-vera-emerald" />
+                <Check size={20} className="text-vera-apoyo" />
               </li>
             ))}
           </ul>
@@ -50,7 +50,7 @@ export default async function CarnetPage({ params }: { params: Promise<{ token: 
 
         <a
           href={`https://wa.me/${carnet.dueno_whatsapp.replace(/\D/g, "")}`}
-          className="mt-6 flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-whatsapp text-lg font-semibold text-white"
+          className="mt-6 flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-whatsapp text-lg font-semibold text-whatsapp-foreground"
         >
           <MessageCircle size={22} />
           Agendar por WhatsApp

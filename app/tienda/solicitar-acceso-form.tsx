@@ -19,7 +19,7 @@ export function SolicitarAccesoForm() {
 
   if (enviado) {
     return (
-      <p className="rounded-2xl border border-border bg-card p-4 text-sm text-vera-emerald">
+      <p className="rounded-2xl border border-border bg-card p-4 text-sm text-vera-apoyo">
         Si tu número está registrado, te llegó un link de acceso por WhatsApp (válido 15 minutos).
       </p>
     );
@@ -34,7 +34,7 @@ export function SolicitarAccesoForm() {
       />
       <button
         type="submit" disabled={enviando}
-        className="w-full rounded-xl bg-vera-emerald px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
+        className="w-full rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-60"
       >
         {enviando ? "Enviando…" : "Pedir acceso"}
       </button>

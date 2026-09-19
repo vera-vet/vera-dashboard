@@ -83,7 +83,14 @@ npm run dev                        # http://localhost:3000
 - **UI:**
   - Componentes shadcn en `components/ui/`, compartidos en `components/shared/`, shell y
     navegación en `components/app-shell/`.
-  - Colores de marca como tokens `vera-*` en `app/globals.css`; fuentes Fraunces (display) e Inter.
+  - Colores de marca como tokens `vera-*` en `app/globals.css`, con los nombres del manual:
+    `vera-verde`, `vera-apoyo`, `vera-menta`, `vera-coral`, `vera-marfil`, `vera-tinta` y sus
+    derivados. Fuentes Fraunces (display) e Inter.
+  - Botones primarios con `bg-primary text-primary-foreground` (funciona en modo claro y oscuro).
+    Texto coral con `text-vera-coral-fuerte` (el coral de marca no llega a AA en texto chico), y
+    texto sobre el verde de WhatsApp con `text-whatsapp-foreground`, nunca blanco.
+  - Todo input lleva una etiqueta asociada (`<label htmlFor>` o `aria-label`); el placeholder no
+    cuenta como etiqueta.
   - **Guía de marca:** `../vera-api/docs/negocio/marca.md` (repo privado). Leerla antes de
     cualquier cambio visual o de copy: paleta, tipografía, reglas de UI y tono.
 - **Público sin sesión:** `/login`, `/carnet/[token]` (carnet de vacunas) y la tienda.
@@ -101,6 +108,7 @@ npm run dev                        # http://localhost:3000
 
 ## Problemas conocidos
 
-- Varias `<label>` de formularios no están asociadas a su input (falta `htmlFor`).
-- La paleta de `app/globals.css` no sigue la línea gráfica v1.0: hay que migrar los tokens a los
-  colores de la guía de marca.
+- El pie del sidebar dice "Vet. San Rafael" para todas las clínicas (hardcodeado).
+- La "Nota clínica" de Registrar no se guarda: el `Textarea` no está conectado al estado.
+- Las fotos de productos (inventario y tienda) todavía pueden mostrarse rotas; los pacientes ya
+  usan `AvatarPaciente`.

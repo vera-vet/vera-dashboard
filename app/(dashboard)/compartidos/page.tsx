@@ -7,7 +7,7 @@ export default async function CompartidosPage() {
 
   return (
     <div>
-      <h1 className="mb-6 font-display text-3xl font-bold text-vera-forest">Pacientes compartidos conmigo</h1>
+      <h1 className="mb-6 font-display text-3xl font-bold text-vera-verde">Pacientes compartidos conmigo</h1>
 
       {pacientes.length === 0 ? (
         <p className="text-sm text-muted-foreground">Ninguna clínica te ha compartido un paciente todavía.</p>
@@ -16,7 +16,7 @@ export default async function CompartidosPage() {
           {pacientes.map((p) => (
             <li key={p.id}>
               <Link href={`/compartidos/${p.id}`} className="flex items-center gap-3 p-4 hover:bg-secondary/50">
-                <Share2 size={16} className="text-vera-emerald" />
+                <Share2 size={16} className="text-vera-apoyo" />
                 <div>
                   <div className="font-semibold">{p.nombre}</div>
                   <div className="text-xs text-muted-foreground">{p.raza}</div>

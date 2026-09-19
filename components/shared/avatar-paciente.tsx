@@ -51,7 +51,7 @@ export function AvatarPaciente({ nombre, fotoUrl, tamano, className }: AvatarPac
       role="img"
       aria-label={nombre}
       style={{ ...estilo, fontSize: Math.round(tamano * 0.42) }}
-      className={cn("grid shrink-0 place-items-center rounded-full bg-vera-sage font-display font-bold text-vera-forest", className)}
+      className={cn("grid shrink-0 place-items-center rounded-full bg-vera-menta-suave font-display font-bold text-vera-verde", className)}
     >
       {inicialDe(nombre)}
     </span>

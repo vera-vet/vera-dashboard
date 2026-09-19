@@ -10,7 +10,7 @@ export default async function InventarioPage() {
     <div>
       <header className="flex items-center justify-between pb-6">
         <div>
-          <h1 className="font-display text-3xl font-bold text-vera-forest">Inventario</h1>
+          <h1 className="font-display text-3xl font-bold text-vera-verde">Inventario</h1>
           <p className="mt-1 text-sm text-muted-foreground">{productos.length} productos</p>
         </div>
         {usuario.esAdmin && <NuevoProductoSection />}

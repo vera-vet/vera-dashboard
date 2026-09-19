@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Edit3, MessageCircle, Pause, Play, X } from "lucide-react";
 import type { Recordatorio } from "@/lib/data/types";
+import { AvatarPaciente } from "@/components/shared/avatar-paciente";
 
 interface Props {
   recordatorio: Recordatorio;
@@ -17,11 +18,7 @@ export function ReminderQueueItem({ recordatorio, pacienteNombre, fotoUrl }: Pro
 
   return (
     <li className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4">
-      {fotoUrl ? (
-        <img src={fotoUrl || undefined} alt={pacienteNombre} className="h-10 w-10 shrink-0 rounded-full object-cover" />
-      ) : (
-        <div className="h-10 w-10 shrink-0 rounded-full bg-muted" />
-      )}
+      <AvatarPaciente nombre={pacienteNombre} fotoUrl={fotoUrl} tamano={40} />
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-baseline gap-x-2">
           <span className="font-display text-sm font-bold">{pacienteNombre}</span>

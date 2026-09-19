@@ -8,6 +8,7 @@ import { resolverDiagramaTipo } from "@/lib/data/diagrama";
 import { SiluetaMarcable } from "@/components/shared/silueta-marcable";
 import { Textarea } from "@/components/ui/textarea";
 import { registrarServicio, buscarNotaConsultaSinConectar } from "./actions";
+import { AvatarPaciente } from "@/components/shared/avatar-paciente";
 
 interface Producto {
   nombre: string;
@@ -120,7 +121,7 @@ export function RegistrarClient({ pacientes, especialidades }: { pacientes: Paci
                 : "flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-secondary"
             }
           >
-            <img src={p.fotoUrl || undefined} alt={p.nombre} className="h-5 w-5 rounded-full object-cover" />
+            <AvatarPaciente nombre={p.nombre} fotoUrl={p.fotoUrl} tamano={20} />
             {p.nombre}
           </button>
         ))}

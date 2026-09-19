@@ -21,7 +21,8 @@ export function ReportesCharts({ semanas }: { semanas: ResumenReportes["semanas"
               <XAxis dataKey="etiqueta" stroke="var(--vera-tinta-suave)" fontSize={12} />
               <YAxis allowDecimals={false} stroke="var(--vera-tinta-suave)" fontSize={12} />
               <Tooltip />
-              <Legend />
+              {/* Texto de la leyenda en tinta: la menta de las barras no da contraste como texto. */}
+              <Legend formatter={(valor) => <span style={{ color: "var(--vera-tinta-suave)" }}>{valor}</span>} />
               <Bar dataKey="enviados" name="Enviados" fill="var(--vera-menta)" radius={[6, 6, 0, 0]} />
               <Bar dataKey="respondidos" name="Respondidos" fill="var(--vera-apoyo)" radius={[6, 6, 0, 0]} />
             </BarChart>

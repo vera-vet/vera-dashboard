@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import type { Conversacion } from "@/lib/data/types";
+import { useEffect, useState } from "react";
+import type { Conversacion, Mensaje } from "@/lib/data/types";
+import { cargarMensajes } from "./actions";
 import { WhatsAppBubble } from "@/components/shared/whatsapp-bubble";
 import { cn } from "@/lib/utils";
 
@@ -22,6 +23,14 @@ const ESTADO_COLOR: Record<Conversacion["estado"], string> = {
 export function ConversacionesTab({ conversaciones }: { conversaciones: Conversacion[] }) {
   const [openId, setOpenId] = useState(conversaciones[0]?.id ?? null);
   const open = conversaciones.find((c) => c.id === openId);
+  const [mensajes, setMensajes] = useState<Record<string, Mensaje[] | "error">>({});
+
+  useEffect(() => {
+    if (!openId || mensajes[openId]) return;
+    cargarMensajes(openId).then((r) => setMensajes((prev) => ({ ...prev, [openId]: r.ok ? r.mensajes : "error" })));
+  }, [openId, mensajes]);
+
+  const mensajesAbiertos = openId ? mensajes[openId] : undefined;
 
   return (
     <div className="grid gap-4 lg:grid-cols-[340px_1fr]">
@@ -56,11 +65,17 @@ export function ConversacionesTab({ conversaciones }: { conversaciones: Conversa
             <div className="font-display text-lg font-bold">{open.duenoNombre}</div>
             <div className="text-sm text-muted-foreground">Sobre {open.pacienteNombre}</div>
           </div>
-          <div className="space-y-2">
-            {open.mensajes.map((m) => (
-              <WhatsAppBubble key={m.id} mensaje={m} />
-            ))}
-          </div>
+          {mensajesAbiertos === undefined ? (
+            <p className="text-sm text-muted-foreground">Cargando mensajes…</p>
+          ) : mensajesAbiertos === "error" ? (
+            <p className="text-sm text-vera-coral-fuerte">No se pudieron cargar los mensajes.</p>
+          ) : (
+            <div className="space-y-2">
+              {mensajesAbiertos.map((m) => (
+                <WhatsAppBubble key={m.id} mensaje={m} />
+              ))}
+            </div>
+          )}
         </section>
       )}
     </div>

@@ -6,7 +6,7 @@ import { getVisitasPorPaciente } from "@/lib/data/visitas";
 import { getNotasConsultaPorPaciente } from "@/lib/data/notas-consulta";
 import { getComparticionesPorPaciente } from "@/lib/data/comparticiones";
 import { VaccineTimeline } from "@/components/shared/vaccine-timeline";
-import { edadTexto, formatFechaCorta, formatFechaHoraCorta, hoyISO } from "@/lib/date";
+import { edadTexto, formatFechaCorta, formatFechaHoraCorta, formatHora, hoyISOElSalvador } from "@/lib/date";
 import { DatosClinicos } from "./datos-clinicos";
 import { HistorialItem } from "./historial-item";
 import { CompartirPanel } from "./compartir-panel";
@@ -21,7 +21,7 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
 
   const dueno = await getDueno(paciente.duenoId);
   const servicios = await getServiciosPorPaciente(paciente.id);
-  const proximas = (await getVisitasPorPaciente(paciente.id)).filter((v) => v.fecha >= hoyISO());
+  const proximas = (await getVisitasPorPaciente(paciente.id)).filter((v) => v.fecha >= hoyISOElSalvador());
   const notas = await getNotasConsultaPorPaciente(paciente.id);
   const comparticiones = await getComparticionesPorPaciente(paciente.id);
 
@@ -95,7 +95,7 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
                 {proximas.slice(0, 5).map((v) => (
                   <li key={v.id} className="text-sm">
                     <div className="font-medium">{v.motivo}</div>
-                    <div className="text-xs text-muted-foreground">{formatFechaCorta(v.fecha)}{v.hora ? ` · ${v.hora}` : ""}</div>
+                    <div className="text-xs text-muted-foreground">{formatFechaCorta(v.fecha)}{v.hora ? ` · ${formatHora(v.hora)}` : ""}</div>
                   </li>
                 ))}
               </ul>

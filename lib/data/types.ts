@@ -194,6 +194,7 @@ export interface Usuario {
   email: string;
   nombre: string;
   esAdmin: boolean;
+  clinicaNombre: string;
 }
 
 export interface ResumenReportes {

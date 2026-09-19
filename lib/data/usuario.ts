@@ -3,7 +3,7 @@ import type { ApiUsuario } from "@/lib/api/types";
 import type { Usuario } from "@/lib/data/types";
 
 export function mapUsuario(api: ApiUsuario): Usuario {
-  return { email: api.email, nombre: api.nombre, esAdmin: api.es_admin };
+  return { email: api.email, nombre: api.nombre, esAdmin: api.es_admin, clinicaNombre: api.clinica_nombre };
 }
 
 export async function getMe(): Promise<Usuario> {

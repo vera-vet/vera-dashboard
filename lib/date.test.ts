@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addDaysISO, edadTexto, hoyISOElSalvador, formatFechaCorta, formatFechaHoraCorta, hoyISO, fechaLargaElSalvador, saludoSegunHora } from "./date";
+import { addDaysISO, edadTexto, hoyISOElSalvador, formatFechaCorta, formatFechaHoraCorta, hoyISO, fechaLargaElSalvador, formatHora, saludoSegunHora } from "./date";
 
 describe("hoyISO", () => {
   it("returns today's date in YYYY-MM-DD format", () => {
@@ -122,5 +122,21 @@ describe("saludoSegunHora", () => {
 describe("fechaLargaElSalvador", () => {
   it("no se adelanta al día siguiente después de las 18:00", () => {
     expect(fechaLargaElSalvador(new Date("2026-09-19T01:00:00Z"))).toContain("18 de septiembre");
+  });
+});
+
+describe("formatHora", () => {
+  it("convierte la hora de la API a 12 horas", () => {
+    expect(formatHora("08:30:00")).toBe("8:30 a. m.");
+    expect(formatHora("12:00:00")).toBe("12:00 p. m.");
+    expect(formatHora("00:15")).toBe("12:15 a. m.");
+    expect(formatHora("16:05:00")).toBe("4:05 p. m.");
+  });
+});
+
+describe("formatFechaCorta con año", () => {
+  it("agrega el año solo si la fecha no es de este año", () => {
+    expect(formatFechaCorta("2026-09-18", "2026-09-18")).not.toMatch(/2026/);
+    expect(formatFechaCorta("2023-11-03", "2026-09-18")).toMatch(/2023/);
   });
 });

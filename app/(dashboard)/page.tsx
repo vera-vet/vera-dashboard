@@ -4,10 +4,10 @@ import { MetricHero } from "@/components/shared/metric-hero";
 import { UrgencyBadge } from "@/components/shared/urgency-badge";
 import { WhatsAppBubble } from "@/components/shared/whatsapp-bubble";
 import { getVisitasHoy } from "@/lib/data/visitas";
-import { getConversaciones } from "@/lib/data/recordatorios";
+import { getConversacion, getConversaciones } from "@/lib/data/recordatorios";
 import { formatTasa, getResumenReportes } from "@/lib/data/reportes";
 import { getMe } from "@/lib/data/usuario";
-import { fechaLargaElSalvador, saludoSegunHora } from "@/lib/date";
+import { fechaLargaElSalvador, formatHora, saludoSegunHora } from "@/lib/date";
 import { AvatarPaciente } from "@/components/shared/avatar-paciente";
 
 export default async function InicioPage() {
@@ -17,7 +17,8 @@ export default async function InicioPage() {
     getResumenReportes(),
     getMe(),
   ]);
-  const conv = conversaciones[0];
+  // La lista no trae los mensajes: se pide el detalle de la conversación más reciente.
+  const conv = conversaciones[0] ? await getConversacion(conversaciones[0].id) : undefined;
 
   return (
     <div>
@@ -39,7 +40,8 @@ export default async function InicioPage() {
 
       <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
         <section>
-          <h2 className="mb-4 font-display text-xl font-bold">Pacientes que vuelven esta semana</h2>
+          <h2 className="mb-4 font-display text-xl font-bold">Citas de hoy</h2>
+          {visitasHoy.length === 0 && <p className="text-sm text-muted-foreground">No hay citas para hoy.</p>}
           <ul className="space-y-3">
             {visitasHoy.map((visita) => (
               <li key={visita.id}>
@@ -53,7 +55,10 @@ export default async function InicioPage() {
                       <span className="font-display text-base font-bold">{visita.pacienteNombre}</span>
                       <span className="truncate text-xs text-muted-foreground">· {visita.duenoNombre}</span>
                     </div>
-                    <p className="mt-0.5 truncate text-sm text-muted-foreground">{visita.motivo}</p>
+                    <p className="mt-0.5 truncate text-sm text-muted-foreground">
+                      {visita.hora ? `${formatHora(visita.hora)} · ` : ""}
+                      {visita.motivo}
+                    </p>
                   </div>
                   {visita.pacienteEstadoEsquema !== "al_dia" && (
                     <UrgencyBadge estado={visita.pacienteEstadoEsquema} texto={visita.pacienteFaltaTexto} />

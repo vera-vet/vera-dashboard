@@ -1,5 +1,5 @@
 import { getVisitasProximas } from "@/lib/data/visitas";
-import { hoyISO } from "@/lib/date";
+import { formatHora, hoyISOElSalvador } from "@/lib/date";
 
 const DIAS = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
 
@@ -12,7 +12,7 @@ function inicioSemana(iso: string): Date {
 
 export default async function AgendaPage() {
   const visitas = await getVisitasProximas();
-  const hoy = hoyISO();
+  const hoy = hoyISOElSalvador();
   const inicio = inicioSemana(hoy);
   const dias = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(inicio);
@@ -51,7 +51,7 @@ export default async function AgendaPage() {
                       : "rounded-xl border border-dashed border-border p-2 text-xs"
                   }
                 >
-                  <div className="font-semibold">{visita.hora}</div>
+                  <div className="font-semibold">{visita.hora ? formatHora(visita.hora) : "Sin hora"}</div>
                   <div className="truncate">{visita.pacienteNombre} · {visita.duenoNombre}</div>
                 </li>
               ))}

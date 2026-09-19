@@ -175,6 +175,7 @@ export interface ApiUsuario {
   email: string;
   nombre: string;
   es_admin: boolean;
+  clinica_nombre: string;
 }
 
 export interface ApiPedidoItem {

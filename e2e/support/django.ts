@@ -118,3 +118,17 @@ paciente, _ = Paciente.objects.update_or_create(
 print(json.dumps(paciente.id))
 `);
 }
+
+/** Deja una conversación con un mensaje del dueño para un paciente de San Rafael. Devuelve ese texto. */
+export function conversacionDePrueba(paciente: string): string {
+  return djangoShell<string>(`${PRELUDE}
+from apps.recordatorios.models import Conversacion, Mensaje
+p = Paciente.objects.get(clinica__nombre__icontains="San Rafael", nombre=${JSON.stringify(paciente)})
+conversacion, _ = Conversacion.objects.get_or_create(paciente=p, defaults={"estado": "respondido"})
+texto = "Sí, ahí llevo a " + p.nombre + " (E2E)."
+if not conversacion.mensajes.filter(texto=texto).exists():
+    Mensaje.objects.create(conversacion=conversacion, autor="vera", texto="Hola. Soy Vera (E2E).")
+    Mensaje.objects.create(conversacion=conversacion, autor="dueno", texto=texto)
+print(json.dumps(texto))
+`);
+}

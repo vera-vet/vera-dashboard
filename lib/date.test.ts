@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addDaysISO, edadTexto, hoyISOElSalvador, formatFechaCorta, formatFechaHoraCorta, hoyISO } from "./date";
+import { addDaysISO, edadTexto, hoyISOElSalvador, formatFechaCorta, formatFechaHoraCorta, hoyISO, fechaLargaElSalvador, saludoSegunHora } from "./date";
 
 describe("hoyISO", () => {
   it("returns today's date in YYYY-MM-DD format", () => {
@@ -90,5 +90,37 @@ describe("hoyISOElSalvador", () => {
     // 02:00 UTC on Sep 18 is still 20:00 on Sep 17 in El Salvador (UTC-6).
     expect(hoyISOElSalvador(new Date("2026-09-18T02:00:00Z"))).toBe("2026-09-17");
     expect(hoyISOElSalvador(new Date("2026-09-18T06:00:00Z"))).toBe("2026-09-18");
+  });
+});
+
+describe("saludoSegunHora", () => {
+  // El Salvador es UTC-6 todo el año (sin horario de verano).
+  const enSV = (hhmm: string, dia = "2026-09-18") => new Date(`${dia}T${hhmm}:00-06:00`);
+
+  it("buenos días de 5:00 a 11:59", () => {
+    expect(saludoSegunHora(enSV("05:00"))).toBe("Buenos días");
+    expect(saludoSegunHora(enSV("11:59"))).toBe("Buenos días");
+  });
+
+  it("buenas tardes de 12:00 a 18:59", () => {
+    expect(saludoSegunHora(enSV("12:00"))).toBe("Buenas tardes");
+    expect(saludoSegunHora(enSV("18:59"))).toBe("Buenas tardes");
+  });
+
+  it("buenas noches de 19:00 a 4:59", () => {
+    expect(saludoSegunHora(enSV("19:00"))).toBe("Buenas noches");
+    expect(saludoSegunHora(enSV("00:00"))).toBe("Buenas noches");
+    expect(saludoSegunHora(enSV("04:59"))).toBe("Buenas noches");
+  });
+
+  it("usa la hora de El Salvador aunque el servidor esté en UTC", () => {
+    // 01:00 UTC ya es de noche (19:00 del día anterior) en El Salvador.
+    expect(saludoSegunHora(new Date("2026-09-19T01:00:00Z"))).toBe("Buenas noches");
+  });
+});
+
+describe("fechaLargaElSalvador", () => {
+  it("no se adelanta al día siguiente después de las 18:00", () => {
+    expect(fechaLargaElSalvador(new Date("2026-09-19T01:00:00Z"))).toContain("18 de septiembre");
   });
 });

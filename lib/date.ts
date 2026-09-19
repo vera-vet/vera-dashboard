@@ -21,6 +21,23 @@ export function hoyISOElSalvador(ahora: Date = new Date()): string {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "America/El_Salvador" }).format(ahora);
 }
 
+// Saludo según la hora de El Salvador: días de 5 a 11, tardes de 12 a 18, noches de 19 a 4.
+export function saludoSegunHora(ahora: Date = new Date()): string {
+  const hora = Number(
+    new Intl.DateTimeFormat("en-US", { timeZone: "America/El_Salvador", hour: "numeric", hourCycle: "h23" }).format(ahora),
+  );
+  if (hora >= 5 && hora < 12) return "Buenos días";
+  if (hora >= 12 && hora < 19) return "Buenas tardes";
+  return "Buenas noches";
+}
+
+// Fecha larga de hoy en El Salvador, por ejemplo "jueves, 18 de septiembre".
+export function fechaLargaElSalvador(ahora: Date = new Date()): string {
+  return ahora.toLocaleDateString("es-SV", {
+    weekday: "long", day: "numeric", month: "long", timeZone: "America/El_Salvador",
+  });
+}
+
 // Meses calendario cumplidos, igual que `edad_texto` en vera-api. Aritmética pura sobre
 // "YYYY-MM-DD": no parsea a Date, así que no depende de la zona horaria (antes se usaba
 // `new Date(iso)`, que es medianoche UTC, dividido entre meses de 30.44 días, y cerca de un

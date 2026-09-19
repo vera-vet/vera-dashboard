@@ -196,6 +196,13 @@ export interface Usuario {
   esAdmin: boolean;
 }
 
+export interface ResumenReportes {
+  hoy: { recordatoriosEnviados: number; citas: number; citasConfirmadas: number };
+  mes: { recordatoriosEnviados: number; conversacionesRespondidas: number; tasaRespuesta: number | null };
+  /** Últimas semanas, de la más antigua a la actual. `etiqueta` es el lunes, por ejemplo "15 sep". */
+  semanas: { etiqueta: string; enviados: number; respondidos: number }[];
+}
+
 export type TipoEntrega = "retiro" | "domicilio";
 export type EstadoPedido = "pendiente_pago" | "pagado" | "en_proceso" | "entregado" | "cancelado" | "pago_sin_stock";
 

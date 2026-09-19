@@ -195,3 +195,9 @@ export interface ApiPedido {
   creado_en: string;
   items: ApiPedidoItem[];
 }
+
+export interface ApiResumenReportes {
+  hoy: { fecha: string; recordatorios_enviados: number; citas: number; citas_confirmadas: number };
+  mes: { desde: string; recordatorios_enviados: number; conversaciones_respondidas: number; tasa_respuesta: number | null };
+  semanas: { inicio: string; enviados: number; respondidos: number }[];
+}

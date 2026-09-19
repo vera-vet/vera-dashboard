@@ -108,7 +108,6 @@ npm run dev                        # http://localhost:3000
 
 ## Problemas conocidos
 
-- El pie del sidebar dice "Vet. San Rafael" para todas las clínicas (hardcodeado).
 - La "Nota clínica" de Registrar no se guarda: el `Textarea` no está conectado al estado.
 - Las fotos de productos (inventario y tienda) todavía pueden mostrarse rotas; los pacientes ya
   usan `AvatarPaciente`.

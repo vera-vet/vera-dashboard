@@ -2,6 +2,7 @@ import { getSesionesActivas, getSalaEspera, getEstaciones, getEmpleados } from "
 import { getPacientes } from "@/lib/data/pacientes";
 import { EstacionCard } from "./estacion-card";
 import { AvatarPaciente } from "@/components/shared/avatar-paciente";
+import { formatHora } from "@/lib/date";
 
 export default async function SalaPage() {
   const [sesiones, espera, estaciones, empleados, pacientes] = await Promise.all([
@@ -38,7 +39,7 @@ export default async function SalaPage() {
           {espera.map((item) => (
             <li key={item.pacienteId} className="flex items-center gap-3 px-5 py-4">
               <div className="rounded-xl bg-vera-menta-suave px-2.5 py-1.5 text-center font-display text-sm font-bold text-vera-apoyo">
-                {item.hora}
+                {formatHora(item.hora)}
               </div>
               <AvatarPaciente nombre={item.pacienteNombre} fotoUrl={item.pacienteFotoUrl} tamano={40} />
               <div className="min-w-0 flex-1">

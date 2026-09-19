@@ -53,11 +53,24 @@ export function edadTexto(fechaNacimiento: string, hoy: string = hoyISOElSalvado
   return `${anios} ${anios === 1 ? "año" : "años"}`;
 }
 
-export function formatFechaCorta(iso: string): string {
+// "2026-09-18" → "18 sept"; si no es de este año, con el año ("3 nov 2023"), para que un
+// historial de varios años no parezca desordenado.
+export function formatFechaCorta(iso: string, hoy: string = hoyISOElSalvador()): string {
+  const otroAnio = iso.slice(0, 4) !== hoy.slice(0, 4);
   return new Date(`${iso}T00:00:00`).toLocaleDateString("es-SV", {
     day: "numeric",
     month: "short",
+    ...(otroAnio ? { year: "numeric" } : {}),
   });
+}
+
+// Hora de la API ("08:30:00" o "14:05") → "8:30 a. m." / "2:05 p. m.". Aritmética sobre el
+// string: la hora de una cita no tiene zona.
+export function formatHora(hora: string): string {
+  const [h, m] = hora.split(":").map(Number);
+  const sufijo = h < 12 ? "a. m." : "p. m.";
+  const h12 = h % 12 === 0 ? 12 : h % 12;
+  return `${h12}:${String(m).padStart(2, "0")} ${sufijo}`;
 }
 
 // For full ISO 8601 datetimes (date + time + offset), e.g. NotaConsulta.fechaHora.

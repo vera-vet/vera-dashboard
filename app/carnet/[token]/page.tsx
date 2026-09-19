@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { Check, MessageCircle } from "lucide-react";
 import { edadTexto, formatFechaCorta } from "@/lib/date";
+import { AvatarPaciente } from "@/components/shared/avatar-paciente";
 
 interface CarnetData {
   nombre: string;
@@ -27,7 +28,7 @@ export default async function CarnetPage({ params }: { params: Promise<{ token: 
     <div className="min-h-screen bg-vera-sage py-10">
       <div className="mx-auto w-full max-w-[390px] rounded-[36px] border-8 border-vera-forest bg-card p-6 shadow-[var(--shadow-elevated)]">
         <div className="text-center">
-          <img src={carnet.foto_url || undefined} alt={carnet.nombre} className="mx-auto h-28 w-28 rounded-full object-cover" />
+          <AvatarPaciente nombre={carnet.nombre} fotoUrl={carnet.foto_url} tamano={112} className="mx-auto" />
           <h1 className="mt-4 font-display text-2xl font-bold">{carnet.nombre}</h1>
           <p className="text-sm text-muted-foreground">{carnet.raza} · {edadTexto(carnet.fecha_nacimiento)}</p>
         </div>

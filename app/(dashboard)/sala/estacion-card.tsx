@@ -5,6 +5,7 @@ import { Clock } from "lucide-react";
 import type { Empleado, Estacion, SesionActiva } from "@/lib/data/types";
 import { GrabarConsultaButton } from "./grabar-consulta-button";
 import { NuevaSesionForm } from "./nueva-sesion-form";
+import { AvatarPaciente } from "@/components/shared/avatar-paciente";
 
 export function EstacionCard({
   estacion,
@@ -38,7 +39,7 @@ export function EstacionCard({
       {sesion ? (
         <>
           <div className="mt-3 flex items-center gap-3">
-            <img src={sesion.pacienteFotoUrl || undefined} alt={sesion.pacienteNombre} className="h-12 w-12 rounded-full object-cover" />
+            <AvatarPaciente nombre={sesion.pacienteNombre} fotoUrl={sesion.pacienteFotoUrl} tamano={48} />
             <div className="min-w-0">
               <div className="truncate font-display text-base font-bold">{sesion.pacienteNombre}</div>
               <div className="truncate text-xs text-muted-foreground">{sesion.duenoNombre}</div>

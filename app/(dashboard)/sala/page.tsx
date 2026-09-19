@@ -1,6 +1,7 @@
 import { getSesionesActivas, getSalaEspera, getEstaciones, getEmpleados } from "@/lib/data/sala";
 import { getPacientes } from "@/lib/data/pacientes";
 import { EstacionCard } from "./estacion-card";
+import { AvatarPaciente } from "@/components/shared/avatar-paciente";
 
 export default async function SalaPage() {
   const [sesiones, espera, estaciones, empleados, pacientes] = await Promise.all([
@@ -39,7 +40,7 @@ export default async function SalaPage() {
               <div className="rounded-xl bg-vera-sage px-2.5 py-1.5 text-center font-display text-sm font-bold text-vera-emerald">
                 {item.hora}
               </div>
-              <img src={item.pacienteFotoUrl || undefined} alt={item.pacienteNombre} className="h-10 w-10 rounded-full object-cover" />
+              <AvatarPaciente nombre={item.pacienteNombre} fotoUrl={item.pacienteFotoUrl} tamano={40} />
               <div className="min-w-0 flex-1">
                 <div className="truncate text-sm font-semibold">{item.pacienteNombre}</div>
                 <div className="truncate text-xs text-muted-foreground">{item.motivo}</div>

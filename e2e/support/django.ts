@@ -102,3 +102,19 @@ print(json.dumps(Recordatorio.objects.filter(
 ).count()))
 `);
 }
+
+export const FOTO_ROTA_E2E = "/e2e/foto-que-no-existe.jpg";
+
+/** Deja en San Rafael un paciente cuya foto_url existe pero no carga (404). Devuelve su id. */
+export function pacienteConFotoRota(nombre: string): number {
+  return djangoShell<number>(`${PRELUDE}
+clinica = Clinica.objects.get(nombre__icontains="San Rafael")
+dueno = Dueno.objects.filter(clinica=clinica).order_by("id").first()
+paciente, _ = Paciente.objects.update_or_create(
+    clinica=clinica, nombre=${JSON.stringify(nombre)},
+    defaults={"dueno": dueno, "especie": "gato", "raza": "Mestizo", "sexo": "H", "fecha_nacimiento": "2023-03-01",
+              "vacunas_completas": 1, "vacunas_total": 3, "foto_url": ${JSON.stringify(FOTO_ROTA_E2E)}},
+)
+print(json.dumps(paciente.id))
+`);
+}

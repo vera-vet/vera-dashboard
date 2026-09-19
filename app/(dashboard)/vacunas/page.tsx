@@ -1,6 +1,7 @@
 import { MessageCircle } from "lucide-react";
 import { getPendientesVacunas } from "@/lib/data/pacientes";
 import { UrgencyBadge } from "@/components/shared/urgency-badge";
+import { AvatarPaciente } from "@/components/shared/avatar-paciente";
 
 export default async function VacunasPage() {
   const pendientes = await getPendientesVacunas();
@@ -15,7 +16,7 @@ export default async function VacunasPage() {
       <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
         {pendientes.map((paciente) => (
           <li key={paciente.id} className="flex items-center gap-4 px-5 py-4">
-            <img src={paciente.fotoUrl || undefined} alt={paciente.nombre} className="h-12 w-12 rounded-full object-cover" />
+            <AvatarPaciente nombre={paciente.nombre} fotoUrl={paciente.fotoUrl} tamano={48} />
             <div className="min-w-0 flex-1">
               <div className="font-display text-base font-bold">{paciente.nombre}</div>
               <div className="truncate text-xs text-muted-foreground">{paciente.duenoNombre}</div>

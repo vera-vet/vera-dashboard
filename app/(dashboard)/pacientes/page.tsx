@@ -3,6 +3,7 @@ import { ChevronRight, Search, UserPlus } from "lucide-react";
 import { getPacientes } from "@/lib/data/pacientes";
 import { UrgencyBadge } from "@/components/shared/urgency-badge";
 import { edadTexto } from "@/lib/date";
+import { AvatarPaciente } from "@/components/shared/avatar-paciente";
 
 const ESPECIE_LABEL = { perro: "Perro", gato: "Gato", otro: "Otro" } as const;
 
@@ -39,7 +40,7 @@ export default async function PacientesPage() {
               href={`/pacientes/${paciente.id}`}
               className="flex items-center gap-4 px-5 py-4 transition-colors hover:bg-secondary/50"
             >
-              <img src={paciente.fotoUrl || undefined} alt={paciente.nombre} className="h-12 w-12 rounded-full object-cover" />
+              <AvatarPaciente nombre={paciente.nombre} fotoUrl={paciente.fotoUrl} tamano={48} />
               <div className="min-w-0 flex-1">
                 <div className="font-display text-base font-bold">{paciente.nombre}</div>
                 <div className="truncate text-xs text-muted-foreground">

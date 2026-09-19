@@ -8,6 +8,7 @@ import { getConversaciones } from "@/lib/data/recordatorios";
 import { formatTasa, getResumenReportes } from "@/lib/data/reportes";
 import { getMe } from "@/lib/data/usuario";
 import { fechaLargaElSalvador, saludoSegunHora } from "@/lib/date";
+import { AvatarPaciente } from "@/components/shared/avatar-paciente";
 
 export default async function InicioPage() {
   const [visitasHoy, conversaciones, resumen, usuario] = await Promise.all([
@@ -46,7 +47,7 @@ export default async function InicioPage() {
                   href={`/pacientes/${visita.pacienteId}`}
                   className="flex items-center gap-4 rounded-2xl border border-border bg-card p-4 transition-shadow hover:shadow-[var(--shadow-elevated)]"
                 >
-                  <img src={visita.pacienteFotoUrl || undefined} alt={visita.pacienteNombre} className="h-14 w-14 rounded-full object-cover" />
+                  <AvatarPaciente nombre={visita.pacienteNombre} fotoUrl={visita.pacienteFotoUrl} tamano={56} />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-baseline gap-2">
                       <span className="font-display text-base font-bold">{visita.pacienteNombre}</span>

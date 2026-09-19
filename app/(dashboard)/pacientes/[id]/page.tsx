@@ -10,6 +10,7 @@ import { edadTexto, formatFechaCorta, formatFechaHoraCorta, hoyISO } from "@/lib
 import { DatosClinicos } from "./datos-clinicos";
 import { HistorialItem } from "./historial-item";
 import { CompartirPanel } from "./compartir-panel";
+import { AvatarPaciente } from "@/components/shared/avatar-paciente";
 
 const ESPECIE_LABEL = { perro: "Perro", gato: "Gato", otro: "Otro" } as const;
 
@@ -31,7 +32,7 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
       </Link>
 
       <section className="flex flex-wrap items-center gap-6 pb-6">
-        <img src={paciente.fotoUrl || undefined} alt={paciente.nombre} className="h-24 w-24 rounded-full object-cover" />
+        <AvatarPaciente nombre={paciente.nombre} fotoUrl={paciente.fotoUrl} tamano={96} />
         <div className="min-w-0 flex-1">
           <h1 className="font-display text-3xl font-bold text-vera-forest">{paciente.nombre}</h1>
           <p className="mt-1 text-sm text-muted-foreground">

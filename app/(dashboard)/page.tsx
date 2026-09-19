@@ -5,13 +5,15 @@ import { UrgencyBadge } from "@/components/shared/urgency-badge";
 import { WhatsAppBubble } from "@/components/shared/whatsapp-bubble";
 import { getVisitasHoy } from "@/lib/data/visitas";
 import { getConversaciones } from "@/lib/data/recordatorios";
+import { formatTasa, getResumenReportes } from "@/lib/data/reportes";
 
 export default async function InicioPage() {
-  const visitasHoy = await getVisitasHoy();
-  const conversaciones = await getConversaciones();
+  const [visitasHoy, conversaciones, resumen] = await Promise.all([
+    getVisitasHoy(),
+    getConversaciones(),
+    getResumenReportes(),
+  ]);
   const conv = conversaciones[0];
-
-  const sinConfirmar = visitasHoy.filter((v) => !v.confirmada).length;
 
   return (
     <div>
@@ -23,10 +25,10 @@ export default async function InicioPage() {
       </header>
 
       <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <MetricHero label="Clientes recuperados" value={23} hint="este mes" />
-        <MetricHero label="Recordatorios enviados" value={8} hint="hoy" />
-        <MetricHero label="Citas confirmadas" value={visitasHoy.length - sinConfirmar} hint={`de ${visitasHoy.length}`} />
-        <MetricHero label="Ingresos recuperados" value="$487" hint="este mes" />
+        <MetricHero label="Recordatorios enviados" value={resumen.hoy.recordatoriosEnviados} hint="hoy" />
+        <MetricHero label="Citas confirmadas" value={resumen.hoy.citasConfirmadas} hint={`de ${resumen.hoy.citas} hoy`} />
+        <MetricHero label="Respuestas de dueños" value={resumen.mes.conversacionesRespondidas} hint="este mes" />
+        <MetricHero label="Tasa de respuesta" value={formatTasa(resumen.mes.tasaRespuesta)} hint="este mes" />
       </section>
 
       <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">

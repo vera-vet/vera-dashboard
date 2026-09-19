@@ -80,3 +80,25 @@ export function pacienteIdPorNombre(clinica: string, nombre: string): number {
 print(json.dumps(Paciente.objects.get(clinica__nombre__icontains=${JSON.stringify(clinica)}, nombre=${JSON.stringify(nombre)}).id))
 `);
 }
+
+/**
+ * Cuántos recordatorios enviados lleva la clínica en el mes, contados directo en la base
+ * (independiente del endpoint que se prueba). Con `registrarUnoHoy`, antes agrega uno enviado hoy.
+ */
+export function enviadosDelMes(clinica: string, registrarUnoHoy = false): number {
+  return djangoShell<number>(`${PRELUDE}
+import datetime
+from django.utils import timezone
+from apps.recordatorios.models import Recordatorio
+pacientes = Paciente.objects.filter(clinica__nombre__icontains=${JSON.stringify(clinica)})
+if ${registrarUnoHoy ? "True" : "False"}:
+    Recordatorio.objects.create(paciente=pacientes.order_by("id").first(), tipo="E2E", programado_para=timezone.now(),
+                                mensaje="Recordatorio de prueba E2E", estado="enviado")
+hoy = timezone.localdate()
+inicio = timezone.make_aware(datetime.datetime.combine(hoy.replace(day=1), datetime.time.min))
+fin = timezone.make_aware(datetime.datetime.combine(hoy + datetime.timedelta(days=1), datetime.time.min))
+print(json.dumps(Recordatorio.objects.filter(
+    paciente__in=pacientes, estado__in=("enviado", "cumplido"), programado_para__gte=inicio, programado_para__lt=fin,
+).count()))
+`);
+}

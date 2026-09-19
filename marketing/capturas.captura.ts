@@ -19,6 +19,9 @@ test.describe("escritorio", () => {
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Andrea Molina");
     await capturar(page, "escritorio-inicio");
 
+    // Recorte de "Citas de hoy" para las tarjetas de la landing, donde la pantalla completa no se lee.
+    await page.locator("section", { hasText: "Citas de hoy" }).screenshot({ path: png("escritorio-citas-hoy") });
+
     await page.goto("/agenda");
     await capturar(page, "escritorio-agenda");
 

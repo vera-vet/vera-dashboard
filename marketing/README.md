@@ -30,7 +30,8 @@ La salida queda en `marketing/salida/web/` (ignorada por git). De ahí se copian
 
 ## Qué se captura
 
-- **Escritorio** (1440×900 @2x): Inicio, Agenda, expediente de Dante y Reportes.
+- **Escritorio** (1440×900 @2x): Inicio, Agenda, expediente de Dante y Reportes, más un recorte de
+  "Citas de hoy" para tarjetas chicas.
 - **Móvil** (390×844 @3x): Registrar, la conversación de WhatsApp (solo el panel, para ponerla
   en un marco de teléfono en la landing) y el carnet digital.
 - **Video** (1280×800, unos 30 s): Inicio → registrar Rabia a Dante en un toque → confirmación

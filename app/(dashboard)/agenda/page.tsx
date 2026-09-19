@@ -32,7 +32,7 @@ export default async function AgendaPage() {
         <p className="mt-1 text-sm text-muted-foreground">Semana del {new Date(`${dias[0]}T12:00:00`).toLocaleDateString("es-SV", { day: "numeric", month: "long" })}</p>
       </header>
 
-      <div className="grid gap-3 lg:grid-cols-7">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-3 lg:grid-cols-7">
         {dias.map((fecha, i) => (
           <div key={fecha} className="rounded-2xl border border-border bg-card p-3">
             <div className="mb-2 text-center">

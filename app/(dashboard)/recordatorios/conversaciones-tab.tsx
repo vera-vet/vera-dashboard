@@ -33,7 +33,7 @@ export function ConversacionesTab({ conversaciones }: { conversaciones: Conversa
   const mensajesAbiertos = openId ? mensajes[openId] : undefined;
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[340px_1fr]">
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-4 lg:grid-cols-[340px_minmax(0,1fr)]">
       <ul className="space-y-2">
         {conversaciones.map((c) => (
           <li key={c.id}>

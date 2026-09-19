@@ -54,7 +54,7 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
         </a>
       </section>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <section>
           <h2 className="mb-3 font-display text-lg font-bold">Ciclo de vacunación</h2>
           <div className="rounded-2xl border border-border bg-card p-6">

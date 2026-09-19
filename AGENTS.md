@@ -58,6 +58,12 @@ npm run dev                        # http://localhost:3000
 - El E2E corre en el CI de `vera-api`, que clona `staging` de este repo. Si un cambio aquí rompe
   E2E, se ve en la siguiente corrida de CI de la API.
 
+## Capturas de marketing
+
+`npm run capturas` regenera las capturas y el video de la landing con la clínica ficticia de
+`seed_marketing` (ver `marketing/README.md`). Si cambia la UI de Inicio, Agenda, expediente,
+Reportes, Registrar, Recordatorios o el carnet, hay que volver a correrlo y actualizar la landing.
+
 ## Arquitectura
 
 - **Server-to-server:** el navegador nunca llama a Django. Server Components, Server Actions

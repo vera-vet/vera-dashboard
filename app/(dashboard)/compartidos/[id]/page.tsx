@@ -39,7 +39,7 @@ export default async function PacienteCompartidoPage({ params }: { params: Promi
         <p className="mt-2 text-sm"><span className="font-semibold">Alergias:</span> {paciente.alergias.join(", ")}</p>
       )}
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <div className="mt-6 grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <section>
           <h2 className="mb-3 font-display text-lg font-bold">Historial clínico</h2>
           <ol className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">

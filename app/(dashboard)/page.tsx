@@ -38,7 +38,7 @@ export default async function InicioPage() {
         <MetricHero label="Tasa de respuesta" value={formatTasa(resumen.mes.tasaRespuesta)} hint="este mes" />
       </section>
 
-      <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
+      <div className="mt-10 grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
         <section>
           <h2 className="mb-4 font-display text-xl font-bold">Citas de hoy</h2>
           {visitasHoy.length === 0 && <p className="text-sm text-muted-foreground">No hay citas para hoy.</p>}

@@ -18,12 +18,12 @@ export function ReportesCharts({ semanas }: { semanas: ResumenReportes["semanas"
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={semanas}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-              <XAxis dataKey="etiqueta" stroke="var(--vera-ink-soft)" fontSize={12} />
-              <YAxis allowDecimals={false} stroke="var(--vera-ink-soft)" fontSize={12} />
+              <XAxis dataKey="etiqueta" stroke="var(--vera-tinta-suave)" fontSize={12} />
+              <YAxis allowDecimals={false} stroke="var(--vera-tinta-suave)" fontSize={12} />
               <Tooltip />
               <Legend />
-              <Bar dataKey="enviados" name="Enviados" fill="var(--vera-slate-info)" radius={[6, 6, 0, 0]} />
-              <Bar dataKey="respondidos" name="Respondidos" fill="var(--vera-emerald)" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="enviados" name="Enviados" fill="var(--vera-menta)" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="respondidos" name="Respondidos" fill="var(--vera-apoyo)" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

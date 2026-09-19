@@ -2,9 +2,9 @@ import type { EstadoEsquema } from "@/lib/data/types";
 import { cn } from "@/lib/utils";
 
 const STYLES: Record<EstadoEsquema, string> = {
-  vencido: "bg-vera-coral-soft text-vera-coral",
-  falta: "bg-vera-honey-soft text-vera-honey",
-  al_dia: "bg-vera-sage text-vera-emerald",
+  vencido: "bg-vera-coral-soft text-vera-coral-fuerte",
+  falta: "bg-vera-arena text-vera-tinta-suave",
+  al_dia: "bg-vera-menta-suave text-vera-apoyo",
 };
 
 const LABELS: Record<EstadoEsquema, string> = {

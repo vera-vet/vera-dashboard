@@ -35,7 +35,7 @@ export function MobileNav() {
                 href={href}
                 className={cn(
                   "flex min-h-[56px] flex-col items-center justify-center gap-0.5 text-[11px] font-medium",
-                  active ? "text-vera-emerald" : "text-muted-foreground",
+                  active ? "text-vera-apoyo" : "text-muted-foreground",
                 )}
               >
                 <Icon size={20} strokeWidth={active ? 2.3 : 1.8} />
@@ -48,7 +48,7 @@ export function MobileNav() {
             onClick={() => setOpen(true)}
             className={cn(
               "flex min-h-[56px] flex-col items-center justify-center gap-0.5 text-[11px] font-medium",
-              overflowActive ? "text-vera-emerald" : "text-muted-foreground",
+              overflowActive ? "text-vera-apoyo" : "text-muted-foreground",
             )}
           >
             <MoreHorizontal size={20} strokeWidth={overflowActive ? 2.3 : 1.8} />
@@ -72,7 +72,7 @@ export function MobileNav() {
                       href={href}
                       className={cn(
                         "flex min-h-11 items-center gap-3 rounded-2xl px-3 text-sm font-medium",
-                        active ? "bg-secondary text-vera-emerald" : "text-foreground",
+                        active ? "bg-secondary text-vera-apoyo" : "text-foreground",
                       )}
                     >
                       <Icon size={20} strokeWidth={active ? 2.3 : 1.8} />

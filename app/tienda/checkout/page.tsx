@@ -76,18 +76,18 @@ export default function CheckoutPage() {
         />
       )}
 
-      {mensaje && <p className="text-xs text-vera-coral">{mensaje}</p>}
+      {mensaje && <p className="text-xs text-vera-coral-fuerte">{mensaje}</p>}
 
       <button
         type="button" onClick={confirmar} disabled={guardando}
-        className="w-full rounded-xl bg-vera-emerald px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
+        className="w-full rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-60"
       >
         {guardando ? "Procesando…" : "Pagar"}
       </button>
 
       <button
         type="button" onClick={vaciar} disabled={guardando}
-        className="w-full rounded-xl border border-border px-4 py-2 text-sm font-semibold text-vera-coral disabled:opacity-60"
+        className="w-full rounded-xl border border-border px-4 py-2 text-sm font-semibold text-vera-coral-fuerte disabled:opacity-60"
       >
         Vaciar carrito
       </button>

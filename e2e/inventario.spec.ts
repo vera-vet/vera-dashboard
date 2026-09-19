@@ -15,10 +15,9 @@ test("solo un admin de clínica puede crear productos", async ({ page }) => {
   await page.getByRole("button", { name: "Nuevo producto" }).click();
 
   const nombre = `E2E Desparasitante ${Date.now()}`;
-  await page.getByPlaceholder("Nombre", { exact: true }).fill(nombre);
-  // Los <label> de precio/stock no están asociados a su input (sin htmlFor): se ubican por posición.
-  await page.getByText("Precio", { exact: true }).locator("xpath=following-sibling::input").fill("4.75");
-  await page.getByText("Cantidad en stock", { exact: true }).locator("xpath=following-sibling::input").fill("12");
+  await page.getByLabel("Nombre del producto").fill(nombre);
+  await page.getByLabel("Precio").fill("4.75");
+  await page.getByLabel("Cantidad en stock").fill("12");
   await page.getByRole("button", { name: "Crear producto" }).click();
 
   await expect(page.getByText(nombre)).toBeVisible();

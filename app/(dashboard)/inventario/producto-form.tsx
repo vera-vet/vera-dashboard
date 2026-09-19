@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { useRouter } from "next/navigation";
 import { crearProducto, actualizarProducto } from "./actions";
 import type { Producto, ProductoCategoria } from "@/lib/data/types";
@@ -13,6 +13,8 @@ const CATEGORIA_OPCIONES: { value: ProductoCategoria; label: string }[] = [
 
 export function ProductoForm({ producto, onCerrar }: { producto?: Producto; onCerrar: () => void }) {
   const router = useRouter();
+  // Puede haber varios formularios abiertos (crear y editar): ids únicos por instancia.
+  const id = useId();
   const [nombre, setNombre] = useState(producto?.nombre ?? "");
   const [categoria, setCategoria] = useState<ProductoCategoria>(producto?.categoria ?? "medicina");
   const [precio, setPrecio] = useState(producto ? String(producto.precio) : "");
@@ -48,10 +50,11 @@ export function ProductoForm({ producto, onCerrar }: { producto?: Producto; onCe
     <form onSubmit={guardar} className="space-y-3 rounded-2xl border border-border bg-card p-4">
       <input
         type="text" value={nombre} onChange={(e) => setNombre(e.target.value)}
-        placeholder="Nombre" className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
+        placeholder="Nombre" aria-label="Nombre del producto" className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
       />
 
       <select
+        aria-label="Categoría"
         value={categoria} onChange={(e) => setCategoria(e.target.value as ProductoCategoria)}
         className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
       >
@@ -60,16 +63,16 @@ export function ProductoForm({ producto, onCerrar }: { producto?: Producto; onCe
 
       <div className="flex gap-2">
         <div className="w-1/2">
-          <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Precio</label>
+          <label htmlFor={`${id}-precio`} className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Precio</label>
           <input
-            type="number" min={0} step="0.01" value={precio} onChange={(e) => setPrecio(e.target.value)}
+            id={`${id}-precio`} type="number" min={0} step="0.01" value={precio} onChange={(e) => setPrecio(e.target.value)}
             className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
           />
         </div>
         <div className="w-1/2">
-          <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Cantidad en stock</label>
+          <label htmlFor={`${id}-cantidad`} className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Cantidad en stock</label>
           <input
-            type="number" min={0} value={cantidad} onChange={(e) => setCantidad(e.target.value)}
+            id={`${id}-cantidad`} type="number" min={0} value={cantidad} onChange={(e) => setCantidad(e.target.value)}
             className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
           />
         </div>
@@ -77,15 +80,15 @@ export function ProductoForm({ producto, onCerrar }: { producto?: Producto; onCe
 
       <input
         type="text" value={fotoUrl} onChange={(e) => setFotoUrl(e.target.value)}
-        placeholder="URL de la foto (opcional)" className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
+        placeholder="URL de la foto (opcional)" aria-label="URL de la foto" className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
       />
 
-      {mensaje && <p className="text-xs text-vera-coral">{mensaje}</p>}
+      {mensaje && <p className="text-xs text-vera-coral-fuerte">{mensaje}</p>}
 
       <div className="flex gap-2">
         <button
           type="submit" disabled={guardando}
-          className="flex-1 rounded-xl bg-vera-emerald px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
+          className="flex-1 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-60"
         >
           {guardando ? "Guardando…" : producto ? "Guardar cambios" : "Crear producto"}
         </button>

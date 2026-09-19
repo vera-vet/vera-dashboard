@@ -16,7 +16,7 @@ export function VaccineTimeline({ servicios, vacunasCompletas, vacunasTotal }: P
     <ol className="relative ml-3 space-y-5 border-l-2 border-border pl-6">
       {vacunas.map((v) => (
         <li key={v.id} className="relative">
-          <span className="absolute -left-[31px] grid h-6 w-6 place-items-center rounded-full bg-vera-emerald text-white">
+          <span className="absolute -left-[31px] grid h-6 w-6 place-items-center rounded-full bg-primary text-primary-foreground">
             <Check size={13} />
           </span>
           <div className="font-display text-sm font-bold">{v.producto}</div>
@@ -25,10 +25,10 @@ export function VaccineTimeline({ servicios, vacunasCompletas, vacunasTotal }: P
       ))}
       {Array.from({ length: pendientes }).map((_, i) => (
         <li key={`pendiente-${i}`} className="relative opacity-70">
-          <span className="absolute -left-[31px] grid h-6 w-6 place-items-center rounded-full border-2 border-dashed border-vera-honey bg-card text-vera-honey">
+          <span className="absolute -left-[31px] grid h-6 w-6 place-items-center rounded-full border-2 border-dashed border-vera-tinta-suave bg-card text-vera-tinta-suave">
             <Syringe size={12} />
           </span>
-          <div className="font-display text-sm font-bold text-vera-honey">Dosis pendiente</div>
+          <div className="font-display text-sm font-bold text-vera-tinta-suave">Dosis pendiente</div>
           <div className="text-xs text-muted-foreground">Por programar</div>
         </li>
       ))}

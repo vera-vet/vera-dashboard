@@ -33,7 +33,7 @@ function AccederContent() {
   }, [searchParams, router]);
 
   if (error) {
-    return <p className="rounded-2xl border border-border bg-card p-4 text-sm text-vera-coral">{error}</p>;
+    return <p className="rounded-2xl border border-border bg-card p-4 text-sm text-vera-coral-fuerte">{error}</p>;
   }
 
   return <p className="text-sm text-muted-foreground">Entrando…</p>;

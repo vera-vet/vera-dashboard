@@ -23,7 +23,7 @@ export default async function PacienteCompartidoPage({ params }: { params: Promi
 
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl font-bold text-vera-forest">{paciente.nombre}</h1>
+          <h1 className="font-display text-3xl font-bold text-vera-verde">{paciente.nombre}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {ESPECIE_LABEL[paciente.especie]} · {paciente.raza} · {edadTexto(paciente.fechaNacimiento)} · {paciente.sexo === "M" ? "Macho" : "Hembra"}
           </p>

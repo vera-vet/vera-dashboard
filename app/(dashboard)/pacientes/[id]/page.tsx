@@ -34,7 +34,7 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
       <section className="flex flex-wrap items-center gap-6 pb-6">
         <AvatarPaciente nombre={paciente.nombre} fotoUrl={paciente.fotoUrl} tamano={96} />
         <div className="min-w-0 flex-1">
-          <h1 className="font-display text-3xl font-bold text-vera-forest">{paciente.nombre}</h1>
+          <h1 className="font-display text-3xl font-bold text-vera-verde">{paciente.nombre}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {ESPECIE_LABEL[paciente.especie]} · {paciente.raza} · {edadTexto(paciente.fechaNacimiento)} · {paciente.sexo === "M" ? "Macho" : "Hembra"}
           </p>
@@ -43,7 +43,7 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
             <span className="text-muted-foreground">· {dueno?.whatsapp}</span>
           </p>
         </div>
-        <button className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-whatsapp px-4 text-sm font-semibold text-white">
+        <button className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-whatsapp px-4 text-sm font-semibold text-whatsapp-foreground">
           <MessageCircle size={16} /> Escribir a {dueno?.nombre.split(" ")[0]}
         </button>
         <a
@@ -79,7 +79,7 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
                   <span>{formatFechaHoraCorta(n.fechaHora)}</span>
                 </div>
                 <p className="mt-2 text-sm">{n.transcripcion}</p>
-                {n.servicioVisitaId && <p className="mt-2 text-xs text-vera-emerald">Conectada a un servicio registrado</p>}
+                {n.servicioVisitaId && <p className="mt-2 text-xs text-vera-apoyo">Conectada a un servicio registrado</p>}
               </li>
             ))}
           </ol>
@@ -114,7 +114,7 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
               <div className="font-display text-sm font-bold">Carnet del dueño</div>
               <div className="text-xs text-muted-foreground">Lo que ve {dueno?.nombre.split(" ")[0]}</div>
             </div>
-            <ExternalLink size={16} className="text-vera-emerald" />
+            <ExternalLink size={16} className="text-vera-apoyo" />
           </Link>
         </aside>
       </div>

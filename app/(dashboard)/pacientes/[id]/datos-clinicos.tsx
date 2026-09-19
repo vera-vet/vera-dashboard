@@ -20,7 +20,7 @@ function ChipList({
   tono: "coral" | "sage";
 }) {
   const [valor, setValor] = useState("");
-  const chipClass = tono === "coral" ? "bg-vera-coral-soft text-vera-coral" : "bg-vera-sage text-vera-emerald";
+  const chipClass = tono === "coral" ? "bg-vera-coral-soft text-vera-coral-fuerte" : "bg-vera-menta-suave text-vera-apoyo";
 
   return (
     <div>
@@ -57,7 +57,7 @@ function ChipList({
               setValor("");
             }
           }}
-          className="grid min-h-11 min-w-11 place-items-center rounded-lg bg-vera-emerald text-white"
+          className="grid min-h-11 min-w-11 place-items-center rounded-lg bg-primary text-primary-foreground"
           aria-label="Agregar"
         >
           <Plus size={16} />

@@ -8,7 +8,7 @@ export default async function RegistrarPage() {
   return (
     <div>
       <header className="pb-6">
-        <h1 className="font-display text-3xl font-bold text-vera-forest">Registrar visita</h1>
+        <h1 className="font-display text-3xl font-bold text-vera-verde">Registrar visita</h1>
         <p className="mt-1 text-sm text-muted-foreground">Un tap. Vera programa el recordatorio automáticamente.</p>
       </header>
       <RegistrarClient pacientes={pacientes} especialidades={especialidades} />

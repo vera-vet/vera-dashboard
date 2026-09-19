@@ -9,7 +9,7 @@ export default async function VacunasPage() {
   return (
     <div>
       <header className="pb-6">
-        <h1 className="font-display text-3xl font-bold text-vera-forest">A quién le toca</h1>
+        <h1 className="font-display text-3xl font-bold text-vera-verde">A quién le toca</h1>
         <p className="mt-1 text-sm text-muted-foreground">La memoria automática de Vera, priorizada por urgencia.</p>
       </header>
 
@@ -22,7 +22,7 @@ export default async function VacunasPage() {
               <div className="truncate text-xs text-muted-foreground">{paciente.duenoNombre}</div>
             </div>
             <UrgencyBadge estado={paciente.estadoEsquema} texto={paciente.faltaTexto} />
-            <button className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-xl bg-whatsapp px-3 text-xs font-semibold text-white">
+            <button className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-xl bg-whatsapp px-3 text-xs font-semibold text-whatsapp-foreground">
               <MessageCircle size={13} /> Avisar
             </button>
           </li>

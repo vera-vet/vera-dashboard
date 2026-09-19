@@ -49,7 +49,7 @@ export function PedidoCard({ pedido }: { pedido: Pedido }) {
         {siguiente && (
           <button
             type="button" onClick={() => avanzar(siguiente.estado)} disabled={actualizando}
-            className="rounded-xl bg-vera-emerald px-3 py-1.5 text-xs font-semibold text-white disabled:opacity-60"
+            className="rounded-xl bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground disabled:opacity-60"
           >
             {siguiente.label}
           </button>

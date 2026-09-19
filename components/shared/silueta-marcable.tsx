@@ -17,15 +17,15 @@ function Diagrama({ tipo }: { tipo: DiagramaTipo }) {
   // Silueta sólida (un solo color de relleno, sin contorno): un color plano
   // se lee como "forma de animal" de inmediato; el contorno pálido de la
   // versión anterior se veía como un blob irreconocible.
-  const fill = "var(--vera-forest)";
+  const fill = "var(--vera-verde)";
   const resalte = "var(--card)"; // punto de brillo del ojo, contrasta contra el relleno sólido
 
   if (tipo === "ojo") {
     return (
       <svg viewBox="0 0 100 100" className="h-full w-full">
-        <path d="M5 50 Q50 15 95 50 Q50 85 5 50 Z" fill="var(--vera-sage)" stroke={fill} strokeWidth={2} />
-        <circle cx="50" cy="50" r="16" fill="var(--vera-forest-deep)" stroke={fill} strokeWidth={2} />
-        <circle cx="50" cy="50" r="7" fill="var(--vera-ink)" />
+        <path d="M5 50 Q50 15 95 50 Q50 85 5 50 Z" fill="var(--vera-menta-suave)" stroke={fill} strokeWidth={2} />
+        <circle cx="50" cy="50" r="16" fill="var(--vera-verde-profundo)" stroke={fill} strokeWidth={2} />
+        <circle cx="50" cy="50" r="7" fill="var(--vera-tinta)" />
       </svg>
     );
   }
@@ -129,7 +129,7 @@ export function SiluetaMarcable({ diagramaTipo, marcas, modo, onAgregarMarca, on
               e.stopPropagation();
               if (modo === "interactivo") onEliminarMarca?.(marca.id);
             }}
-            className="absolute grid h-6 w-6 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-vera-coral text-white shadow-[var(--shadow-card)]"
+            className="absolute grid h-6 w-6 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-vera-coral-fuerte text-white shadow-[var(--shadow-card)]"
             style={{ left: `${marca.x}%`, top: `${marca.y}%` }}
           >
             <span className="h-2 w-2 rounded-full bg-white" />
@@ -137,7 +137,7 @@ export function SiluetaMarcable({ diagramaTipo, marcas, modo, onAgregarMarca, on
         ))}
         {pendiente && (
           <span
-            className="absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-full bg-vera-honey"
+            className="absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-full bg-vera-coral"
             style={{ left: `${pendiente.x}%`, top: `${pendiente.y}%` }}
           />
         )}
@@ -156,7 +156,7 @@ export function SiluetaMarcable({ diagramaTipo, marcas, modo, onAgregarMarca, on
           <button
             type="button"
             onClick={confirmarPendiente}
-            className="min-h-11 rounded-lg bg-vera-emerald px-3 text-sm font-semibold text-white"
+            className="min-h-11 rounded-lg bg-primary px-3 text-sm font-semibold text-primary-foreground"
           >
             Guardar
           </button>

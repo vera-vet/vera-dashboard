@@ -33,91 +33,102 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --color-vera-forest: var(--vera-forest);
-  --color-vera-forest-deep: var(--vera-forest-deep);
-  --color-vera-emerald: var(--vera-emerald);
-  --color-vera-honey: var(--vera-honey);
-  --color-vera-honey-soft: var(--vera-honey-soft);
+  --color-vera-verde: var(--vera-verde);
+  --color-vera-verde-profundo: var(--vera-verde-profundo);
+  --color-vera-apoyo: var(--vera-apoyo);
+  --color-vera-menta: var(--vera-menta);
+  --color-vera-menta-suave: var(--vera-menta-suave);
   --color-vera-coral: var(--vera-coral);
+  --color-vera-coral-fuerte: var(--vera-coral-fuerte);
   --color-vera-coral-soft: var(--vera-coral-soft);
-  --color-vera-slate-info: var(--vera-slate-info);
-  --color-vera-ink: var(--vera-ink);
-  --color-vera-ink-soft: var(--vera-ink-soft);
-  --color-vera-sage: var(--vera-sage);
+  --color-vera-marfil: var(--vera-marfil);
+  --color-vera-arena: var(--vera-arena);
+  --color-vera-tinta: var(--vera-tinta);
+  --color-vera-tinta-suave: var(--vera-tinta-suave);
   --color-whatsapp: var(--whatsapp);
+  --color-whatsapp-foreground: var(--whatsapp-foreground);
 }
 
 :root {
   --radius: 20px;
 
-  --background: #f4f1e8;
-  --foreground: #2a2a26;
+  /* Línea gráfica v1.0 (vera-api/docs/negocio/marca.md). Los derivados (profundo, suave,
+     fuerte, arena) son mezclas de los colores de marca, no colores nuevos. */
+  --background: #f7f4ee; /* Marfil */
+  --foreground: #1a2421; /* Tinta */
   --card: #ffffff;
-  --card-foreground: #2a2a26;
+  --card-foreground: #1a2421;
 
-  --primary: #1e3a2f;
-  --primary-foreground: #f4f1e8;
-  --secondary: #e4eae0;
-  --secondary-foreground: #1e3a2f;
-  --muted: #e4eae0;
-  --muted-foreground: #6b6b63;
-  --accent: #eef1e6;
-  --accent-foreground: #1e3a2f;
-  --destructive: #d8654f;
+  --primary: #0e5a47; /* Verde Vera */
+  --primary-foreground: #f7f4ee;
+  --secondary: #ddece1;
+  --secondary-foreground: #0e5a47;
+  --muted: #ddece1;
+  /* La marca pide #8A938F para captions, pero no llega a AA (3.2:1): se oscurece. */
+  --muted-foreground: #5f6b66;
+  --accent: #ddece1;
+  --accent-foreground: #0e5a47;
+  --destructive: #b8432c;
   --destructive-foreground: #ffffff;
-  --border: #e2ddc9;
-  --input: #e2ddc9;
-  --ring: #3e9b6b;
+  --border: #e2ddd1; /* hairline de la guía */
+  --input: #e2ddd1;
+  --ring: #1d7a62;
 
-  --vera-forest: #1e3a2f;
-  --vera-forest-deep: #14261d;
-  --vera-emerald: #3e9b6b;
-  --vera-honey: #e0a458;
-  --vera-honey-soft: #f6e3c7;
-  --vera-coral: #d8654f;
-  --vera-coral-soft: #f5dcd5;
-  --vera-slate-info: #5a7a8c;
-  --vera-ink: #2a2a26;
-  --vera-ink-soft: #6b6b63;
-  --vera-sage: #e4eae0;
+  --vera-verde: #0e5a47;
+  --vera-verde-profundo: #0a4436;
+  --vera-apoyo: #1d7a62; /* Verde apoyo: gráficos, hovers, links */
+  --vera-menta: #9fd8c4;
+  --vera-menta-suave: #ddece1; /* Menta al 30 % sobre Marfil */
+  --vera-coral: #e8664b; /* acento, máximo 5 %: íconos, puntos, bordes */
+  --vera-coral-fuerte: #b8432c; /* coral para texto y fondos con texto (AA) */
+  --vera-coral-soft: #fbe8e4;
+  --vera-marfil: #f7f4ee;
+  --vera-arena: #ede8dc; /* estados pendientes, neutros */
+  --vera-tinta: #1a2421;
+  --vera-tinta-suave: #5f6b66;
   --whatsapp: #25d366;
+  /* Texto sobre el verde de WhatsApp: tinta, no blanco (el blanco da 1.98:1). */
+  --whatsapp-foreground: #1a2421;
 
-  --shadow-card: 0 1px 2px rgba(30, 58, 47, 0.06);
-  --shadow-elevated: 0 8px 30px -12px rgba(30, 58, 47, 0.18);
+  --shadow-card: 0 1px 2px rgba(14, 90, 71, 0.06);
+  --shadow-elevated: 0 8px 30px -12px rgba(14, 90, 71, 0.18);
 }
 
+/* La marca no define modo oscuro: esta versión deriva de Verde Vera profundo, Marfil y Menta. */
 .dark {
-  --background: #14261d;
-  --foreground: #f4f1e8;
-  --card: #1c3227;
-  --card-foreground: #f4f1e8;
+  --background: #0b2a22;
+  --foreground: #f7f4ee;
+  --card: #10352b;
+  --card-foreground: #f7f4ee;
 
-  --primary: #3e9b6b;
-  --primary-foreground: #0e1a14;
-  --secondary: #22392e;
-  --secondary-foreground: #f4f1e8;
-  --muted: #22392e;
-  --muted-foreground: #a9b5ac;
-  --accent: #22392e;
-  --accent-foreground: #f4f1e8;
-  --destructive: #d8654f;
-  --destructive-foreground: #14261d;
-  --border: #2a4436;
-  --input: #2a4436;
-  --ring: #3e9b6b;
+  --primary: #9fd8c4;
+  --primary-foreground: #0b2a22;
+  --secondary: #164237;
+  --secondary-foreground: #f7f4ee;
+  --muted: #164237;
+  --muted-foreground: #a9c2b8;
+  --accent: #164237;
+  --accent-foreground: #f7f4ee;
+  --destructive: #f08a73;
+  --destructive-foreground: #0b2a22;
+  --border: #1f4d40;
+  --input: #1f4d40;
+  --ring: #9fd8c4;
 
-  --vera-forest: #dfe9e2;
-  --vera-forest-deep: #14261d;
-  --vera-emerald: #4db683;
-  --vera-honey: #e0a458;
-  --vera-honey-soft: #3a2f1e;
-  --vera-coral: #e17a63;
+  --vera-verde: #cfeadf;
+  --vera-verde-profundo: #0a4436;
+  --vera-apoyo: #7fcdb1;
+  --vera-menta: #9fd8c4;
+  --vera-menta-suave: #164237;
+  --vera-coral: #e8664b;
+  --vera-coral-fuerte: #f08a73;
   --vera-coral-soft: #3a2420;
-  --vera-slate-info: #7fa0b3;
-  --vera-sage: #22392e;
-  --vera-ink: #f4f1e8;
-  --vera-ink-soft: #a9b5ac;
+  --vera-marfil: #f7f4ee;
+  --vera-arena: #1f4d40;
+  --vera-tinta: #f7f4ee;
+  --vera-tinta-suave: #a9c2b8;
   --whatsapp: #25d366;
+  --whatsapp-foreground: #1a2421;
 
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.24);
   --shadow-elevated: 0 8px 30px -12px rgba(0, 0, 0, 0.5);

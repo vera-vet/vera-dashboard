@@ -28,7 +28,7 @@ export default async function AgendaPage() {
   return (
     <div>
       <header className="pb-6">
-        <h1 className="font-display text-3xl font-bold text-vera-forest">Agenda</h1>
+        <h1 className="font-display text-3xl font-bold text-vera-verde">Agenda</h1>
         <p className="mt-1 text-sm text-muted-foreground">Semana del {new Date(`${dias[0]}T12:00:00`).toLocaleDateString("es-SV", { day: "numeric", month: "long" })}</p>
       </header>
 
@@ -37,7 +37,7 @@ export default async function AgendaPage() {
           <div key={fecha} className="rounded-2xl border border-border bg-card p-3">
             <div className="mb-2 text-center">
               <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{DIAS[i]}</div>
-              <div className={fecha === hoy ? "font-display text-lg font-bold text-vera-emerald" : "font-display text-lg font-bold"}>
+              <div className={fecha === hoy ? "font-display text-lg font-bold text-vera-apoyo" : "font-display text-lg font-bold"}>
                 {new Date(`${fecha}T12:00:00`).getDate()}
               </div>
             </div>
@@ -47,7 +47,7 @@ export default async function AgendaPage() {
                   key={visita.id}
                   className={
                     visita.confirmada
-                      ? "rounded-xl bg-vera-sage p-2 text-xs"
+                      ? "rounded-xl bg-vera-menta-suave p-2 text-xs"
                       : "rounded-xl border border-dashed border-border p-2 text-xs"
                   }
                 >

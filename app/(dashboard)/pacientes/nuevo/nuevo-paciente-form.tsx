@@ -117,6 +117,7 @@ export function NuevoPacienteForm() {
               setMensaje(null);
             }}
             placeholder="WhatsApp del dueño"
+            aria-label="WhatsApp del dueño"
             className="flex-1 rounded-xl border border-border bg-background px-3 py-2 text-sm"
           />
           <button
@@ -129,7 +130,7 @@ export function NuevoPacienteForm() {
         </div>
 
         {duenoNombreExistente && (
-          <p className="text-sm text-vera-emerald">Encontrado: {duenoNombreExistente}</p>
+          <p className="text-sm text-vera-apoyo">Encontrado: {duenoNombreExistente}</p>
         )}
 
         {whatsappBuscado === whatsapp.trim() && !duenoId && !buscando && (
@@ -138,17 +139,18 @@ export function NuevoPacienteForm() {
             value={duenoNombreNuevo}
             onChange={(e) => setDuenoNombreNuevo(e.target.value)}
             placeholder="Nombre del dueño (no encontrado, se creará uno nuevo)"
+            aria-label="Nombre del dueño"
             className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
           />
         )}
 
-        {mensaje && <p className="text-xs text-vera-coral">{mensaje}</p>}
+        {mensaje && <p className="text-xs text-vera-coral-fuerte">{mensaje}</p>}
 
         <button
           type="button"
           onClick={continuarConDueno}
           disabled={guardandoDueno}
-          className="w-full rounded-xl bg-vera-emerald px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
+          className="w-full rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-60"
         >
           {guardandoDueno ? "Guardando…" : "Continuar"}
         </button>
@@ -162,27 +164,27 @@ export function NuevoPacienteForm() {
 
       <input
         type="text" value={nombre} onChange={(e) => setNombre(e.target.value)}
-        placeholder="Nombre" className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
+        placeholder="Nombre" aria-label="Nombre del paciente" className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
       />
 
-      <select value={especie} onChange={(e) => setEspecie(e.target.value)} className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm">
+      <select aria-label="Especie" value={especie} onChange={(e) => setEspecie(e.target.value)} className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm">
         {ESPECIE_OPCIONES.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
       </select>
 
       <input
         type="text" value={raza} onChange={(e) => setRaza(e.target.value)}
-        placeholder="Raza" className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
+        placeholder="Raza" aria-label="Raza" className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
       />
 
-      <select value={sexo} onChange={(e) => setSexo(e.target.value as "M" | "H")} className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm">
+      <select aria-label="Sexo" value={sexo} onChange={(e) => setSexo(e.target.value as "M" | "H")} className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm">
         <option value="M">Macho</option>
         <option value="H">Hembra</option>
       </select>
 
       <div>
-        <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Fecha de nacimiento</label>
+        <label htmlFor="paciente-fecha-nacimiento" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Fecha de nacimiento</label>
         <input
-          type="date" value={fechaNacimiento} onChange={(e) => setFechaNacimiento(e.target.value)}
+          id="paciente-fecha-nacimiento" type="date" value={fechaNacimiento} onChange={(e) => setFechaNacimiento(e.target.value)}
           className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
         />
       </div>
@@ -194,26 +196,26 @@ export function NuevoPacienteForm() {
 
       <div className="flex gap-2">
         <div className="w-1/2">
-          <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Vacunas completas</label>
+          <label htmlFor="paciente-vacunas-completas" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Vacunas completas</label>
           <input
-            type="number" min={0} value={vacunasCompletas} onChange={(e) => setVacunasCompletas(Number(e.target.value))}
+            id="paciente-vacunas-completas" type="number" min={0} value={vacunasCompletas} onChange={(e) => setVacunasCompletas(Number(e.target.value))}
             placeholder="Vacunas completas" className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
           />
         </div>
         <div className="w-1/2">
-          <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Vacunas totales</label>
+          <label htmlFor="paciente-vacunas-totales" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Vacunas totales</label>
           <input
-            type="number" min={0} value={vacunasTotal} onChange={(e) => setVacunasTotal(Number(e.target.value))}
+            id="paciente-vacunas-totales" type="number" min={0} value={vacunasTotal} onChange={(e) => setVacunasTotal(Number(e.target.value))}
             placeholder="Vacunas totales" className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
           />
         </div>
       </div>
 
-      {mensaje && <p className="text-xs text-vera-coral">{mensaje}</p>}
+      {mensaje && <p className="text-xs text-vera-coral-fuerte">{mensaje}</p>}
 
       <button
         type="submit" disabled={guardando}
-        className="w-full rounded-xl bg-vera-emerald px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
+        className="w-full rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-60"
       >
         {guardando ? "Guardando…" : "Crear paciente"}
       </button>

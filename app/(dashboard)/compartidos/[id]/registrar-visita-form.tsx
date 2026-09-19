@@ -71,7 +71,7 @@ export function RegistrarVisitaForm({ pacienteId }: { pacienteId: string }) {
       <button
         type="submit"
         disabled={enviando}
-        className="w-full rounded-xl bg-vera-emerald px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+        className="w-full rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:cursor-not-allowed disabled:opacity-60"
       >
         {enviando ? "Registrando…" : "Registrar"}
       </button>

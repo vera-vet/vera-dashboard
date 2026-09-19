@@ -14,9 +14,9 @@ const ESTADO_LABEL: Record<Conversacion["estado"], string> = {
 
 const ESTADO_COLOR: Record<Conversacion["estado"], string> = {
   enviado: "bg-muted text-muted-foreground",
-  respondido: "bg-vera-sage text-vera-emerald",
-  agendado: "bg-vera-sage text-vera-emerald",
-  sin_respuesta: "bg-vera-honey-soft text-vera-honey",
+  respondido: "bg-vera-menta-suave text-vera-apoyo",
+  agendado: "bg-vera-menta-suave text-vera-apoyo",
+  sin_respuesta: "bg-vera-arena text-vera-tinta-suave",
 };
 
 export function ConversacionesTab({ conversaciones }: { conversaciones: Conversacion[] }) {
@@ -32,7 +32,7 @@ export function ConversacionesTab({ conversaciones }: { conversaciones: Conversa
               onClick={() => setOpenId(c.id)}
               className={cn(
                 "flex w-full items-start gap-3 rounded-2xl border bg-card p-3 text-left",
-                openId === c.id ? "border-vera-emerald" : "border-border",
+                openId === c.id ? "border-vera-apoyo" : "border-border",
               )}
             >
               <div className="min-w-0 flex-1">

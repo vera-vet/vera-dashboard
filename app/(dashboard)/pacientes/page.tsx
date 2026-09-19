@@ -14,12 +14,12 @@ export default async function PacientesPage() {
     <div>
       <header className="flex items-center justify-between pb-6">
         <div>
-          <h1 className="font-display text-3xl font-bold text-vera-forest">Pacientes</h1>
+          <h1 className="font-display text-3xl font-bold text-vera-verde">Pacientes</h1>
           <p className="mt-1 text-sm text-muted-foreground">{pacientes.length} en la clínica</p>
         </div>
         <Link
           href="/pacientes/nuevo"
-          className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-vera-emerald px-4 text-sm font-semibold text-white"
+          className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground"
         >
           <UserPlus size={16} /> Nuevo paciente
         </Link>

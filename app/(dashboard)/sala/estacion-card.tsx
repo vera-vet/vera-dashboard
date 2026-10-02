@@ -6,6 +6,7 @@ import type { Empleado, Estacion, SesionActiva } from "@/lib/data/types";
 import { GrabarConsultaButton } from "./grabar-consulta-button";
 import { NuevaSesionForm } from "./nueva-sesion-form";
 import { AvatarPaciente } from "@/components/shared/avatar-paciente";
+import { formatHora } from "@/lib/date";
 
 export function EstacionCard({
   estacion,
@@ -48,7 +49,7 @@ export function EstacionCard({
           <div className="mt-3 flex items-center justify-between border-t border-border/60 pt-3 text-xs">
             <span className="font-medium">{sesion.empleadoNombre}</span>
             <span className="flex items-center gap-1 text-muted-foreground">
-              <Clock size={12} /> desde {sesion.inicio}
+              <Clock size={12} /> desde {formatHora(sesion.inicio)}
             </span>
           </div>
           <GrabarConsultaButton pacienteId={sesion.pacienteId} empleadoId={sesion.empleadoId} />

@@ -9,7 +9,9 @@ interface Props {
 }
 
 export function VaccineTimeline({ servicios, vacunasCompletas, vacunasTotal }: Props) {
-  const vacunas = servicios.filter((s) => s.tipo === "vacuna");
+  // La API devuelve los servicios de la visita más reciente a la más antigua (es lo que quiere el
+  // historial); el ciclo de vacunación se lee al revés: de la primera dosis a la última.
+  const vacunas = servicios.filter((s) => s.tipo === "vacuna").toSorted((a, b) => a.fecha.localeCompare(b.fecha));
   const pendientes = Math.max(vacunasTotal - vacunasCompletas, 0);
 
   return (

@@ -32,13 +32,24 @@ export function ConversacionesTab({ conversaciones }: { conversaciones: Conversa
 
   const mensajesAbiertos = openId ? mensajes[openId] : undefined;
 
+  if (conversaciones.length === 0) {
+    return (
+      <div className="rounded-2xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
+        Todavía no hay conversaciones. Aparecen cuando Vera envía un recordatorio o cuando un dueño le escribe al
+        WhatsApp de la clínica.
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-[minmax(0,1fr)] gap-4 lg:grid-cols-[340px_minmax(0,1fr)]">
       <ul className="space-y-2">
         {conversaciones.map((c) => (
           <li key={c.id}>
             <button
+              type="button"
               onClick={() => setOpenId(c.id)}
+              aria-pressed={openId === c.id}
               className={cn(
                 "flex w-full items-start gap-3 rounded-2xl border bg-card p-3 text-left",
                 openId === c.id ? "border-vera-apoyo" : "border-border",

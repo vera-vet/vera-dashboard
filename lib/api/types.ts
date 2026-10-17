@@ -2,6 +2,7 @@ export interface ApiDueno {
   id: number;
   nombre: string;
   whatsapp: string;
+  acepta_whatsapp?: boolean;
 }
 
 export interface ApiMarca {
@@ -18,6 +19,12 @@ export interface ApiReporte {
   marcas: ApiMarca[];
 }
 
+export interface ApiNotaDeServicio {
+  id: number;
+  fecha_hora: string;
+  transcripcion: string;
+}
+
 export interface ApiServicioVisita {
   id: number;
   paciente: number;
@@ -27,6 +34,8 @@ export interface ApiServicioVisita {
   vet: string;
   aplicada: boolean;
   reporte: ApiReporte | null;
+  clinica_origen_nombre?: string | null;
+  notas?: ApiNotaDeServicio[];
 }
 
 export interface ApiPaciente {
@@ -68,10 +77,13 @@ export interface ApiRecordatorio {
   paciente: number;
   paciente_nombre: string;
   paciente_foto_url: string;
+  dueno_acepta_whatsapp?: boolean;
   tipo: string;
+  servicio_producto?: string | null;
   programado_para: string;
   mensaje: string;
   estado: string;
+  enviado_en?: string | null;
 }
 
 export interface ApiMensaje {

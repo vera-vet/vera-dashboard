@@ -132,3 +132,11 @@ if not conversacion.mensajes.filter(texto=texto).exists():
 print(json.dumps(texto))
 `);
 }
+
+/** Cuántas visitas con esa nota exacta hay en la base (para detectar registros duplicados). */
+export function visitasConNota(nota: string): number {
+  return djangoShell<number>(`${PRELUDE}
+from apps.pacientes.models import NotaConsulta
+print(json.dumps(NotaConsulta.objects.filter(transcripcion=${JSON.stringify(nota)}, servicio_visita__isnull=False).count()))
+`);
+}

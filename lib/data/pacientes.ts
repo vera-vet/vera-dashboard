@@ -3,7 +3,7 @@ import type { ApiDueno, ApiMarca, ApiPaciente, ApiReporte, ApiServicioVisita } f
 import type { Dueno, DiagramaTipo, EstadoEsquema, Especie, Marca, Paciente, Reporte, ServicioTipo, ServicioVisita } from "@/lib/data/types";
 
 export function mapDueno(api: ApiDueno): Dueno {
-  return { id: String(api.id), nombre: api.nombre, whatsapp: api.whatsapp };
+  return { id: String(api.id), nombre: api.nombre, whatsapp: api.whatsapp, aceptaWhatsapp: api.acepta_whatsapp ?? true };
 }
 
 export function mapPaciente(api: ApiPaciente): Paciente {
@@ -52,6 +52,8 @@ export function mapServicioVisita(api: ApiServicioVisita): ServicioVisita {
     vet: api.vet,
     aplicada: api.aplicada,
     reporte: api.reporte ? mapReporte(api.reporte, String(api.id)) : undefined,
+    clinicaOrigenNombre: api.clinica_origen_nombre ?? undefined,
+    notas: (api.notas ?? []).map((n) => ({ id: String(n.id), fechaHora: n.fecha_hora, texto: n.transcripcion })),
   };
 }
 

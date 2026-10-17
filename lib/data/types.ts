@@ -16,6 +16,8 @@ export interface Dueno {
   id: string;
   nombre: string;
   whatsapp: string;
+  /** Consentimiento para recibir recordatorios por WhatsApp. */
+  aceptaWhatsapp: boolean;
 }
 
 export interface Paciente {
@@ -38,6 +40,12 @@ export interface Paciente {
   carnetToken: string;
 }
 
+export interface NotaDeServicio {
+  id: string;
+  fechaHora: string;
+  texto: string;
+}
+
 export interface ServicioVisita {
   id: string;
   pacienteId: string;
@@ -47,6 +55,10 @@ export interface ServicioVisita {
   vet: string;
   aplicada: boolean;
   reporte?: Reporte;
+  /** Clínica que registró la visita cuando no fue la dueña del expediente (compartidos). */
+  clinicaOrigenNombre?: string;
+  /** Notas escritas o transcripciones conectadas a esta visita. */
+  notas: NotaDeServicio[];
 }
 
 export interface Visita {
@@ -68,7 +80,11 @@ export interface Recordatorio {
   pacienteId: string;
   pacienteNombre: string;
   pacienteFotoUrl: string;
+  /** Sin consentimiento, el recordatorio no sale aunque esté pendiente. */
+  duenoAceptaWhatsapp: boolean;
   tipo: string;
+  /** Producto del servicio que lo generó; null en los anteriores a ese dato. */
+  servicioProducto: string | null;
   cuando: string;
   mensaje: string;
   estado: "pendiente" | "pausado" | "enviado" | "cumplido";

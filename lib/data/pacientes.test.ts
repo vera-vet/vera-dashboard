@@ -4,9 +4,13 @@ import type { ApiDueno, ApiPaciente, ApiServicioVisita } from "@/lib/api/types";
 
 describe("mapDueno", () => {
   it("maps snake_case API fields to the frontend shape", () => {
-    expect(mapDueno({ id: 1, nombre: "María López", whatsapp: "+503 7123 4567" })).toEqual({
-      id: "1", nombre: "María López", whatsapp: "+503 7123 4567",
+    expect(mapDueno({ id: 1, nombre: "María López", whatsapp: "+50371234567", acepta_whatsapp: false })).toEqual({
+      id: "1", nombre: "María López", whatsapp: "+50371234567", aceptaWhatsapp: false,
     });
+  });
+
+  it("assumes consent when an older API does not send it", () => {
+    expect(mapDueno({ id: 1, nombre: "María López", whatsapp: "+50371234567" }).aceptaWhatsapp).toBe(true);
   });
 });
 
@@ -49,8 +53,19 @@ describe("mapServicioVisita", () => {
     };
     expect(mapServicioVisita(api)).toEqual({
       id: "1", pacienteId: "10", tipo: "vacuna", producto: "Rabia", fecha: "2022-08-10",
-      vet: "Dra. Ramírez", aplicada: true, reporte: undefined,
+      vet: "Dra. Ramírez", aplicada: true, reporte: undefined, clinicaOrigenNombre: undefined, notas: [],
     });
+  });
+
+  it("maps the visit's notes and the clinic that registered it", () => {
+    const api: ApiServicioVisita = {
+      id: 1, paciente: 10, tipo: "consulta", producto: "General", fecha: "2026-10-17", vet: "Dr. Gómez",
+      aplicada: true, reporte: null, clinica_origen_nombre: "Clínica del Valle",
+      notas: [{ id: 3, fecha_hora: "2026-10-17T10:00:00-06:00", transcripcion: "Otitis leve." }],
+    };
+    const result = mapServicioVisita(api);
+    expect(result.clinicaOrigenNombre).toBe("Clínica del Valle");
+    expect(result.notas).toEqual([{ id: "3", fechaHora: "2026-10-17T10:00:00-06:00", texto: "Otitis leve." }]);
   });
 
   it("maps a nested reporte when present", () => {

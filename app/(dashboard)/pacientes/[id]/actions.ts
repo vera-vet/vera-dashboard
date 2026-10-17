@@ -23,12 +23,18 @@ export async function buscarClinicas(q: string): Promise<Clinica[]> {
   return data.map(mapClinica);
 }
 
-export async function compartirPaciente(pacienteId: string, clinicaId: string): Promise<{ ok: boolean }> {
+export async function compartirPaciente(
+  pacienteId: string,
+  clinicaId: string,
+): Promise<{ ok: boolean; mensaje?: string }> {
   const response = await apiFetch(`/api/pacientes/${pacienteId}/compartir/`, {
     method: "POST",
     body: JSON.stringify({ clinica_id: clinicaId }),
   });
-  return { ok: response.ok };
+  if (response.ok) return { ok: true };
+  // La API explica por qué rechazó (p. ej. compartir con la propia clínica): se muestra tal cual.
+  const data = (await response.json().catch(() => ({}))) as { detail?: string };
+  return { ok: false, mensaje: data.detail };
 }
 
 export async function revocarComparticion(pacienteId: string, shareId: string): Promise<{ ok: boolean }> {

@@ -75,6 +75,19 @@ print(json.dumps(True))
 `);
 }
 
+/** Revoca toda compartición activa del paciente con esa clínica, para empezar de cero. */
+export function revocarComparticiones(clinicaDuena: string, paciente: string, clinicaDestino: string): void {
+  djangoShell(`${PRELUDE}
+from django.utils import timezone
+from apps.pacientes.models import PacienteCompartido
+PacienteCompartido.objects.filter(
+    paciente__clinica__nombre__icontains=${JSON.stringify(clinicaDuena)}, paciente__nombre=${JSON.stringify(paciente)},
+    clinica__nombre__icontains=${JSON.stringify(clinicaDestino)}, revocado_en__isnull=True,
+).update(revocado_en=timezone.now())
+print(json.dumps(True))
+`);
+}
+
 export function pacienteIdPorNombre(clinica: string, nombre: string): number {
   return djangoShell<number>(`${PRELUDE}
 print(json.dumps(Paciente.objects.get(clinica__nombre__icontains=${JSON.stringify(clinica)}, nombre=${JSON.stringify(nombre)}).id))

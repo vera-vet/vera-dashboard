@@ -86,20 +86,28 @@ print(json.dumps(Paciente.objects.get(clinica__nombre__icontains=${JSON.stringif
  * (independiente del endpoint que se prueba). Con `registrarUnoHoy`, antes agrega uno enviado hoy.
  */
 export function enviadosDelMes(clinica: string, registrarUnoHoy = false): number {
+  // La API cuenta los enviados por `enviado_en` (cuándo salió de verdad) desde que existe ese
+  // campo; antes, por estado y hora programada. Se cuenta igual que la API que esté corriendo
+  // (el E2E corre contra `vera-api@staging` y contra sus PRs). Cuando todas tengan el campo, la
+  // rama vieja sobra.
   return djangoShell<number>(`${PRELUDE}
 import datetime
 from django.utils import timezone
 from apps.recordatorios.models import Recordatorio
+por_envio = "enviado_en" in {f.name for f in Recordatorio._meta.get_fields()}
 pacientes = Paciente.objects.filter(clinica__nombre__icontains=${JSON.stringify(clinica)})
 if ${registrarUnoHoy ? "True" : "False"}:
     Recordatorio.objects.create(paciente=pacientes.order_by("id").first(), tipo="E2E", programado_para=timezone.now(),
-                                mensaje="Recordatorio de prueba E2E", estado="enviado")
+                                mensaje="Recordatorio de prueba E2E", estado="enviado",
+                                **({"enviado_en": timezone.now()} if por_envio else {}))
 hoy = timezone.localdate()
 inicio = timezone.make_aware(datetime.datetime.combine(hoy.replace(day=1), datetime.time.min))
 fin = timezone.make_aware(datetime.datetime.combine(hoy + datetime.timedelta(days=1), datetime.time.min))
-print(json.dumps(Recordatorio.objects.filter(
-    paciente__in=pacientes, estado__in=("enviado", "cumplido"), programado_para__gte=inicio, programado_para__lt=fin,
-).count()))
+filtro = (
+    {"enviado_en__gte": inicio, "enviado_en__lt": fin} if por_envio
+    else {"estado__in": ("enviado", "cumplido"), "programado_para__gte": inicio, "programado_para__lt": fin}
+)
+print(json.dumps(Recordatorio.objects.filter(paciente__in=pacientes, **filtro).count()))
 `);
 }
 

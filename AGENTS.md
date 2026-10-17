@@ -114,6 +114,7 @@ Reportes, Registrar, Recordatorios o el carnet, hay que volver a correrlo y actu
 
 ## Problemas conocidos
 
-- La "Nota clínica" de Registrar no se guarda: el `Textarea` no está conectado al estado.
 - Las fotos de productos (inventario y tienda) todavía pueden mostrarse rotas; los pacientes ya
   usan `AvatarPaciente`.
+- Registrar no adjunta fotos: el navegador solo tenía URLs `blob:` que morían con la pestaña.
+  Vuelven cuando exista la subida real de archivos.

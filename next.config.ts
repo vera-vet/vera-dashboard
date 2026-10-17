@@ -2,7 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [{ protocol: "https", hostname: "images.unsplash.com" }],
+    // La app no usa next/image (las fotos son URLs arbitrarias y se muestran con <img>). Sin
+    // optimizador, /_next/image responde 404 y el servidor nunca procesa imágenes ajenas:
+    // menos superficie de ataque.
+    unoptimized: true,
   },
   experimental: {
     serverActions: {

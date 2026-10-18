@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import { useRouter } from "next/navigation";
 import { crearProducto, actualizarProducto } from "./actions";
+import { SelectorFoto } from "@/components/shared/selector-foto";
 import type { Producto, ProductoCategoria } from "@/lib/data/types";
 
 const CATEGORIA_OPCIONES: { value: ProductoCategoria; label: string }[] = [
@@ -78,10 +79,7 @@ export function ProductoForm({ producto, onCerrar }: { producto?: Producto; onCe
         </div>
       </div>
 
-      <input
-        type="text" value={fotoUrl} onChange={(e) => setFotoUrl(e.target.value)}
-        placeholder="URL de la foto (opcional)" aria-label="URL de la foto" className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
-      />
+      <SelectorFoto valor={fotoUrl} onCambio={setFotoUrl} etiqueta="Foto (opcional)" inicial={nombre} />
 
       {mensaje && <p className="text-xs text-vera-coral-fuerte">{mensaje}</p>}
 

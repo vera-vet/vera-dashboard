@@ -12,6 +12,7 @@ import {
   serviciosFrecuentes, type RecordatorioAbierto,
 } from "@/lib/data/registro";
 import { SiluetaMarcable } from "@/components/shared/silueta-marcable";
+import { SelectorFotos } from "@/components/shared/selector-fotos";
 import { AvatarPaciente } from "@/components/shared/avatar-paciente";
 import { Textarea } from "@/components/ui/textarea";
 import { buscarNotaConsultaSinConectar, recordatoriosAbiertos, registrarServicio } from "./actions";
@@ -49,6 +50,7 @@ export function RegistrarClient({ especialidades, pacienteInicial, enSala }: Pro
   const [cumpleElegido, setCumpleElegido] = useState(false);
   const [nota, setNota] = useState("");
   const [marcas, setMarcas] = useState<Marca[]>([]);
+  const [fotos, setFotos] = useState<string[]>([]);
   const [transcripcion, setTranscripcion] = useState<{ id: string; hora: string } | null>(null);
   const [conectarTranscripcion, setConectarTranscripcion] = useState(true);
   const [guardando, setGuardando] = useState(false);
@@ -91,6 +93,7 @@ export function RegistrarClient({ especialidades, pacienteInicial, enSala }: Pro
     setPlazoElegido(false);
     setCumpleElegido(false);
     setMarcas([]);
+    setFotos([]);
     setNota("");
     setConectarTranscripcion(true);
     setError(null);
@@ -127,6 +130,7 @@ export function RegistrarClient({ especialidades, pacienteInicial, enSala }: Pro
         tipo,
         producto: nombreProducto,
         marcas: marcas.map(({ x, y, nota: textoMarca }) => ({ x, y, nota: textoMarca })),
+        fotos,
         diagramaTipo: resolverDiagramaTipo(tipo, especialidades, paciente.especie),
         notaConsultaId: transcripcion && conectarTranscripcion ? transcripcion.id : undefined,
         nota,
@@ -352,6 +356,8 @@ export function RegistrarClient({ especialidades, pacienteInicial, enSala }: Pro
                 className="mt-2"
               />
             </div>
+
+            <SelectorFotos fotos={fotos} onCambio={setFotos} />
 
             {diagrama && (
               <details className="rounded-xl border border-border p-3">

@@ -57,6 +57,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Públicas: login, activar (definir contraseña con el enlace de invitación), el carnet y la tienda.
-  matcher: ["/((?!login|activar|carnet|api/session|api/tienda|_next|favicon.ico).*)"],
+  // Públicas: login, activar (definir contraseña con el enlace de invitación), el carnet, las fotos
+  // (públicas por su UUID) y la tienda.
+  matcher: ["/((?!login|activar|carnet|imagenes|api/session|api/tienda|_next|favicon.ico).*)"],
 };

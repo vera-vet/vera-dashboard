@@ -46,6 +46,7 @@ interface CrearPacienteInput {
   esterilizado: boolean;
   vacunasCompletas: number;
   vacunasTotal: number;
+  fotoUrl: string;
 }
 
 export async function crearPaciente(datos: CrearPacienteInput): Promise<{ ok: boolean; id?: string; mensaje?: string }> {
@@ -63,6 +64,7 @@ export async function crearPaciente(datos: CrearPacienteInput): Promise<{ ok: bo
       esterilizado: datos.esterilizado,
       vacunas_completas: datos.vacunasCompletas,
       vacunas_total: datos.vacunasTotal,
+      foto_url: datos.fotoUrl,
     }),
   });
   if (!response.ok) return { ok: false, mensaje: await primerError(response) };

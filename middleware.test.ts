@@ -150,7 +150,7 @@ describe("middleware matcher", () => {
     (path) => expect(matcher.test(path)).toBe(true),
   );
 
-  it.each(["/login", "/activar", "/carnet/abc-123", "/api/session/login", "/api/tienda/acceder", "/_next/static/x.js", "/favicon.ico"])(
+  it.each(["/login", "/activar", "/carnet/abc-123", "/imagenes/0b6a3f1e-7c2d-4e5f-9a8b-1c2d3e4f5a6b", "/api/session/login", "/api/tienda/acceder", "/_next/static/x.js", "/favicon.ico"])(
     "skips public path %s",
     (path) => expect(matcher.test(path)).toBe(false),
   );

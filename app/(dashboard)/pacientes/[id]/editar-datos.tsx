@@ -6,6 +6,7 @@ import { Pencil } from "lucide-react";
 import type { Dueno, Paciente } from "@/lib/data/types";
 import { hoyISOElSalvador } from "@/lib/date";
 import { actualizarDueno, actualizarPaciente } from "./actions";
+import { SelectorFoto } from "@/components/shared/selector-foto";
 
 const CAMPO = "mt-1 min-h-11 w-full rounded-xl border border-border bg-background px-3 text-base md:text-sm";
 const ETIQUETA = "text-xs font-semibold text-muted-foreground";
@@ -33,6 +34,7 @@ function FormularioPaciente({ paciente }: { paciente: Paciente }) {
     esterilizado: paciente.esterilizado,
     vacunasCompletas: paciente.vacunasCompletas,
     vacunasTotal: paciente.vacunasTotal,
+    fotoUrl: paciente.fotoUrl,
   });
   const [guardando, setGuardando] = useState(false);
   const [mensaje, setMensaje] = useState<Mensaje>(null);
@@ -115,6 +117,7 @@ function FormularioPaciente({ paciente }: { paciente: Paciente }) {
         <input type="checkbox" checked={datos.esterilizado} onChange={(e) => cambiar("esterilizado", e.target.checked)} className="h-4 w-4 accent-vera-verde" />
         Esterilizado
       </label>
+      <SelectorFoto valor={datos.fotoUrl} onCambio={(url) => cambiar("fotoUrl", url)} etiqueta="Foto" inicial={datos.nombre} />
       <div className="flex items-center gap-3">
         <button type="submit" disabled={guardando} className="min-h-11 rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground disabled:opacity-60">
           {guardando ? "Guardando…" : "Guardar paciente"}

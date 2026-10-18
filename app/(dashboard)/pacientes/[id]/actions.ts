@@ -25,6 +25,7 @@ export interface DatosPaciente {
   esterilizado: boolean;
   vacunasCompletas: number;
   vacunasTotal: number;
+  fotoUrl: string;
 }
 
 export async function actualizarPaciente(id: string, datos: DatosPaciente): Promise<Resultado> {
@@ -40,6 +41,7 @@ export async function actualizarPaciente(id: string, datos: DatosPaciente): Prom
       esterilizado: datos.esterilizado,
       vacunas_completas: datos.vacunasCompletas,
       vacunas_total: datos.vacunasTotal,
+      foto_url: datos.fotoUrl,
     }),
   });
   return resultado(response);

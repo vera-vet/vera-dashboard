@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { hoyISOElSalvador } from "@/lib/date";
+import { SelectorFoto } from "@/components/shared/selector-foto";
 import { buscarDueno, crearDueno, crearPaciente } from "./actions";
 
 const ESPECIE_OPCIONES = [
@@ -33,6 +34,7 @@ export function NuevoPacienteForm() {
   const [esterilizado, setEsterilizado] = useState(false);
   const [vacunasCompletas, setVacunasCompletas] = useState(0);
   const [vacunasTotal, setVacunasTotal] = useState(0);
+  const [fotoUrl, setFotoUrl] = useState("");
   const [guardando, setGuardando] = useState(false);
 
   async function buscar() {
@@ -94,7 +96,7 @@ export function NuevoPacienteForm() {
     try {
       const resultado = await crearPaciente({
         duenoId, nombre, especie, raza, sexo, fechaNacimiento,
-        esterilizado, vacunasCompletas, vacunasTotal,
+        esterilizado, vacunasCompletas, vacunasTotal, fotoUrl,
       });
       if (resultado.ok && resultado.id) {
         router.push(`/pacientes/${resultado.id}`);
@@ -215,6 +217,8 @@ export function NuevoPacienteForm() {
         <input type="checkbox" checked={esterilizado} onChange={(e) => setEsterilizado(e.target.checked)} />
         Esterilizado
       </label>
+
+      <SelectorFoto valor={fotoUrl} onCambio={setFotoUrl} etiqueta="Foto (opcional)" inicial={nombre} />
 
       <div className="flex gap-2">
         <div className="w-1/2">

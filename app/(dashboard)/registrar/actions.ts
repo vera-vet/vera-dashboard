@@ -64,6 +64,8 @@ interface RegistrarServicioInput {
   tipo: string;
   producto: string;
   marcas?: { x: number; y: number; nota: string }[];
+  /** Fotos ya subidas a Vera ("/imagenes/<uuid>"). */
+  fotos?: string[];
   diagramaTipo?: string;
   notaConsultaId?: string;
   nota?: string;
@@ -86,8 +88,9 @@ export async function registrarServicio(
     proximo_en_dias: datos.proximoEnDias,
     cumple_recordatorios: datos.cumpleRecordatorios.filter(esIdValido).map(Number),
   };
-  if (datos.marcas?.length) {
-    body.marcas = datos.marcas;
+  if (datos.marcas?.length || datos.fotos?.length) {
+    body.marcas = datos.marcas ?? [];
+    body.fotos = datos.fotos ?? [];
     body.diagrama_tipo = datos.diagramaTipo;
   }
   if (datos.nota?.trim()) body.nota = datos.nota.trim();

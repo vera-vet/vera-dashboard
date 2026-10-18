@@ -115,9 +115,9 @@ Reportes, Registrar, Recordatorios o el carnet, hay que volver a correrlo y actu
 - Los comentarios explican el *porqué*.
 - El CI no usa secretos: seguir así.
 
-## Problemas conocidos
+## Fotos
 
-- Las fotos de productos (inventario y tienda) todavía pueden mostrarse rotas; los pacientes ya
-  usan `AvatarPaciente`.
-- Registrar no adjunta fotos: el navegador solo tenía URLs `blob:` que morían con la pestaña.
-  Vuelven cuando exista la subida real de archivos.
+- Se suben a Vera (`app/(dashboard)/actions-imagenes.ts` → `/api/imagenes/`), reducidas antes en el
+  navegador (`lib/imagen-cliente.ts`), y se sirven públicas por su UUID en `/imagenes/<uuid>` (route
+  handler fuera del middleware). Se muestran con `<img>` y siempre con respaldo: `AvatarPaciente` y
+  `FotoProducto` muestran la inicial si no hay foto o no carga.

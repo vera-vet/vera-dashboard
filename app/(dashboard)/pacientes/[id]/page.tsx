@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronLeft, Download, ExternalLink, MessageCircle } from "lucide-react";
+import { ChevronLeft, Download, ExternalLink, MessageCircle, PlusCircle } from "lucide-react";
 import { getPaciente, getDueno, getServiciosPorPaciente } from "@/lib/data/pacientes";
 import { getVisitasPorPaciente } from "@/lib/data/visitas";
 import { getNotasConsultaPorPaciente } from "@/lib/data/notas-consulta";
@@ -8,7 +8,7 @@ import { getComparticionesPorPaciente } from "@/lib/data/comparticiones";
 import { VaccineTimeline } from "@/components/shared/vaccine-timeline";
 import { edadTexto, formatFechaCorta, formatFechaHoraCorta, formatHora, hoyISOElSalvador } from "@/lib/date";
 import { DatosClinicos } from "./datos-clinicos";
-import { HistorialItem } from "./historial-item";
+import { HistorialItem } from "@/components/shared/historial-item";
 import { CompartirPanel } from "./compartir-panel";
 import { AvatarPaciente } from "@/components/shared/avatar-paciente";
 
@@ -19,11 +19,15 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
   const paciente = await getPaciente(id);
   if (!paciente) notFound();
 
-  const dueno = await getDueno(paciente.duenoId);
-  const servicios = await getServiciosPorPaciente(paciente.id);
-  const proximas = (await getVisitasPorPaciente(paciente.id)).filter((v) => v.fecha >= hoyISOElSalvador());
-  const notas = await getNotasConsultaPorPaciente(paciente.id);
-  const comparticiones = await getComparticionesPorPaciente(paciente.id);
+  const [dueno, servicios, visitas, notas, comparticiones] = await Promise.all([
+    getDueno(paciente.duenoId),
+    getServiciosPorPaciente(paciente.id),
+    getVisitasPorPaciente(paciente.id),
+    getNotasConsultaPorPaciente(paciente.id),
+    getComparticionesPorPaciente(paciente.id),
+  ]);
+  const proximas = visitas.filter((v) => v.fecha >= hoyISOElSalvador());
+  const sinVisita = notas.filter((n) => !n.servicioVisitaId);
 
   return (
     <div>
@@ -46,6 +50,12 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
         <button className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-whatsapp px-4 text-sm font-semibold text-whatsapp-foreground">
           <MessageCircle size={16} /> Escribir a {dueno?.nombre.split(" ")[0]}
         </button>
+        <Link
+          href={`/registrar?paciente=${paciente.id}`}
+          className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground"
+        >
+          <PlusCircle size={16} aria-hidden /> Registrar visita
+        </Link>
         <a
           href={`/api/pacientes/${paciente.id}/expediente-pdf/`}
           className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border bg-card px-4 text-sm font-semibold text-foreground hover:bg-secondary/50"
@@ -65,31 +75,40 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
           <ol className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
             {servicios.length === 0 && <li className="p-6 text-center text-sm text-muted-foreground">Sin visitas registradas.</li>}
             {servicios.map((s) => (
-              <HistorialItem key={s.id} servicio={s} reporte={s.reporte} />
+              <HistorialItem key={s.id} servicio={s} />
             ))}
           </ol>
 
-          <h2 className="mb-3 mt-8 font-display text-lg font-bold">Transcripciones</h2>
-          <ol className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
-            {notas.length === 0 && <li className="p-6 text-center text-sm text-muted-foreground">Sin transcripciones registradas.</li>}
-            {[...notas].reverse().map((n) => (
-              <li key={n.id} className="p-4">
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span className="font-semibold">{n.empleadoNombre}</span>
-                  <span>{formatFechaHoraCorta(n.fechaHora)}</span>
-                </div>
-                <p className="mt-2 text-sm">{n.transcripcion}</p>
-                {n.servicioVisitaId && <p className="mt-2 text-xs text-vera-apoyo">Conectada a un servicio registrado</p>}
-              </li>
-            ))}
-          </ol>
+          {/* Las notas y transcripciones conectadas a una visita se ven dentro de esa visita; aquí
+              quedan las grabaciones que todavía no se conectaron a ninguna. */}
+          {sinVisita.length > 0 && (
+            <>
+              <h2 className="mb-3 mt-8 font-display text-lg font-bold">Transcripciones sin visita</h2>
+              <ol className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
+                {[...sinVisita].reverse().map((n) => (
+                  <li key={n.id} className="p-4">
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <span className="font-semibold">{n.empleadoNombre}</span>
+                      <span>{formatFechaHoraCorta(n.fechaHora)}</span>
+                    </div>
+                    <p className="mt-2 whitespace-pre-line text-sm">{n.transcripcion}</p>
+                  </li>
+                ))}
+              </ol>
+            </>
+          )}
         </section>
 
         <aside className="space-y-4">
           <div className="rounded-2xl border border-border bg-card p-4">
-            <h3 className="font-display text-sm font-bold">Próximas visitas</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="font-display text-sm font-bold">Próximas citas</h3>
+              <Link href={`/agenda?paciente=${paciente.id}`} className="text-xs font-semibold text-vera-apoyo underline">
+                Agendar cita
+              </Link>
+            </div>
             {proximas.length === 0 ? (
-              <p className="mt-3 text-xs text-muted-foreground">Sin visitas programadas.</p>
+              <p className="mt-3 text-xs text-muted-foreground">Sin citas programadas.</p>
             ) : (
               <ul className="mt-3 space-y-3">
                 {proximas.slice(0, 5).map((v) => (

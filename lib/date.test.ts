@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addDaysISO, edadTexto, hoyISOElSalvador, formatFechaCorta, formatFechaHoraCorta, hoyISO, fechaLargaElSalvador, formatHora, saludoSegunHora } from "./date";
+import { addDaysISO, edadTexto, esFechaISOValida, fechaConMes, hoyISOElSalvador, formatFechaCorta, hoyISO, fechaLargaElSalvador, formatHora, lunesDeLaSemana, saludoSegunHora, sumarDiasISO } from "./date";
 
 describe("hoyISO", () => {
   it("returns today's date in YYYY-MM-DD format", () => {
@@ -138,5 +138,39 @@ describe("formatFechaCorta con año", () => {
   it("agrega el año solo si la fecha no es de este año", () => {
     expect(formatFechaCorta("2026-09-18", "2026-09-18")).not.toMatch(/2026/);
     expect(formatFechaCorta("2023-11-03", "2026-09-18")).toMatch(/2023/);
+  });
+});
+
+describe("sumarDiasISO", () => {
+  it("crosses months and years without touching time zones", () => {
+    expect(sumarDiasISO("2026-10-17", 3)).toBe("2026-10-20");
+    expect(sumarDiasISO("2026-10-31", 1)).toBe("2026-11-01");
+    expect(sumarDiasISO("2026-12-31", 1)).toBe("2027-01-01");
+    expect(sumarDiasISO("2026-03-01", -1)).toBe("2026-02-28");
+  });
+});
+
+describe("lunesDeLaSemana", () => {
+  it("returns the Monday of the week (Monday to Sunday)", () => {
+    expect(lunesDeLaSemana("2026-10-17")).toBe("2026-10-12"); // sábado
+    expect(lunesDeLaSemana("2026-10-12")).toBe("2026-10-12"); // lunes
+    expect(lunesDeLaSemana("2026-10-18")).toBe("2026-10-12"); // domingo
+    expect(lunesDeLaSemana("2027-01-01")).toBe("2026-12-28");
+  });
+});
+
+describe("fechaConMes", () => {
+  it("adds the year only when it differs", () => {
+    expect(fechaConMes("2026-10-13", "2026-10-17")).toBe("13 de octubre");
+    expect(fechaConMes("2025-10-13", "2026-10-17")).toBe("13 de octubre de 2025");
+  });
+});
+
+describe("esFechaISOValida", () => {
+  it("accepts real calendar dates only", () => {
+    expect(esFechaISOValida("2026-10-17")).toBe(true);
+    expect(esFechaISOValida("2026-02-30")).toBe(false);
+    expect(esFechaISOValida("17/10/2026")).toBe(false);
+    expect(esFechaISOValida("2026-10-17T00:00")).toBe(false);
   });
 });

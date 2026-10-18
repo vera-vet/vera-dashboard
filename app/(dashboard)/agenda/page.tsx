@@ -1,65 +1,46 @@
-import { getVisitasProximas } from "@/lib/data/visitas";
-import { formatHora, hoyISOElSalvador } from "@/lib/date";
+import Link from "next/link";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { esIdValido } from "@/lib/api/ids";
+import { getPaciente } from "@/lib/data/pacientes";
+import { getVisitasEntre } from "@/lib/data/visitas";
+import { esFechaISOValida, fechaConMes, hoyISOElSalvador, lunesDeLaSemana, sumarDiasISO } from "@/lib/date";
+import { AgendaSemana } from "./agenda-semana";
 
-const DIAS = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+const BOTON = "inline-flex min-h-11 items-center gap-1 rounded-xl border border-border px-3 text-sm font-semibold hover:bg-secondary";
 
-function inicioSemana(iso: string): Date {
-  const d = new Date(`${iso}T12:00:00`);
-  const offset = (d.getDay() + 6) % 7;
-  d.setDate(d.getDate() - offset);
-  return d;
-}
-
-export default async function AgendaPage() {
-  const visitas = await getVisitasProximas();
+export default async function AgendaPage({ searchParams }: { searchParams: Promise<{ semana?: string; paciente?: string }> }) {
+  const { semana, paciente } = await searchParams;
   const hoy = hoyISOElSalvador();
-  const inicio = inicioSemana(hoy);
-  const dias = Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(inicio);
-    d.setDate(d.getDate() + i);
-    return d.toISOString().slice(0, 10);
-  });
+  // Todo con fechas "YYYY-MM-DD": la semana no depende de la zona horaria del servidor.
+  const lunes = lunesDeLaSemana(semana && esFechaISOValida(semana) ? semana : hoy);
+  const dias = Array.from({ length: 7 }, (_, i) => sumarDiasISO(lunes, i));
 
-  const porFecha = new Map<string, typeof visitas>();
-  for (const v of visitas) {
-    porFecha.set(v.fecha, [...(porFecha.get(v.fecha) ?? []), v]);
-  }
+  const [visitas, pacienteInicial] = await Promise.all([
+    getVisitasEntre(dias[0], dias[6]),
+    paciente && esIdValido(paciente) ? getPaciente(paciente) : Promise.resolve(undefined),
+  ]);
 
   return (
     <div>
-      <header className="pb-6">
-        <h1 className="font-display text-3xl font-bold text-vera-verde">Agenda</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Semana del {new Date(`${dias[0]}T12:00:00`).toLocaleDateString("es-SV", { day: "numeric", month: "long" })}</p>
+      <header className="flex flex-wrap items-end justify-between gap-3 pb-6">
+        <div>
+          <h1 className="font-display text-3xl font-bold text-vera-verde">Agenda</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Semana del {fechaConMes(lunes, hoy)}</p>
+        </div>
+        <nav aria-label="Semanas" className="flex gap-2">
+          <Link href={`/agenda?semana=${sumarDiasISO(lunes, -7)}`} className={BOTON} aria-label="Semana anterior">
+            <ChevronLeft size={16} aria-hidden /> Anterior
+          </Link>
+          <Link href="/agenda" className={BOTON}>
+            Hoy
+          </Link>
+          <Link href={`/agenda?semana=${sumarDiasISO(lunes, 7)}`} className={BOTON} aria-label="Semana siguiente">
+            Siguiente <ChevronRight size={16} aria-hidden />
+          </Link>
+        </nav>
       </header>
 
-      <div className="grid grid-cols-[minmax(0,1fr)] gap-3 lg:grid-cols-7">
-        {dias.map((fecha, i) => (
-          <div key={fecha} className="rounded-2xl border border-border bg-card p-3">
-            <div className="mb-2 text-center">
-              <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{DIAS[i]}</div>
-              <div className={fecha === hoy ? "font-display text-lg font-bold text-vera-apoyo" : "font-display text-lg font-bold"}>
-                {new Date(`${fecha}T12:00:00`).getDate()}
-              </div>
-            </div>
-            <ul className="space-y-2">
-              {(porFecha.get(fecha) ?? []).map((visita) => (
-                <li
-                  key={visita.id}
-                  className={
-                    visita.confirmada
-                      ? "rounded-xl bg-vera-menta-suave p-2 text-xs"
-                      : "rounded-xl border border-dashed border-border p-2 text-xs"
-                  }
-                >
-                  <div className="font-semibold">{visita.hora ? formatHora(visita.hora) : "Sin hora"}</div>
-                  <div className="truncate">{visita.pacienteNombre} · {visita.duenoNombre}</div>
-                </li>
-              ))}
-              {(porFecha.get(fecha) ?? []).length === 0 && <li className="py-4 text-center text-[11px] text-muted-foreground">—</li>}
-            </ul>
-          </div>
-        ))}
-      </div>
+      <AgendaSemana key={lunes} dias={dias} hoy={hoy} visitas={visitas} pacienteInicial={pacienteInicial ?? null} />
     </div>
   );
 }

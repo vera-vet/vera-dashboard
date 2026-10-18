@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { MoreHorizontal } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { LogOut, MoreHorizontal } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { NAV_ITEMS } from "./nav-items";
 import { cn } from "@/lib/utils";
 import {
@@ -19,7 +20,16 @@ const OVERFLOW_ITEMS = NAV_ITEMS.slice(4);
 
 export function MobileNav() {
   const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
+
+  // En móvil no hay barra lateral: cerrar sesión vive aquí (antes no había cómo).
+  async function cerrarSesion() {
+    await fetch("/api/session/logout", { method: "POST" });
+    setOpen(false);
+    router.push("/login");
+    router.refresh();
+  }
 
   const overflowActive = OVERFLOW_ITEMS.some(({ href }) => pathname.startsWith(href));
 
@@ -46,6 +56,7 @@ export function MobileNav() {
           <button
             type="button"
             onClick={() => setOpen(true)}
+            aria-label="Más opciones"
             className={cn(
               "flex min-h-[56px] flex-col items-center justify-center gap-0.5 text-[11px] font-medium",
               overflowActive ? "text-vera-apoyo" : "text-muted-foreground",
@@ -83,6 +94,17 @@ export function MobileNav() {
               );
             })}
           </ul>
+          <div className="flex items-center justify-between border-t border-border px-4 pb-6 pt-4">
+            <button
+              type="button"
+              onClick={cerrarSesion}
+              className="inline-flex min-h-11 items-center gap-3 rounded-2xl px-3 text-sm font-medium text-foreground"
+            >
+              <LogOut size={20} strokeWidth={1.8} aria-hidden />
+              Cerrar sesión
+            </button>
+            <ThemeToggle />
+          </div>
         </SheetContent>
       </Sheet>
     </>

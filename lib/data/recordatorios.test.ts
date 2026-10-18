@@ -22,6 +22,19 @@ describe("mapRecordatorio", () => {
     // Node's full-ICU es-SV locale renders the meridiem as "p. m." (CLDR-standard
     // Spanish), not English "PM" — accept either, matching lib/data/format.test.ts.
     expect(result.cuando).toMatch(/5:00\s*p\.?\s*m\.?/i);
+    expect(result.duenoAceptaWhatsapp).toBe(true);
+    expect(result.servicioProducto).toBeNull();
+  });
+
+  it("maps consent and the originating product", () => {
+    const api: ApiRecordatorio = {
+      id: 2, paciente: 10, paciente_nombre: "Rocky", paciente_foto_url: "", dueno_acepta_whatsapp: false,
+      tipo: "vacuna", servicio_producto: "Séxtuple", programado_para: new Date().toISOString(),
+      mensaje: "A Rocky le toca su próxima vacuna (Séxtuple).", estado: "pendiente", enviado_en: null,
+    };
+    const result = mapRecordatorio(api);
+    expect(result.duenoAceptaWhatsapp).toBe(false);
+    expect(result.servicioProducto).toBe("Séxtuple");
   });
 });
 

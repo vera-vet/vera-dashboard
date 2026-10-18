@@ -85,3 +85,40 @@ export function formatFechaHoraCorta(iso: string): string {
     timeZone: "America/El_Salvador",
   });
 }
+
+// Aritmética de calendario sobre "YYYY-MM-DD", sin pasar por la zona del servidor: se usa
+// Date.UTC solo como calculadora de días.
+function partesISO(iso: string): [number, number, number] {
+  const [y, m, d] = iso.slice(0, 10).split("-").map(Number);
+  return [y, m, d];
+}
+
+function isoDesdeUTC(ms: number): string {
+  return new Date(ms).toISOString().slice(0, 10);
+}
+
+/** "2026-10-17" + 3 → "2026-10-20" (cruza meses y años). */
+export function sumarDiasISO(iso: string, dias: number): string {
+  const [y, m, d] = partesISO(iso);
+  return isoDesdeUTC(Date.UTC(y, m - 1, d + dias));
+}
+
+/** Lunes de la semana de esa fecha (la agenda va de lunes a domingo). */
+export function lunesDeLaSemana(iso: string): string {
+  const [y, m, d] = partesISO(iso);
+  const diaSemana = new Date(Date.UTC(y, m - 1, d)).getUTCDay(); // 0 = domingo
+  return sumarDiasISO(iso, -((diaSemana + 6) % 7));
+}
+
+/** "2026-10-13" → "13 de octubre" (o "13 de octubre de 2025" si no es de este año). */
+export function fechaConMes(iso: string, hoy: string = hoyISOElSalvador()): string {
+  const [y, m, d] = partesISO(iso);
+  const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+  return `${d} de ${meses[m - 1]}${String(y) === hoy.slice(0, 4) ? "" : ` de ${y}`}`;
+}
+
+export function esFechaISOValida(iso: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return false;
+  const [y, m, d] = partesISO(iso);
+  return isoDesdeUTC(Date.UTC(y, m - 1, d)) === iso;
+}

@@ -2,7 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronLeft, Download } from "lucide-react";
 import { getPacienteCompartido, getServiciosCompartido, getNotasConsultaCompartido } from "@/lib/data/comparticiones";
-import { edadTexto, formatFechaCorta, formatFechaHoraCorta } from "@/lib/date";
+import { edadTexto, formatFechaHoraCorta } from "@/lib/date";
+import { HistorialItem } from "@/components/shared/historial-item";
 import { RegistrarVisitaForm } from "./registrar-visita-form";
 
 const ESPECIE_LABEL = { perro: "Perro", gato: "Gato", otro: "Otro" } as const;
@@ -12,8 +13,8 @@ export default async function PacienteCompartidoPage({ params }: { params: Promi
   const paciente = await getPacienteCompartido(id);
   if (!paciente) notFound();
 
-  const servicios = await getServiciosCompartido(id);
-  const notas = await getNotasConsultaCompartido(id);
+  const [servicios, notas] = await Promise.all([getServiciosCompartido(id), getNotasConsultaCompartido(id)]);
+  const sinVisita = notas.filter((n) => !n.servicioVisitaId);
 
   return (
     <div>
@@ -45,29 +46,26 @@ export default async function PacienteCompartidoPage({ params }: { params: Promi
           <ol className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
             {servicios.length === 0 && <li className="p-6 text-center text-sm text-muted-foreground">Sin visitas registradas.</li>}
             {servicios.map((s) => (
-              <li key={s.id} className="p-4">
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span className="font-semibold">{s.tipo}</span>
-                  <span>{formatFechaCorta(s.fecha)}</span>
-                </div>
-                <p className="mt-1 text-sm">{s.producto} · {s.vet}</p>
-              </li>
+              <HistorialItem key={s.id} servicio={s} />
             ))}
           </ol>
 
-          <h2 className="mb-3 mt-8 font-display text-lg font-bold">Transcripciones</h2>
-          <ol className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
-            {notas.length === 0 && <li className="p-6 text-center text-sm text-muted-foreground">Sin transcripciones registradas.</li>}
-            {[...notas].reverse().map((n) => (
-              <li key={n.id} className="p-4">
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span className="font-semibold">{n.empleadoNombre}</span>
-                  <span>{formatFechaHoraCorta(n.fechaHora)}</span>
-                </div>
-                <p className="mt-2 text-sm">{n.transcripcion}</p>
-              </li>
-            ))}
-          </ol>
+          {sinVisita.length > 0 && (
+            <>
+              <h2 className="mb-3 mt-8 font-display text-lg font-bold">Transcripciones sin visita</h2>
+              <ol className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
+                {[...sinVisita].reverse().map((n) => (
+                  <li key={n.id} className="p-4">
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <span className="font-semibold">{n.empleadoNombre}</span>
+                      <span>{formatFechaHoraCorta(n.fechaHora)}</span>
+                    </div>
+                    <p className="mt-2 whitespace-pre-line text-sm">{n.transcripcion}</p>
+                  </li>
+                ))}
+              </ol>
+            </>
+          )}
         </section>
 
         <aside>

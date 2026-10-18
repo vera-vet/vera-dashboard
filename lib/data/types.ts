@@ -16,6 +16,8 @@ export interface Dueno {
   id: string;
   nombre: string;
   whatsapp: string;
+  /** Consentimiento para recibir recordatorios por WhatsApp. */
+  aceptaWhatsapp: boolean;
 }
 
 export interface Paciente {
@@ -28,6 +30,8 @@ export interface Paciente {
   fotoUrl: string;
   duenoId: string;
   duenoNombre: string;
+  /** E.164; vacío en expedientes compartidos (compartir no incluye el contacto). */
+  duenoWhatsapp: string;
   esterilizado: boolean;
   vacunasCompletas: number;
   vacunasTotal: number;
@@ -36,6 +40,14 @@ export interface Paciente {
   alergias: string[];
   notasComportamiento: string[];
   carnetToken: string;
+  /** Solo en expedientes compartidos: la clínica que lo compartió. */
+  clinicaNombre?: string;
+}
+
+export interface NotaDeServicio {
+  id: string;
+  fechaHora: string;
+  texto: string;
 }
 
 export interface ServicioVisita {
@@ -47,6 +59,10 @@ export interface ServicioVisita {
   vet: string;
   aplicada: boolean;
   reporte?: Reporte;
+  /** Clínica que registró la visita cuando no fue la dueña del expediente (compartidos). */
+  clinicaOrigenNombre?: string;
+  /** Notas escritas o transcripciones conectadas a esta visita. */
+  notas: NotaDeServicio[];
 }
 
 export interface Visita {
@@ -68,7 +84,11 @@ export interface Recordatorio {
   pacienteId: string;
   pacienteNombre: string;
   pacienteFotoUrl: string;
+  /** Sin consentimiento, el recordatorio no sale aunque esté pendiente. */
+  duenoAceptaWhatsapp: boolean;
   tipo: string;
+  /** Producto del servicio que lo generó; null en los anteriores a ese dato. */
+  servicioProducto: string | null;
   cuando: string;
   mensaje: string;
   estado: "pendiente" | "pausado" | "enviado" | "cumplido";
@@ -119,9 +139,12 @@ export interface SesionActiva {
   motivo: string;
   inicio: string;
   tipo: "consulta" | "grooming";
+  /** Fecha (YYYY-MM-DD, El Salvador) en que se abrió: si no es hoy, quedó abierta. */
+  fechaInicio?: string;
 }
 
 export interface SalaEsperaItem {
+  id: string;
   pacienteId: string;
   pacienteNombre: string;
   pacienteFotoUrl: string;
@@ -166,6 +189,13 @@ export interface NotaConsulta {
 export interface Clinica {
   id: string;
   nombre: string;
+}
+
+/** La propia clínica, como la edita el admin en Ajustes. */
+export interface MiClinica {
+  id: string;
+  nombre: string;
+  whatsapp: string;
 }
 
 export interface Comparticion {

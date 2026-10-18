@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import type { Paciente } from "@/lib/data/types";
@@ -29,7 +29,16 @@ function FilaPaciente({ paciente, onElegir }: { paciente: Paciente; onElegir: (p
   );
 }
 
-export function SelectorPaciente({ enSala, onElegir }: { enSala: Paciente[]; onElegir: (p: Paciente) => void }) {
+export function SelectorPaciente({
+  enSala,
+  onElegir,
+  etiqueta = "¿A quién atendiste?",
+}: {
+  enSala: Paciente[];
+  onElegir: (p: Paciente) => void;
+  etiqueta?: string;
+}) {
+  const idBuscar = useId();
   const [query, setQuery] = useState("");
   const [resultados, setResultados] = useState<Paciente[]>([]);
   const [buscando, setBuscando] = useState(false);
@@ -65,13 +74,13 @@ export function SelectorPaciente({ enSala, onElegir }: { enSala: Paciente[]; onE
 
   return (
     <section className="rounded-2xl border border-border bg-card p-4">
-      <label htmlFor="registrar-buscar" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-        ¿A quién atendiste?
+      <label htmlFor={idBuscar} className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        {etiqueta}
       </label>
       <div className="mt-2 flex items-center gap-2 rounded-xl border border-border bg-background px-3">
         <Search size={16} className="shrink-0 text-muted-foreground" aria-hidden />
         <input
-          id="registrar-buscar"
+          id={idBuscar}
           type="search"
           value={query}
           onChange={(e) => buscar(e.target.value)}

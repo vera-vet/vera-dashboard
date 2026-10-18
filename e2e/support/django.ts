@@ -140,3 +140,13 @@ from apps.pacientes.models import NotaConsulta
 print(json.dumps(NotaConsulta.objects.filter(transcripcion=${JSON.stringify(nota)}, servicio_visita__isnull=False).count()))
 `);
 }
+
+/** La cita con ese motivo y su recordatorio pendiente, para verificar que lo sigue. */
+export function citaConMotivo(motivo: string): { confirmada: boolean; recordatorio: string | null } | null {
+  return djangoShell<{ confirmada: boolean; recordatorio: string | null } | null>(`${PRELUDE}
+from apps.visitas.models import Visita
+v = Visita.objects.filter(motivo=${JSON.stringify(motivo)}).first()
+r = v.recordatorios.filter(estado__in=("pendiente", "pausado")).first() if v else None
+print(json.dumps(None if v is None else {"confirmada": v.confirmada, "recordatorio": r.mensaje if r else None}))
+`);
+}

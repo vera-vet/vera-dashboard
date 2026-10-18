@@ -101,9 +101,14 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
 
         <aside className="space-y-4">
           <div className="rounded-2xl border border-border bg-card p-4">
-            <h3 className="font-display text-sm font-bold">Próximas visitas</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="font-display text-sm font-bold">Próximas citas</h3>
+              <Link href={`/agenda?paciente=${paciente.id}`} className="text-xs font-semibold text-vera-apoyo underline">
+                Agendar cita
+              </Link>
+            </div>
             {proximas.length === 0 ? (
-              <p className="mt-3 text-xs text-muted-foreground">Sin visitas programadas.</p>
+              <p className="mt-3 text-xs text-muted-foreground">Sin citas programadas.</p>
             ) : (
               <ul className="mt-3 space-y-3">
                 {proximas.slice(0, 5).map((v) => (

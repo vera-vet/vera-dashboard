@@ -98,7 +98,11 @@ Reportes, Registrar, Recordatorios o el carnet, hay que volver a correrlo y actu
     cuenta como etiqueta.
   - **Guía de marca:** `../vera-api/docs/negocio/marca.md` (repo privado). Leerla antes de
     cualquier cambio visual o de copy: paleta, tipografía, reglas de UI y tono.
-- **Público sin sesión:** `/login`, `/carnet/[token]` (carnet de vacunas) y la tienda.
+- **Público sin sesión:** `/login`, `/activar` (definir la contraseña con el enlace de invitación),
+  `/carnet/[token]` (carnet de vacunas) y la tienda.
+- **Cuentas:** el admin de la clínica invita al personal desde Ajustes; la API devuelve un enlace
+  `/activar?uid=&token=` que el admin comparte (no hay correo saliente). Olvidar la contraseña =
+  pedirle al admin un enlace nuevo.
 
 ## Convenciones
 

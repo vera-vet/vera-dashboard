@@ -194,7 +194,17 @@ export interface ApiProducto {
   foto_url: string;
 }
 
+export interface ApiUsuarioEquipo {
+  id: number;
+  email: string;
+  nombre: string;
+  es_admin: boolean;
+  is_active: boolean;
+  last_login: string | null;
+}
+
 export interface ApiUsuario {
+  id?: number;
   email: string;
   nombre: string;
   es_admin: boolean;

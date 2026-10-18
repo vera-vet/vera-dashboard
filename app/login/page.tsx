@@ -77,6 +77,9 @@ export default function LoginPage() {
             {entrando ? "Entrando…" : "Entrar"}
           </Button>
         </form>
+        <p className="mt-6 text-center text-xs text-muted-foreground">
+          ¿Olvidaste tu contraseña? Pídele al administrador de tu clínica un enlace nuevo (Ajustes → Cuentas de acceso).
+        </p>
       </div>
     </main>
   );

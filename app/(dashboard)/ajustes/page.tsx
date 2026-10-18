@@ -1,22 +1,25 @@
 import { getEspecialidades } from "@/lib/data/especialidades";
 import { getMiClinica } from "@/lib/data/mi-clinica";
 import { getEmpleados, getEstaciones } from "@/lib/data/sala";
-import { getMe } from "@/lib/data/usuario";
+import { getMe, getUsuariosEquipo } from "@/lib/data/usuario";
 import { etiquetaTipo } from "@/lib/data/registro";
 import { ClinicaForm } from "./clinica-form";
 import { ConsultoriosSection, EquipoSection } from "./secciones";
+import { MiCuenta, UsuariosSection } from "./usuarios";
 
 export default async function AjustesPage() {
   const [usuario, clinica, empleados, estaciones, especialidades] = await Promise.all([
     getMe(), getMiClinica(), getEmpleados(), getEstaciones(), getEspecialidades(),
   ]);
+  // Las cuentas del personal solo las ve el admin (para el resto la API responde 403).
+  const cuentas = usuario.esAdmin ? await getUsuariosEquipo() : [];
 
   return (
     <div className="max-w-3xl">
       <header className="pb-6">
         <h1 className="font-display text-3xl font-bold text-vera-verde">Ajustes</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Los datos de tu clínica, tu equipo y tus consultorios.
+          Los datos de tu clínica, las cuentas de acceso, tu equipo y tus consultorios.
           {!usuario.esAdmin && " Solo el administrador de la clínica puede cambiarlos."}
         </p>
       </header>
@@ -26,8 +29,11 @@ export default async function AjustesPage() {
         <ClinicaForm clinica={clinica} esAdmin={usuario.esAdmin} />
       </section>
 
+      {usuario.esAdmin && <UsuariosSection usuarios={cuentas} miEmail={usuario.email} />}
       <EquipoSection empleados={empleados} esAdmin={usuario.esAdmin} />
       <ConsultoriosSection estaciones={estaciones} esAdmin={usuario.esAdmin} />
+
+      <MiCuenta />
 
       <section className="mt-8">
         <h2 className="mb-3 font-display text-lg font-bold">Especialidades</h2>

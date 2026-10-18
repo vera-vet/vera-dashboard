@@ -220,7 +220,19 @@ export interface Producto {
   fotoUrl: string;
 }
 
+/** Una cuenta del personal, como la administra el admin en Ajustes. */
+export interface UsuarioEquipo {
+  id: string;
+  email: string;
+  nombre: string;
+  esAdmin: boolean;
+  activo: boolean;
+  /** ISO; null si nunca entró (invitación pendiente). */
+  ultimoAcceso: string | null;
+}
+
 export interface Usuario {
+  id?: string;
   email: string;
   nombre: string;
   esAdmin: boolean;

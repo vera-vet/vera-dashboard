@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { mapConversacion, mapMensaje, mapRecordatorio } from "./recordatorios";
 import type { ApiRecordatorio } from "@/lib/api/types";
 

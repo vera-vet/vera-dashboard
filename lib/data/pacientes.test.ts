@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { mapDueno, mapPaciente, mapServicioVisita } from "./pacientes";
-import type { ApiDueno, ApiPaciente, ApiServicioVisita } from "@/lib/api/types";
+import type { ApiPaciente, ApiServicioVisita } from "@/lib/api/types";
 
 describe("mapDueno", () => {
   it("maps snake_case API fields to the frontend shape", () => {

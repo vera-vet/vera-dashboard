@@ -1,3 +1,8 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    // Las fotos son URLs arbitrarias y el optimizador de imágenes está apagado (next.config.ts):
+    // <img> es lo correcto aquí, no next/image.
+    "@next/next/no-img-element": "off"
+  }
 }

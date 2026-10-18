@@ -1,6 +1,12 @@
 "use client";
 
+import { useEffect } from "react";
 export default function DashboardError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+  // El mensaje real no se le muestra al usuario, pero sí queda en la consola para depurar.
+  useEffect(() => {
+    console.error(error);
+  }, [error]);
+
   return (
     <div className="grid min-h-[60vh] place-items-center px-4 text-center">
       <div>

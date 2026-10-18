@@ -1,5 +1,5 @@
 import { apiFetch } from "@/lib/api/client";
-import { formatFechaHora } from "@/lib/data/format";
+import { formatCuando, formatFechaHora } from "@/lib/data/format";
 import type { ApiConversacion, ApiMensaje, ApiRecordatorio } from "@/lib/api/types";
 import type { Conversacion, Mensaje, Recordatorio } from "@/lib/data/types";
 
@@ -9,15 +9,18 @@ export function mapRecordatorio(api: ApiRecordatorio): Recordatorio {
     pacienteId: String(api.paciente),
     pacienteNombre: api.paciente_nombre,
     pacienteFotoUrl: api.paciente_foto_url,
+    duenoAceptaWhatsapp: api.dueno_acepta_whatsapp ?? true,
     tipo: api.tipo,
-    cuando: formatFechaHora(api.programado_para),
+    servicioProducto: api.servicio_producto ?? null,
+    cuando: formatCuando(api.programado_para),
     mensaje: api.mensaje,
     estado: api.estado as Recordatorio["estado"],
   };
 }
 
+/** La cola de lo que todavía no sale: pendientes y pausados (sin el histórico de enviados). */
 export async function getRecordatoriosProgramados(): Promise<Recordatorio[]> {
-  const response = await apiFetch("/api/recordatorios/");
+  const response = await apiFetch("/api/recordatorios/?estado=pendiente,pausado");
   if (!response.ok) throw new Error(`No se pudieron cargar los recordatorios (${response.status})`);
   const data: ApiRecordatorio[] = await response.json();
   return data.map(mapRecordatorio);

@@ -4,38 +4,45 @@ import type { ApiRecordatorio } from "@/lib/api/types";
 
 describe("mapRecordatorio", () => {
   it("maps snake_case API fields, renaming paciente to pacienteId and formatting programado_para as cuando", () => {
-    const hoy5pm = new Date();
-    hoy5pm.setHours(17, 0, 0, 0);
     const api: ApiRecordatorio = {
       id: 1, paciente: 10, paciente_nombre: "Rocky", paciente_foto_url: "https://example.com/rocky.jpg",
-      tipo: "Recordatorio de cita", programado_para: hoy5pm.toISOString(),
-      mensaje: "Le recordamos la cita de Rocky.", estado: "pendiente",
+      tipo: "vacuna", programado_para: "2026-10-20T09:00:00-06:00",
+      mensaje: "A Rocky le toca su próxima vacuna (Rabia).", estado: "pendiente",
     };
     const result = mapRecordatorio(api);
     expect(result.id).toBe("1");
     expect(result.pacienteId).toBe("10");
     expect(result.pacienteNombre).toBe("Rocky");
     expect(result.pacienteFotoUrl).toBe("https://example.com/rocky.jpg");
-    expect(result.tipo).toBe("Recordatorio de cita");
-    expect(result.mensaje).toBe("Le recordamos la cita de Rocky.");
+    expect(result.tipo).toBe("vacuna");
+    expect(result.mensaje).toBe("A Rocky le toca su próxima vacuna (Rabia).");
     expect(result.estado).toBe("pendiente");
-    // Node's full-ICU es-SV locale renders the meridiem as "p. m." (CLDR-standard
-    // Spanish), not English "PM" — accept either, matching lib/data/format.test.ts.
-    expect(result.cuando).toMatch(/5:00\s*p\.?\s*m\.?/i);
+    // La hora es la de El Salvador sin importar la zona de la máquina.
+    expect(result.cuando).toMatch(/9:00\s*a\.?\s*m\.?$/i);
+    expect(result.duenoAceptaWhatsapp).toBe(true);
+    expect(result.servicioProducto).toBeNull();
+  });
+
+  it("maps consent and the originating product", () => {
+    const api: ApiRecordatorio = {
+      id: 2, paciente: 10, paciente_nombre: "Rocky", paciente_foto_url: "", dueno_acepta_whatsapp: false,
+      tipo: "vacuna", servicio_producto: "Séxtuple", programado_para: "2026-10-20T09:00:00-06:00",
+      mensaje: "A Rocky le toca su próxima vacuna (Séxtuple).", estado: "pendiente", enviado_en: null,
+    };
+    const result = mapRecordatorio(api);
+    expect(result.duenoAceptaWhatsapp).toBe(false);
+    expect(result.servicioProducto).toBe("Séxtuple");
   });
 });
 
 describe("mapMensaje", () => {
   it("maps snake_case API fields and formats created_at as hora", () => {
-    const hoy5pm = new Date();
-    hoy5pm.setHours(17, 0, 0, 0);
-    const result = mapMensaje({ id: 1, autor: "vera", texto: "¡Hola!", created_at: hoy5pm.toISOString() });
+    // Una fecha vieja da un resultado fijo ("3 nov 2025"); lo relativo se prueba en format.test.ts.
+    const result = mapMensaje({ id: 1, autor: "vera", texto: "¡Hola!", created_at: "2025-11-03T17:00:00-06:00" });
     expect(result.id).toBe("1");
     expect(result.autor).toBe("vera");
     expect(result.texto).toBe("¡Hola!");
-    // Node's full-ICU es-SV locale renders the meridiem as "p. m." (CLDR-standard
-    // Spanish), not English "PM" — accept either, matching lib/data/format.test.ts.
-    expect(result.hora).toMatch(/5:00\s*p\.?\s*m\.?/i);
+    expect(result.hora).toMatch(/^3 nov\.? 2025$/);
   });
 });
 

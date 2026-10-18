@@ -7,7 +7,7 @@ import path from "node:path";
 const API_DIR = path.resolve(process.env.VERA_API_DIR ?? path.join(__dirname, "../../../vera-api"));
 const PYTHON = process.env.VERA_API_PYTHON ?? path.join(API_DIR, ".venv/bin/python");
 
-function djangoShell<T>(code: string): T {
+export function djangoShell<T>(code: string): T {
   const out = execFileSync(PYTHON, ["manage.py", "shell", "-c", code], {
     cwd: API_DIR,
     encoding: "utf-8",
@@ -17,7 +17,7 @@ function djangoShell<T>(code: string): T {
   return JSON.parse(lastLine) as T;
 }
 
-const PRELUDE = `
+export const PRELUDE = `
 import json
 from apps.accounts.models import Usuario, Clinica
 from apps.pacientes.models import Dueno, Paciente
@@ -130,5 +130,13 @@ if not conversacion.mensajes.filter(texto=texto).exists():
     Mensaje.objects.create(conversacion=conversacion, autor="vera", texto="Hola. Soy Vera (E2E).")
     Mensaje.objects.create(conversacion=conversacion, autor="dueno", texto=texto)
 print(json.dumps(texto))
+`);
+}
+
+/** Cuántas visitas con esa nota exacta hay en la base (para detectar registros duplicados). */
+export function visitasConNota(nota: string): number {
+  return djangoShell<number>(`${PRELUDE}
+from apps.pacientes.models import NotaConsulta
+print(json.dumps(NotaConsulta.objects.filter(transcripcion=${JSON.stringify(nota)}, servicio_visita__isnull=False).count()))
 `);
 }

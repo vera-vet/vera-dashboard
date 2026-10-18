@@ -4,8 +4,7 @@ import { ConversacionesTab } from "./conversaciones-tab";
 import { ProgramadosTab } from "./programados-tab";
 
 export default async function RecordatoriosPage() {
-  const conversaciones = await getConversaciones();
-  const recordatorios = await getRecordatoriosProgramados();
+  const [conversaciones, recordatorios] = await Promise.all([getConversaciones(), getRecordatoriosProgramados()]);
 
   return (
     <div>
@@ -14,7 +13,8 @@ export default async function RecordatoriosPage() {
         <p className="mt-1 text-sm text-muted-foreground">El corazón de Vera: lo que se envió y lo que está por salir.</p>
       </header>
 
-      <Tabs defaultValue="conversaciones">
+      {/* Una clínica nueva todavía no tiene conversaciones: se abre lo que está por salir. */}
+      <Tabs defaultValue={conversaciones.length === 0 ? "programados" : "conversaciones"}>
         <TabsList>
           <TabsTrigger value="conversaciones">Conversaciones</TabsTrigger>
           <TabsTrigger value="programados">Programados</TabsTrigger>

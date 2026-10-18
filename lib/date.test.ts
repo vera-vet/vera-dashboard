@@ -121,7 +121,7 @@ describe("saludoSegunHora", () => {
 
 describe("fechaLargaElSalvador", () => {
   it("no se adelanta al día siguiente después de las 18:00", () => {
-    expect(fechaLargaElSalvador(new Date("2026-09-19T01:00:00Z"))).toContain("18 de septiembre");
+    expect(fechaLargaElSalvador(new Date("2026-09-19T01:00:00Z"))).toBe("viernes, 18 de septiembre");
   });
 });
 
@@ -136,8 +136,22 @@ describe("formatHora", () => {
 
 describe("formatFechaCorta con año", () => {
   it("agrega el año solo si la fecha no es de este año", () => {
-    expect(formatFechaCorta("2026-09-18", "2026-09-18")).not.toMatch(/2026/);
-    expect(formatFechaCorta("2023-11-03", "2026-09-18")).toMatch(/2023/);
+    expect(formatFechaCorta("2026-09-18", "2026-09-18")).toBe("18 sept");
+    expect(formatFechaCorta("2023-11-03", "2026-09-18")).toBe("3 nov 2023");
+  });
+});
+
+describe("formatFechaHoraCorta", () => {
+  it("usa la hora de El Salvador", () => {
+    expect(formatFechaHoraCorta("2026-10-18T22:05:00Z")).toBe("18 oct, 4:05 p. m.");
+    // 05:59 UTC del 19 todavía es el 18 en El Salvador.
+    expect(formatFechaHoraCorta("2026-10-19T05:59:00Z")).toBe("18 oct, 11:59 p. m.");
+    expect(formatFechaHoraCorta("2026-10-20T06:05:00Z")).toBe("20 oct, 12:05 a. m.");
+  });
+
+  it("no depende del ICU: solo espacios normales", () => {
+    // Con toLocaleString, Node escribía "p.\u00a0m." y Chrome "p. m.", y /pedidos no hidrataba.
+    expect(formatFechaHoraCorta("2026-10-18T22:05:00Z")).not.toMatch(/[\u00a0\u202f]/);
   });
 });
 

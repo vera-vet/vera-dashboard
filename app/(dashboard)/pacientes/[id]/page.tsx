@@ -9,6 +9,9 @@ import { VaccineTimeline } from "@/components/shared/vaccine-timeline";
 import { edadTexto, formatFechaCorta, formatFechaHoraCorta, formatHora, hoyISOElSalvador } from "@/lib/date";
 import { DatosClinicos } from "./datos-clinicos";
 import { HistorialItem } from "@/components/shared/historial-item";
+import { getMe } from "@/lib/data/usuario";
+import { linkWhatsApp, primerNombre } from "@/lib/whatsapp";
+import { EditarDatos } from "./editar-datos";
 import { CompartirPanel } from "./compartir-panel";
 import { AvatarPaciente } from "@/components/shared/avatar-paciente";
 
@@ -19,15 +22,20 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
   const paciente = await getPaciente(id);
   if (!paciente) notFound();
 
-  const [dueno, servicios, visitas, notas, comparticiones] = await Promise.all([
+  const [dueno, servicios, visitas, notas, comparticiones, usuario] = await Promise.all([
     getDueno(paciente.duenoId),
     getServiciosPorPaciente(paciente.id),
     getVisitasPorPaciente(paciente.id),
     getNotasConsultaPorPaciente(paciente.id),
     getComparticionesPorPaciente(paciente.id),
+    getMe(),
   ]);
   const proximas = visitas.filter((v) => v.fecha >= hoyISOElSalvador());
   const sinVisita = notas.filter((n) => !n.servicioVisitaId);
+  // Antes este botón no hacía nada: abre WhatsApp con el saludo de la clínica ya escrito.
+  const escribir = dueno
+    ? linkWhatsApp(dueno.whatsapp, `Hola, ${primerNombre(dueno.nombre)}. Te escribimos de ${usuario.clinicaNombre} sobre ${paciente.nombre}.`)
+    : null;
 
   return (
     <div>
@@ -46,10 +54,20 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
             Dueño: <span className="font-semibold">{dueno?.nombre}</span>{" "}
             <span className="text-muted-foreground">· {dueno?.whatsapp}</span>
           </p>
+          {dueno && !dueno.aceptaWhatsapp && (
+            <p className="mt-1 text-xs font-semibold text-vera-coral-fuerte">No recibe recordatorios por WhatsApp (no lo aceptó o respondió BAJA).</p>
+          )}
         </div>
-        <button className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-whatsapp px-4 text-sm font-semibold text-whatsapp-foreground">
-          <MessageCircle size={16} /> Escribir a {dueno?.nombre.split(" ")[0]}
-        </button>
+        {escribir && (
+          <a
+            href={escribir}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-whatsapp px-4 text-sm font-semibold text-whatsapp-foreground"
+          >
+            <MessageCircle size={16} aria-hidden /> Escribir a {primerNombre(dueno!.nombre)}
+          </a>
+        )}
         <Link
           href={`/registrar?paciente=${paciente.id}`}
           className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground"
@@ -60,8 +78,9 @@ export default async function ExpedientePage({ params }: { params: Promise<{ id:
           href={`/api/pacientes/${paciente.id}/expediente-pdf/`}
           className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border bg-card px-4 text-sm font-semibold text-foreground hover:bg-secondary/50"
         >
-          <Download size={16} /> Descargar PDF
+          <Download size={16} aria-hidden /> Descargar PDF
         </a>
+        <EditarDatos paciente={paciente} dueno={dueno} />
       </section>
 
       <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">

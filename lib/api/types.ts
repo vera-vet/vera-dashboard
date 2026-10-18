@@ -57,6 +57,8 @@ export interface ApiPaciente {
   alergias: string[];
   notas_comportamiento: string[];
   carnet_token: string;
+  /** Solo en expedientes compartidos: la clínica que lo compartió. */
+  clinica_nombre?: string;
 }
 
 export interface ApiVisita {

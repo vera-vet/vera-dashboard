@@ -26,6 +26,7 @@ export function mapPaciente(api: ApiPaciente): Paciente {
     alergias: api.alergias,
     notasComportamiento: api.notas_comportamiento,
     carnetToken: api.carnet_token,
+    ...(api.clinica_nombre ? { clinicaNombre: api.clinica_nombre } : {}),
   };
 }
 
@@ -58,8 +59,10 @@ export function mapServicioVisita(api: ApiServicioVisita): ServicioVisita {
   };
 }
 
-export async function getPacientes(): Promise<Paciente[]> {
-  const response = await apiFetch("/api/pacientes/");
+/** Pacientes de la clínica; con `q`, solo los que coinciden por mascota, dueño o teléfono. */
+export async function getPacientes(q?: string): Promise<Paciente[]> {
+  const texto = q?.trim();
+  const response = await apiFetch(texto ? `/api/pacientes/?q=${encodeURIComponent(texto)}` : "/api/pacientes/");
   if (!response.ok) throw new Error(`No se pudieron cargar los pacientes (${response.status})`);
   const data: ApiPaciente[] = await response.json();
   return data.map(mapPaciente);

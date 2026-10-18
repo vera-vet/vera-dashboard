@@ -40,6 +40,8 @@ export interface Paciente {
   alergias: string[];
   notasComportamiento: string[];
   carnetToken: string;
+  /** Solo en expedientes compartidos: la clínica que lo compartió. */
+  clinicaNombre?: string;
 }
 
 export interface NotaDeServicio {

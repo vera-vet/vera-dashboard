@@ -16,10 +16,13 @@ export default async function CompartidosPage() {
           {pacientes.map((p) => (
             <li key={p.id}>
               <Link href={`/compartidos/${p.id}`} className="flex items-center gap-3 p-4 hover:bg-secondary/50">
-                <Share2 size={16} className="text-vera-apoyo" />
+                <Share2 size={16} className="text-vera-apoyo" aria-hidden />
                 <div>
                   <div className="font-semibold">{p.nombre}</div>
-                  <div className="text-xs text-muted-foreground">{p.raza}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {p.raza} · {p.duenoNombre}
+                    {p.clinicaNombre && <> · Compartido por {p.clinicaNombre}</>}
+                  </div>
                 </div>
               </Link>
             </li>

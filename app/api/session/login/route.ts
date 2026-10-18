@@ -13,7 +13,8 @@ export async function POST(request: Request) {
     });
 
     if (!djangoResponse.ok) {
-      return NextResponse.json({ ok: false }, { status: 401 });
+      // 429 (demasiados intentos) se pasa tal cual: la pantalla dice que espere.
+      return NextResponse.json({ ok: false }, { status: djangoResponse.status === 429 ? 429 : 401 });
     }
 
     const { access, refresh } = await djangoResponse.json();

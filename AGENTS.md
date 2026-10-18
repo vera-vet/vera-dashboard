@@ -85,7 +85,6 @@ Reportes, Registrar, Recordatorios o el carnet, hay que volver a correrlo y actu
   - Fetchers que convierten los tipos snake_case de la API (`lib/api/types.ts`) a tipos de
     dominio camelCase (`lib/data/types.ts`).
   - Cada mapper tiene su test.
-  - `lib/data/seed/` es código muerto del prototipo de Fase 1: no importarlo.
 - **UI:**
   - Componentes shadcn en `components/ui/`, compartidos en `components/shared/`, shell y
     navegación en `components/app-shell/`.
@@ -99,7 +98,11 @@ Reportes, Registrar, Recordatorios o el carnet, hay que volver a correrlo y actu
     cuenta como etiqueta.
   - **Guía de marca:** `../vera-api/docs/negocio/marca.md` (repo privado). Leerla antes de
     cualquier cambio visual o de copy: paleta, tipografía, reglas de UI y tono.
-- **Público sin sesión:** `/login`, `/carnet/[token]` (carnet de vacunas) y la tienda.
+- **Público sin sesión:** `/login`, `/activar` (definir la contraseña con el enlace de invitación),
+  `/carnet/[token]` (carnet de vacunas) y la tienda.
+- **Cuentas:** el admin de la clínica invita al personal desde Ajustes; la API devuelve un enlace
+  `/activar?uid=&token=` que el admin comparte (no hay correo saliente). Olvidar la contraseña =
+  pedirle al admin un enlace nuevo.
 
 ## Convenciones
 
@@ -114,6 +117,7 @@ Reportes, Registrar, Recordatorios o el carnet, hay que volver a correrlo y actu
 
 ## Problemas conocidos
 
-- La "Nota clínica" de Registrar no se guarda: el `Textarea` no está conectado al estado.
 - Las fotos de productos (inventario y tienda) todavía pueden mostrarse rotas; los pacientes ya
   usan `AvatarPaciente`.
+- Registrar no adjunta fotos: el navegador solo tenía URLs `blob:` que morían con la pestaña.
+  Vuelven cuando exista la subida real de archivos.

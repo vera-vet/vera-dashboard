@@ -3,7 +3,7 @@ import type { ApiDueno, ApiMarca, ApiPaciente, ApiReporte, ApiServicioVisita } f
 import type { Dueno, DiagramaTipo, EstadoEsquema, Especie, Marca, Paciente, Reporte, ServicioTipo, ServicioVisita } from "@/lib/data/types";
 
 export function mapDueno(api: ApiDueno): Dueno {
-  return { id: String(api.id), nombre: api.nombre, whatsapp: api.whatsapp };
+  return { id: String(api.id), nombre: api.nombre, whatsapp: api.whatsapp, aceptaWhatsapp: api.acepta_whatsapp ?? true };
 }
 
 export function mapPaciente(api: ApiPaciente): Paciente {
@@ -17,6 +17,7 @@ export function mapPaciente(api: ApiPaciente): Paciente {
     fotoUrl: api.foto_url,
     duenoId: String(api.dueno),
     duenoNombre: api.dueno_nombre,
+    duenoWhatsapp: api.dueno_whatsapp ?? "",
     esterilizado: api.esterilizado,
     vacunasCompletas: api.vacunas_completas,
     vacunasTotal: api.vacunas_total,
@@ -25,6 +26,7 @@ export function mapPaciente(api: ApiPaciente): Paciente {
     alergias: api.alergias,
     notasComportamiento: api.notas_comportamiento,
     carnetToken: api.carnet_token,
+    ...(api.clinica_nombre ? { clinicaNombre: api.clinica_nombre } : {}),
   };
 }
 
@@ -52,11 +54,15 @@ export function mapServicioVisita(api: ApiServicioVisita): ServicioVisita {
     vet: api.vet,
     aplicada: api.aplicada,
     reporte: api.reporte ? mapReporte(api.reporte, String(api.id)) : undefined,
+    clinicaOrigenNombre: api.clinica_origen_nombre ?? undefined,
+    notas: (api.notas ?? []).map((n) => ({ id: String(n.id), fechaHora: n.fecha_hora, texto: n.transcripcion })),
   };
 }
 
-export async function getPacientes(): Promise<Paciente[]> {
-  const response = await apiFetch("/api/pacientes/");
+/** Pacientes de la clínica; con `q`, solo los que coinciden por mascota, dueño o teléfono. */
+export async function getPacientes(q?: string): Promise<Paciente[]> {
+  const texto = q?.trim();
+  const response = await apiFetch(texto ? `/api/pacientes/?q=${encodeURIComponent(texto)}` : "/api/pacientes/");
   if (!response.ok) throw new Error(`No se pudieron cargar los pacientes (${response.status})`);
   const data: ApiPaciente[] = await response.json();
   return data.map(mapPaciente);

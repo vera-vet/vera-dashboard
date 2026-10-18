@@ -41,7 +41,12 @@ export default async function InicioPage() {
       <div className="mt-10 grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
         <section>
           <h2 className="mb-4 font-display text-xl font-bold">Citas de hoy</h2>
-          {visitasHoy.length === 0 && <p className="text-sm text-muted-foreground">No hay citas para hoy.</p>}
+          {visitasHoy.length === 0 && (
+            <p className="text-sm text-muted-foreground">
+              No hay citas para hoy.{" "}
+              <Link href="/agenda" className="font-semibold text-vera-apoyo underline">Abrir la agenda</Link>
+            </p>
+          )}
           <ul className="space-y-3">
             {visitasHoy.map((visita) => (
               <li key={visita.id}>

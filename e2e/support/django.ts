@@ -150,3 +150,36 @@ r = v.recordatorios.filter(estado__in=("pendiente", "pausado")).first() if v els
 print(json.dumps(None if v is None else {"confirmada": v.confirmada, "recordatorio": r.mensaje if r else None}))
 `);
 }
+
+/** Un consultorio de prueba en San Rafael (los del seed pueden estar ocupados). Devuelve su id. */
+export function crearEstacionE2E(nombre: string): number {
+  return djangoShell<number>(`${PRELUDE}
+from apps.sala.models import Estacion
+clinica = Clinica.objects.get(nombre__icontains="San Rafael")
+print(json.dumps(Estacion.objects.create(clinica=clinica, nombre=${JSON.stringify(nombre)}, tipo="consultorio").id))
+`);
+}
+
+/** Borra los consultorios de prueba (y con ellos sus sesiones) y saca a Kira E2E de la espera. */
+export function limpiarSalaE2E(prefijo: string): void {
+  djangoShell<null>(`${PRELUDE}
+from apps.sala.models import Estacion, SalaEsperaItem, SesionActiva
+Estacion.objects.filter(nombre__startswith=${JSON.stringify(prefijo)}).delete()
+SesionActiva.objects.filter(paciente__nombre="Kira E2E").delete()
+SalaEsperaItem.objects.filter(paciente__nombre="Kira E2E").delete()
+print(json.dumps(None))
+`);
+}
+
+export function carnetTokenDe(clinica: string, nombre: string): string {
+  return djangoShell<string>(`${PRELUDE}
+print(json.dumps(str(Paciente.objects.filter(clinica__nombre__icontains=${JSON.stringify(clinica)}, nombre=${JSON.stringify(nombre)}).order_by("id").first().carnet_token)))
+`);
+}
+
+export function setWhatsappClinica(clinica: string, whatsapp: string): void {
+  djangoShell<null>(`${PRELUDE}
+Clinica.objects.filter(nombre__icontains=${JSON.stringify(clinica)}).update(whatsapp=${JSON.stringify(whatsapp)})
+print(json.dumps(None))
+`);
+}

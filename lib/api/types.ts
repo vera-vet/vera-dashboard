@@ -42,6 +42,7 @@ export interface ApiPaciente {
   id: number;
   dueno: number;
   dueno_nombre: string;
+  dueno_whatsapp?: string;
   nombre: string;
   especie: string;
   raza: string;
@@ -129,6 +130,7 @@ export interface ApiSesionActiva {
   motivo: string;
   inicio: string;
   tipo: string;
+  creada_en?: string;
 }
 
 export interface ApiSalaEsperaItem {
@@ -136,8 +138,15 @@ export interface ApiSalaEsperaItem {
   paciente: number;
   paciente_nombre: string;
   paciente_foto_url: string;
+  fecha?: string;
   hora: string;
   motivo: string;
+}
+
+export interface ApiMiClinica {
+  id: number;
+  nombre: string;
+  whatsapp: string;
 }
 
 export interface ApiEspecialidad {

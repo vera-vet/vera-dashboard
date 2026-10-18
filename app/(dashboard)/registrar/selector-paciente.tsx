@@ -1,11 +1,11 @@
 "use client";
 
-import { useId, useRef, useState } from "react";
+import { useId } from "react";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import type { Paciente } from "@/lib/data/types";
 import { AvatarPaciente } from "@/components/shared/avatar-paciente";
-import { buscarPacientes } from "./actions";
+import { useBusquedaPacientes } from "@/hooks/use-busqueda-pacientes";
 
 const ESPECIE_LABEL = { perro: "Perro", gato: "Gato", otro: "Otro" } as const;
 
@@ -39,38 +39,7 @@ export function SelectorPaciente({
   etiqueta?: string;
 }) {
   const idBuscar = useId();
-  const [query, setQuery] = useState("");
-  const [resultados, setResultados] = useState<Paciente[]>([]);
-  const [buscando, setBuscando] = useState(false);
-  const [error, setError] = useState(false);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const ultimaRef = useRef("");
-
-  function buscar(texto: string) {
-    setQuery(texto);
-    ultimaRef.current = texto;
-    setError(false);
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    if (texto.trim().length < 2) {
-      setResultados([]);
-      setBuscando(false);
-      return;
-    }
-    setBuscando(true);
-    debounceRef.current = setTimeout(async () => {
-      try {
-        const encontrados = await buscarPacientes(texto);
-        if (ultimaRef.current !== texto) return; // respuesta obsoleta
-        setResultados(encontrados);
-      } catch {
-        if (ultimaRef.current === texto) setError(true);
-      } finally {
-        if (ultimaRef.current === texto) setBuscando(false);
-      }
-    }, 250);
-  }
-
-  const sinResultados = !buscando && !error && query.trim().length >= 2 && resultados.length === 0;
+  const { query, resultados, buscando, error, sinResultados, buscar } = useBusquedaPacientes();
 
   return (
     <section className="rounded-2xl border border-border bg-card p-4">

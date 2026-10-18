@@ -85,7 +85,6 @@ Reportes, Registrar, Recordatorios o el carnet, hay que volver a correrlo y actu
   - Fetchers que convierten los tipos snake_case de la API (`lib/api/types.ts`) a tipos de
     dominio camelCase (`lib/data/types.ts`).
   - Cada mapper tiene su test.
-  - `lib/data/seed/` es código muerto del prototipo de Fase 1: no importarlo.
 - **UI:**
   - Componentes shadcn en `components/ui/`, compartidos en `components/shared/`, shell y
     navegación en `components/app-shell/`.

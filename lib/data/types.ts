@@ -30,6 +30,8 @@ export interface Paciente {
   fotoUrl: string;
   duenoId: string;
   duenoNombre: string;
+  /** E.164; vacío en expedientes compartidos (compartir no incluye el contacto). */
+  duenoWhatsapp: string;
   esterilizado: boolean;
   vacunasCompletas: number;
   vacunasTotal: number;
@@ -135,9 +137,12 @@ export interface SesionActiva {
   motivo: string;
   inicio: string;
   tipo: "consulta" | "grooming";
+  /** Fecha (YYYY-MM-DD, El Salvador) en que se abrió: si no es hoy, quedó abierta. */
+  fechaInicio?: string;
 }
 
 export interface SalaEsperaItem {
+  id: string;
   pacienteId: string;
   pacienteNombre: string;
   pacienteFotoUrl: string;
@@ -182,6 +187,13 @@ export interface NotaConsulta {
 export interface Clinica {
   id: string;
   nombre: string;
+}
+
+/** La propia clínica, como la edita el admin en Ajustes. */
+export interface MiClinica {
+  id: string;
+  nombre: string;
+  whatsapp: string;
 }
 
 export interface Comparticion {

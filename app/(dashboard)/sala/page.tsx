@@ -1,20 +1,21 @@
+import Link from "next/link";
 import { getSesionesActivas, getSalaEspera, getEstaciones, getEmpleados } from "@/lib/data/sala";
-import { getPacientes } from "@/lib/data/pacientes";
+import { getMe } from "@/lib/data/usuario";
+import { hoyISOElSalvador } from "@/lib/date";
 import { EstacionCard } from "./estacion-card";
-import { AvatarPaciente } from "@/components/shared/avatar-paciente";
-import { formatHora } from "@/lib/date";
+import { SalaEspera } from "./sala-espera";
 
 export default async function SalaPage() {
-  const [sesiones, espera, estaciones, empleados, pacientes] = await Promise.all([
-    getSesionesActivas(), getSalaEspera(), getEstaciones(), getEmpleados(), getPacientes(),
+  const [sesiones, espera, estaciones, empleados, usuario] = await Promise.all([
+    getSesionesActivas(), getSalaEspera(), getEstaciones(), getEmpleados(), getMe(),
   ]);
+  const hoy = hoyISOElSalvador();
 
-  const tarjetas = estaciones.map((estacion) => {
-    const sesion = sesiones.find((s) => s.estacionId === estacion.id);
-    return { estacion, sesion: sesion ?? null };
-  });
-
-  const opcionesPaciente = pacientes.map(({ id, nombre }) => ({ id, nombre }));
+  const tarjetas = estaciones.map((estacion) => ({
+    estacion,
+    sesion: sesiones.find((s) => s.estacionId === estacion.id) ?? null,
+  }));
+  const libres = tarjetas.filter((t) => t.sesion === null).map((t) => t.estacion);
 
   return (
     <div>
@@ -23,33 +24,26 @@ export default async function SalaPage() {
         <p className="mt-1 text-sm text-muted-foreground">Quién atiende a quién, en vivo.</p>
       </header>
 
-      <div className="grid gap-3 sm:grid-cols-2">
-        {tarjetas.map(({ estacion, sesion }) => (
-          <EstacionCard key={estacion.id} estacion={estacion} sesion={sesion} pacientes={opcionesPaciente} empleados={empleados} />
-        ))}
-      </div>
-
-      <h2 className="mb-3 mt-8 font-display text-lg font-bold">Sala de espera</h2>
-      {espera.length === 0 ? (
+      {estaciones.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
-          Nadie esperando ahora.
+          Todavía no hay consultorios.{" "}
+          {usuario.esAdmin ? (
+            <>
+              Agrégalos en <Link href="/ajustes" className="font-semibold text-vera-apoyo underline">Ajustes</Link>.
+            </>
+          ) : (
+            "Pídele al administrador de la clínica que los agregue en Ajustes."
+          )}
         </div>
       ) : (
-        <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
-          {espera.map((item) => (
-            <li key={item.pacienteId} className="flex items-center gap-3 px-5 py-4">
-              <div className="rounded-xl bg-vera-menta-suave px-2.5 py-1.5 text-center font-display text-sm font-bold text-vera-apoyo">
-                {formatHora(item.hora)}
-              </div>
-              <AvatarPaciente nombre={item.pacienteNombre} fotoUrl={item.pacienteFotoUrl} tamano={40} />
-              <div className="min-w-0 flex-1">
-                <div className="truncate text-sm font-semibold">{item.pacienteNombre}</div>
-                <div className="truncate text-xs text-muted-foreground">{item.motivo}</div>
-              </div>
-            </li>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {tarjetas.map(({ estacion, sesion }) => (
+            <EstacionCard key={estacion.id} estacion={estacion} sesion={sesion} empleados={empleados} hoy={hoy} />
           ))}
-        </ul>
+        </div>
       )}
+
+      <SalaEspera espera={espera} libres={libres} empleados={empleados} />
     </div>
   );
 }

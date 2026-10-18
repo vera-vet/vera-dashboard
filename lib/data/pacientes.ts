@@ -17,6 +17,7 @@ export function mapPaciente(api: ApiPaciente): Paciente {
     fotoUrl: api.foto_url,
     duenoId: String(api.dueno),
     duenoNombre: api.dueno_nombre,
+    duenoWhatsapp: api.dueno_whatsapp ?? "",
     esterilizado: api.esterilizado,
     vacunasCompletas: api.vacunas_completas,
     vacunasTotal: api.vacunas_total,

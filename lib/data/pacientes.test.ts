@@ -17,7 +17,7 @@ describe("mapDueno", () => {
 describe("mapPaciente", () => {
   it("maps snake_case API fields to camelCase, renaming dueno to duenoId", () => {
     const api: ApiPaciente = {
-      id: 1, dueno: 5, dueno_nombre: "María López", nombre: "Rocky", especie: "perro", raza: "Labrador", sexo: "M",
+      id: 1, dueno: 5, dueno_nombre: "María López", dueno_whatsapp: "+50371234567", nombre: "Rocky", especie: "perro", raza: "Labrador", sexo: "M",
       fecha_nacimiento: "2022-04-10", foto_url: "https://example.com/rocky.jpg", esterilizado: true,
       vacunas_completas: 5, vacunas_total: 5, estado_esquema: "al_dia", falta_texto: "",
       alergias: ["amoxicilina"], notas_comportamiento: ["Se pone nervioso"],
@@ -26,11 +26,21 @@ describe("mapPaciente", () => {
     expect(mapPaciente(api)).toEqual({
       id: "1", nombre: "Rocky", especie: "perro", raza: "Labrador", sexo: "M",
       fechaNacimiento: "2022-04-10", fotoUrl: "https://example.com/rocky.jpg", duenoId: "5",
-      duenoNombre: "María López",
+      duenoNombre: "María López", duenoWhatsapp: "+50371234567",
       esterilizado: true, vacunasCompletas: 5, vacunasTotal: 5, estadoEsquema: "al_dia",
       faltaTexto: undefined, alergias: ["amoxicilina"], notasComportamiento: ["Se pone nervioso"],
       carnetToken: "11111111-1111-1111-1111-111111111111",
     });
+  });
+
+  it("leaves the owner's WhatsApp empty when the API does not send it (shared records)", () => {
+    const api: ApiPaciente = {
+      id: 2, dueno: 5, dueno_nombre: "María López", nombre: "Luna", especie: "gato", raza: "Persa", sexo: "H",
+      fecha_nacimiento: "2025-04-20", foto_url: "", esterilizado: false,
+      vacunas_completas: 1, vacunas_total: 3, estado_esquema: "falta", falta_texto: "Falta 2ª dosis",
+      alergias: [], notas_comportamiento: [], carnet_token: "22222222-2222-2222-2222-222222222222",
+    };
+    expect(mapPaciente(api).duenoWhatsapp).toBe("");
   });
 
   it("omits faltaTexto when the API returns an empty string", () => {

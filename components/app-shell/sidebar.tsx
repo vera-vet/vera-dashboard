@@ -48,7 +48,7 @@ export function Sidebar({ clinicaNombre }: { clinicaNombre: string }) {
       <div className="flex items-center justify-between border-t border-primary-foreground/10 px-6 py-4">
         <span className="min-w-0 truncate text-xs text-primary-foreground/70">{clinicaNombre}</span>
         <div className="flex items-center gap-1">
-          <ThemeToggle />
+          <ThemeToggle variante="sidebar" />
           <button
             type="button"
             onClick={handleLogout}

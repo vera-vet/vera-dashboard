@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ProductoForm } from "./producto-form";
 import { borrarProducto } from "./actions";
 import type { Producto } from "@/lib/data/types";
+import { FotoProducto } from "@/components/shared/foto-producto";
 
 const CATEGORIA_LABEL = { medicina: "Medicina", alimento: "Alimento", accesorio: "Accesorio" } as const;
 
@@ -30,7 +31,7 @@ export function ProductoCard({ producto, esAdmin }: { producto: Producto; esAdmi
 
   return (
     <li className="flex items-center gap-4 px-5 py-4">
-      <img src={producto.fotoUrl || undefined} alt={producto.nombre} className="h-12 w-12 rounded-full object-cover" />
+      <FotoProducto nombre={producto.nombre} fotoUrl={producto.fotoUrl} />
       <div className="min-w-0 flex-1">
         <div className="font-display text-base font-bold">{producto.nombre}</div>
         <div className="truncate text-xs text-muted-foreground">

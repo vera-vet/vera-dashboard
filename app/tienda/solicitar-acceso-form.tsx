@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { solicitarAcceso } from "./actions-acceso";
 
-export function SolicitarAccesoForm() {
+export function SolicitarAccesoForm({ sesionVencida = false }: { sesionVencida?: boolean }) {
   const [whatsapp, setWhatsapp] = useState("");
   const [enviando, setEnviando] = useState(false);
   const [enviado, setEnviado] = useState(false);
@@ -27,10 +27,13 @@ export function SolicitarAccesoForm() {
 
   return (
     <form onSubmit={enviar} className="space-y-3 rounded-2xl border border-border bg-card p-4">
-      <p className="text-sm text-muted-foreground">Ingresa tu WhatsApp para recibir tu link de acceso a la tienda.</p>
+      {sesionVencida && <p className="text-sm text-vera-coral-fuerte">Tu sesión venció. Pide un link nuevo.</p>}
+      <label htmlFor="tienda-whatsapp" className="block text-sm text-muted-foreground">
+        Escribe tu WhatsApp para recibir tu link de acceso a la tienda.
+      </label>
       <input
-        type="text" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)}
-        placeholder="WhatsApp" className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
+        id="tienda-whatsapp" type="tel" autoComplete="tel" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)}
+        placeholder="Ej. 7123 4567" className="min-h-11 w-full rounded-xl border border-border bg-background px-3 text-base md:text-sm"
       />
       <button
         type="submit" disabled={enviando}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addDaysISO, edadTexto, hoyISOElSalvador, formatFechaCorta, formatFechaHoraCorta, hoyISO, fechaLargaElSalvador, formatHora, saludoSegunHora } from "./date";
+import { addDaysISO, edadTexto, esFechaISOValida, fechaConMes, hoyISOElSalvador, formatFechaCorta, formatFechaHoraCorta, hoyISO, fechaLargaElSalvador, formatHora, lunesDeLaSemana, saludoSegunHora, sumarDiasISO } from "./date";
 
 describe("hoyISO", () => {
   it("returns today's date in YYYY-MM-DD format", () => {
@@ -121,7 +121,7 @@ describe("saludoSegunHora", () => {
 
 describe("fechaLargaElSalvador", () => {
   it("no se adelanta al día siguiente después de las 18:00", () => {
-    expect(fechaLargaElSalvador(new Date("2026-09-19T01:00:00Z"))).toContain("18 de septiembre");
+    expect(fechaLargaElSalvador(new Date("2026-09-19T01:00:00Z"))).toBe("viernes, 18 de septiembre");
   });
 });
 
@@ -136,7 +136,55 @@ describe("formatHora", () => {
 
 describe("formatFechaCorta con año", () => {
   it("agrega el año solo si la fecha no es de este año", () => {
-    expect(formatFechaCorta("2026-09-18", "2026-09-18")).not.toMatch(/2026/);
-    expect(formatFechaCorta("2023-11-03", "2026-09-18")).toMatch(/2023/);
+    expect(formatFechaCorta("2026-09-18", "2026-09-18")).toBe("18 sept");
+    expect(formatFechaCorta("2023-11-03", "2026-09-18")).toBe("3 nov 2023");
+  });
+});
+
+describe("formatFechaHoraCorta", () => {
+  it("usa la hora de El Salvador", () => {
+    expect(formatFechaHoraCorta("2026-10-18T22:05:00Z")).toBe("18 oct, 4:05 p. m.");
+    // 05:59 UTC del 19 todavía es el 18 en El Salvador.
+    expect(formatFechaHoraCorta("2026-10-19T05:59:00Z")).toBe("18 oct, 11:59 p. m.");
+    expect(formatFechaHoraCorta("2026-10-20T06:05:00Z")).toBe("20 oct, 12:05 a. m.");
+  });
+
+  it("no depende del ICU: solo espacios normales", () => {
+    // Con toLocaleString, Node escribía "p.\u00a0m." y Chrome "p. m.", y /pedidos no hidrataba.
+    expect(formatFechaHoraCorta("2026-10-18T22:05:00Z")).not.toMatch(/[\u00a0\u202f]/);
+  });
+});
+
+describe("sumarDiasISO", () => {
+  it("crosses months and years without touching time zones", () => {
+    expect(sumarDiasISO("2026-10-17", 3)).toBe("2026-10-20");
+    expect(sumarDiasISO("2026-10-31", 1)).toBe("2026-11-01");
+    expect(sumarDiasISO("2026-12-31", 1)).toBe("2027-01-01");
+    expect(sumarDiasISO("2026-03-01", -1)).toBe("2026-02-28");
+  });
+});
+
+describe("lunesDeLaSemana", () => {
+  it("returns the Monday of the week (Monday to Sunday)", () => {
+    expect(lunesDeLaSemana("2026-10-17")).toBe("2026-10-12"); // sábado
+    expect(lunesDeLaSemana("2026-10-12")).toBe("2026-10-12"); // lunes
+    expect(lunesDeLaSemana("2026-10-18")).toBe("2026-10-12"); // domingo
+    expect(lunesDeLaSemana("2027-01-01")).toBe("2026-12-28");
+  });
+});
+
+describe("fechaConMes", () => {
+  it("adds the year only when it differs", () => {
+    expect(fechaConMes("2026-10-13", "2026-10-17")).toBe("13 de octubre");
+    expect(fechaConMes("2025-10-13", "2026-10-17")).toBe("13 de octubre de 2025");
+  });
+});
+
+describe("esFechaISOValida", () => {
+  it("accepts real calendar dates only", () => {
+    expect(esFechaISOValida("2026-10-17")).toBe(true);
+    expect(esFechaISOValida("2026-02-30")).toBe(false);
+    expect(esFechaISOValida("17/10/2026")).toBe(false);
+    expect(esFechaISOValida("2026-10-17T00:00")).toBe(false);
   });
 });

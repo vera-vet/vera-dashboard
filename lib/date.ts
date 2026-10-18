@@ -31,11 +31,18 @@ export function saludoSegunHora(ahora: Date = new Date()): string {
   return "Buenas noches";
 }
 
-// Fecha larga de hoy en El Salvador, por ejemplo "jueves, 18 de septiembre".
+// Nombres fijos en vez de toLocaleDateString: el texto de ICU cambia entre versiones (Node
+// escribe "p. m." con un espacio duro y Chrome con uno normal) y, si el servidor y el navegador
+// no escriben exactamente lo mismo, React no puede hidratar la página. A Intl solo se le piden
+// números.
+const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+const MESES_CORTOS = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sept", "oct", "nov", "dic"];
+const DIAS = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+
+// Fecha larga de hoy en El Salvador, por ejemplo "viernes, 18 de septiembre".
 export function fechaLargaElSalvador(ahora: Date = new Date()): string {
-  return ahora.toLocaleDateString("es-SV", {
-    weekday: "long", day: "numeric", month: "long", timeZone: "America/El_Salvador",
-  });
+  const [y, m, d] = partesISO(hoyISOElSalvador(ahora));
+  return `${DIAS[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]}, ${d} de ${MESES[m - 1]}`;
 }
 
 // Meses calendario cumplidos, igual que `edad_texto` en vera-api. Aritmética pura sobre
@@ -56,12 +63,8 @@ export function edadTexto(fechaNacimiento: string, hoy: string = hoyISOElSalvado
 // "2026-09-18" → "18 sept"; si no es de este año, con el año ("3 nov 2023"), para que un
 // historial de varios años no parezca desordenado.
 export function formatFechaCorta(iso: string, hoy: string = hoyISOElSalvador()): string {
-  const otroAnio = iso.slice(0, 4) !== hoy.slice(0, 4);
-  return new Date(`${iso}T00:00:00`).toLocaleDateString("es-SV", {
-    day: "numeric",
-    month: "short",
-    ...(otroAnio ? { year: "numeric" } : {}),
-  });
+  const [y, m, d] = partesISO(iso);
+  return `${d} ${MESES_CORTOS[m - 1]}${String(y) === hoy.slice(0, 4) ? "" : ` ${y}`}`;
 }
 
 // Hora de la API ("08:30:00" o "14:05") → "8:30 a. m." / "2:05 p. m.". Aritmética sobre el
@@ -73,15 +76,50 @@ export function formatHora(hora: string): string {
   return `${h12}:${String(m).padStart(2, "0")} ${sufijo}`;
 }
 
-// For full ISO 8601 datetimes (date + time + offset), e.g. NotaConsulta.fechaHora.
-// Unlike formatFechaCorta, this must NOT append "T00:00:00" — the string already
-// carries a time and timezone offset, and doing so would produce an invalid date.
+// Un instante completo de la API (fecha, hora y zona), por ejemplo NotaConsulta.fechaHora →
+// "18 oct, 4:05 p. m.", en la hora de El Salvador.
 export function formatFechaHoraCorta(iso: string): string {
-  return new Date(iso).toLocaleString("es-SV", {
-    day: "numeric",
-    month: "short",
-    hour: "numeric",
-    minute: "2-digit",
-    timeZone: "America/El_Salvador",
-  });
+  const fecha = new Date(iso);
+  const [, m, d] = partesISO(hoyISOElSalvador(fecha));
+  const partes = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/El_Salvador", hour: "numeric", minute: "numeric", hourCycle: "h23",
+  }).formatToParts(fecha);
+  const valor = (tipo: string) => partes.find((p) => p.type === tipo)?.value ?? "0";
+  return `${d} ${MESES_CORTOS[m - 1]}, ${formatHora(`${valor("hour")}:${valor("minute")}`)}`;
+}
+
+// Aritmética de calendario sobre "YYYY-MM-DD", sin pasar por la zona del servidor: se usa
+// Date.UTC solo como calculadora de días.
+function partesISO(iso: string): [number, number, number] {
+  const [y, m, d] = iso.slice(0, 10).split("-").map(Number);
+  return [y, m, d];
+}
+
+function isoDesdeUTC(ms: number): string {
+  return new Date(ms).toISOString().slice(0, 10);
+}
+
+/** "2026-10-17" + 3 → "2026-10-20" (cruza meses y años). */
+export function sumarDiasISO(iso: string, dias: number): string {
+  const [y, m, d] = partesISO(iso);
+  return isoDesdeUTC(Date.UTC(y, m - 1, d + dias));
+}
+
+/** Lunes de la semana de esa fecha (la agenda va de lunes a domingo). */
+export function lunesDeLaSemana(iso: string): string {
+  const [y, m, d] = partesISO(iso);
+  const diaSemana = new Date(Date.UTC(y, m - 1, d)).getUTCDay(); // 0 = domingo
+  return sumarDiasISO(iso, -((diaSemana + 6) % 7));
+}
+
+/** "2026-10-13" → "13 de octubre" (o "13 de octubre de 2025" si no es de este año). */
+export function fechaConMes(iso: string, hoy: string = hoyISOElSalvador()): string {
+  const [y, m, d] = partesISO(iso);
+  return `${d} de ${MESES[m - 1]}${String(y) === hoy.slice(0, 4) ? "" : ` de ${y}`}`;
+}
+
+export function esFechaISOValida(iso: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return false;
+  const [y, m, d] = partesISO(iso);
+  return isoDesdeUTC(Date.UTC(y, m - 1, d)) === iso;
 }

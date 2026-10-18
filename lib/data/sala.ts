@@ -1,4 +1,5 @@
 import { apiFetch } from "@/lib/api/client";
+import { hoyISOElSalvador } from "@/lib/date";
 import type { ApiEmpleado, ApiEstacion, ApiSalaEsperaItem, ApiSesionActiva } from "@/lib/api/types";
 import type { Empleado, Estacion, Rol, SalaEsperaItem, SesionActiva } from "@/lib/data/types";
 
@@ -23,11 +24,13 @@ export function mapSesionActiva(api: ApiSesionActiva): SesionActiva {
     motivo: api.motivo,
     inicio: api.inicio,
     tipo: api.tipo as "consulta" | "grooming",
+    fechaInicio: api.creada_en ? hoyISOElSalvador(new Date(api.creada_en)) : undefined,
   };
 }
 
 export function mapSalaEsperaItem(api: ApiSalaEsperaItem): SalaEsperaItem {
   return {
+    id: String(api.id),
     pacienteId: String(api.paciente),
     pacienteNombre: api.paciente_nombre,
     pacienteFotoUrl: api.paciente_foto_url,

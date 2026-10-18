@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addDaysISO, edadTexto, hoyISOElSalvador, formatFechaCorta, hoyISO, fechaLargaElSalvador, formatHora, saludoSegunHora } from "./date";
+import { addDaysISO, edadTexto, hoyISOElSalvador, formatFechaCorta, formatFechaHoraCorta, hoyISO, fechaLargaElSalvador, formatHora, saludoSegunHora } from "./date";
 
 describe("hoyISO", () => {
   it("returns today's date in YYYY-MM-DD format", () => {

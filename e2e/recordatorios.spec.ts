@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { datosRecordatorio, recordatorioPendiente } from "./support/django";
+import { datosRecordatorio, recordatorioPendiente } from "./support/recordatorios";
 
 async function abrirProgramados(page: Page) {
   await page.goto("/recordatorios");

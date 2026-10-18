@@ -7,7 +7,7 @@ import path from "node:path";
 const API_DIR = path.resolve(process.env.VERA_API_DIR ?? path.join(__dirname, "../../../vera-api"));
 const PYTHON = process.env.VERA_API_PYTHON ?? path.join(API_DIR, ".venv/bin/python");
 
-function djangoShell<T>(code: string): T {
+export function djangoShell<T>(code: string): T {
   const out = execFileSync(PYTHON, ["manage.py", "shell", "-c", code], {
     cwd: API_DIR,
     encoding: "utf-8",
@@ -17,7 +17,7 @@ function djangoShell<T>(code: string): T {
   return JSON.parse(lastLine) as T;
 }
 
-const PRELUDE = `
+export const PRELUDE = `
 import json
 from apps.accounts.models import Usuario, Clinica
 from apps.pacientes.models import Dueno, Paciente
@@ -138,26 +138,5 @@ export function visitasConNota(nota: string): number {
   return djangoShell<number>(`${PRELUDE}
 from apps.pacientes.models import NotaConsulta
 print(json.dumps(NotaConsulta.objects.filter(transcripcion=${JSON.stringify(nota)}, servicio_visita__isnull=False).count()))
-`);
-}
-
-/** Un recordatorio pendiente de Rocky (San Rafael) con un texto único; devuelve su id. */
-export function recordatorioPendiente(mensaje: string): number {
-  return djangoShell<number>(`${PRELUDE}
-import datetime
-from django.utils import timezone
-from apps.recordatorios.models import Recordatorio
-rocky = Paciente.objects.filter(clinica__nombre__icontains="San Rafael", nombre="Rocky").order_by("id").first()
-r = Recordatorio.objects.create(paciente=rocky, tipo="vacuna", mensaje=${JSON.stringify(mensaje)},
-                                programado_para=timezone.now() + datetime.timedelta(days=3))
-print(json.dumps(r.id))
-`);
-}
-
-export function datosRecordatorio(id: number): { estado: string; mensaje: string } {
-  return djangoShell<{ estado: string; mensaje: string }>(`${PRELUDE}
-from apps.recordatorios.models import Recordatorio
-r = Recordatorio.objects.get(id=${id})
-print(json.dumps({"estado": r.estado, "mensaje": r.mensaje}))
 `);
 }

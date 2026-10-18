@@ -25,6 +25,15 @@ export async function getVisitasHoy(): Promise<Visita[]> {
   return data.map(mapVisita);
 }
 
+/** Citas entre dos fechas "YYYY-MM-DD", inclusive (la semana de la agenda). */
+export async function getVisitasEntre(desde: string, hasta: string): Promise<Visita[]> {
+  const params = new URLSearchParams({ desde, hasta });
+  const response = await apiFetch(`/api/visitas/?${params}`);
+  if (!response.ok) throw new Error(`No se pudieron cargar las citas (${response.status})`);
+  const data: ApiVisita[] = await response.json();
+  return data.map(mapVisita);
+}
+
 export async function getVisitasProximas(): Promise<Visita[]> {
   const response = await apiFetch("/api/visitas/proximas/");
   if (!response.ok) throw new Error(`No se pudieron cargar las próximas visitas (${response.status})`);

@@ -4,16 +4,20 @@ import type { ApiDueno, ApiPaciente, ApiServicioVisita } from "@/lib/api/types";
 
 describe("mapDueno", () => {
   it("maps snake_case API fields to the frontend shape", () => {
-    expect(mapDueno({ id: 1, nombre: "María López", whatsapp: "+503 7123 4567" })).toEqual({
-      id: "1", nombre: "María López", whatsapp: "+503 7123 4567",
+    expect(mapDueno({ id: 1, nombre: "María López", whatsapp: "+50371234567", acepta_whatsapp: false })).toEqual({
+      id: "1", nombre: "María López", whatsapp: "+50371234567", aceptaWhatsapp: false,
     });
+  });
+
+  it("assumes consent when an older API does not send it", () => {
+    expect(mapDueno({ id: 1, nombre: "María López", whatsapp: "+50371234567" }).aceptaWhatsapp).toBe(true);
   });
 });
 
 describe("mapPaciente", () => {
   it("maps snake_case API fields to camelCase, renaming dueno to duenoId", () => {
     const api: ApiPaciente = {
-      id: 1, dueno: 5, dueno_nombre: "María López", nombre: "Rocky", especie: "perro", raza: "Labrador", sexo: "M",
+      id: 1, dueno: 5, dueno_nombre: "María López", dueno_whatsapp: "+50371234567", nombre: "Rocky", especie: "perro", raza: "Labrador", sexo: "M",
       fecha_nacimiento: "2022-04-10", foto_url: "https://example.com/rocky.jpg", esterilizado: true,
       vacunas_completas: 5, vacunas_total: 5, estado_esquema: "al_dia", falta_texto: "",
       alergias: ["amoxicilina"], notas_comportamiento: ["Se pone nervioso"],
@@ -22,11 +26,21 @@ describe("mapPaciente", () => {
     expect(mapPaciente(api)).toEqual({
       id: "1", nombre: "Rocky", especie: "perro", raza: "Labrador", sexo: "M",
       fechaNacimiento: "2022-04-10", fotoUrl: "https://example.com/rocky.jpg", duenoId: "5",
-      duenoNombre: "María López",
+      duenoNombre: "María López", duenoWhatsapp: "+50371234567",
       esterilizado: true, vacunasCompletas: 5, vacunasTotal: 5, estadoEsquema: "al_dia",
       faltaTexto: undefined, alergias: ["amoxicilina"], notasComportamiento: ["Se pone nervioso"],
       carnetToken: "11111111-1111-1111-1111-111111111111",
     });
+  });
+
+  it("leaves the owner's WhatsApp empty when the API does not send it (shared records)", () => {
+    const api: ApiPaciente = {
+      id: 2, dueno: 5, dueno_nombre: "María López", nombre: "Luna", especie: "gato", raza: "Persa", sexo: "H",
+      fecha_nacimiento: "2025-04-20", foto_url: "", esterilizado: false,
+      vacunas_completas: 1, vacunas_total: 3, estado_esquema: "falta", falta_texto: "Falta 2ª dosis",
+      alergias: [], notas_comportamiento: [], carnet_token: "22222222-2222-2222-2222-222222222222",
+    };
+    expect(mapPaciente(api).duenoWhatsapp).toBe("");
   });
 
   it("omits faltaTexto when the API returns an empty string", () => {
@@ -49,8 +63,19 @@ describe("mapServicioVisita", () => {
     };
     expect(mapServicioVisita(api)).toEqual({
       id: "1", pacienteId: "10", tipo: "vacuna", producto: "Rabia", fecha: "2022-08-10",
-      vet: "Dra. Ramírez", aplicada: true, reporte: undefined,
+      vet: "Dra. Ramírez", aplicada: true, reporte: undefined, clinicaOrigenNombre: undefined, notas: [],
     });
+  });
+
+  it("maps the visit's notes and the clinic that registered it", () => {
+    const api: ApiServicioVisita = {
+      id: 1, paciente: 10, tipo: "consulta", producto: "General", fecha: "2026-10-17", vet: "Dr. Gómez",
+      aplicada: true, reporte: null, clinica_origen_nombre: "Clínica del Valle",
+      notas: [{ id: 3, fecha_hora: "2026-10-17T10:00:00-06:00", transcripcion: "Otitis leve." }],
+    };
+    const result = mapServicioVisita(api);
+    expect(result.clinicaOrigenNombre).toBe("Clínica del Valle");
+    expect(result.notas).toEqual([{ id: "3", fechaHora: "2026-10-17T10:00:00-06:00", texto: "Otitis leve." }]);
   });
 
   it("maps a nested reporte when present", () => {

@@ -5,6 +5,7 @@ import type { ServicioVisita } from "@/lib/data/types";
 
 const servicio = (producto: string, fecha: string): ServicioVisita => ({
   id: producto, pacienteId: "1", tipo: "vacuna", producto, fecha, vet: "Dra. Molina", aplicada: true, reporte: undefined,
+  notas: [],
 });
 
 describe("VaccineTimeline", () => {

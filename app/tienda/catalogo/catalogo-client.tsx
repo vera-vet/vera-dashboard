@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Producto } from "@/lib/data/types";
 import { guardarCarrito, leerCarrito, type ItemCarrito } from "../carrito";
+import { FotoProducto } from "@/components/shared/foto-producto";
 
 export function CatalogoClient({ productos }: { productos: Producto[] }) {
   const [carrito, setCarrito] = useState<ItemCarrito[]>([]);
@@ -36,7 +37,7 @@ export function CatalogoClient({ productos }: { productos: Producto[] }) {
       <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
         {productos.map((producto) => (
           <li key={producto.id} className="flex items-center gap-4 px-5 py-4">
-            <img src={producto.fotoUrl || undefined} alt={producto.nombre} className="h-12 w-12 rounded-full object-cover" />
+            <FotoProducto nombre={producto.nombre} fotoUrl={producto.fotoUrl} />
             <div className="min-w-0 flex-1">
               <div className="font-display text-base font-bold">{producto.nombre}</div>
               <div className="text-xs text-muted-foreground">${producto.precio.toFixed(2)}</div>

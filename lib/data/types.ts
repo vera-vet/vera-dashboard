@@ -261,6 +261,7 @@ export interface Pedido {
   id: string;
   duenoId: string;
   duenoNombre: string;
+  duenoWhatsapp: string;
   tipoEntrega: TipoEntrega;
   direccionEntrega: string;
   estado: EstadoPedido;

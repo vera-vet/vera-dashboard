@@ -223,6 +223,7 @@ export interface ApiPedido {
   id: number;
   dueno: number;
   dueno_nombre: string;
+  dueno_whatsapp?: string;
   tipo_entrega: string;
   direccion_entrega: string;
   estado: string;

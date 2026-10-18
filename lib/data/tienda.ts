@@ -19,6 +19,7 @@ export function mapPedido(api: ApiPedido): Pedido {
     id: String(api.id),
     duenoId: String(api.dueno),
     duenoNombre: api.dueno_nombre,
+    duenoWhatsapp: api.dueno_whatsapp ?? "",
     tipoEntrega: api.tipo_entrega as TipoEntrega,
     direccionEntrega: api.direccion_entrega,
     estado: api.estado as EstadoPedido,
@@ -27,9 +28,26 @@ export function mapPedido(api: ApiPedido): Pedido {
   };
 }
 
+// Con la sesión vencida se borra la cookie antes de volver a /tienda: si no, /tienda (que ve la
+// cookie) redirige al catálogo, que da 401, y así para siempre.
+const SESION_VENCIDA = "/api/tienda/salir?vencida=1";
+
+export interface ClinicaTienda {
+  nombre: string;
+  whatsapp: string;
+  duenoNombre: string;
+}
+
+export async function getClinicaTienda(): Promise<ClinicaTienda | null> {
+  const response = await apiFetchTienda("/api/tienda/clinica/").catch(() => null);
+  if (!response?.ok) return null;
+  const data = await response.json();
+  return { nombre: data.nombre, whatsapp: data.whatsapp ?? "", duenoNombre: data.dueno_nombre ?? "" };
+}
+
 export async function getCatalogoTienda(): Promise<Producto[]> {
   const response = await apiFetchTienda("/api/tienda/productos/");
-  if (response.status === 401) redirect("/tienda");
+  if (response.status === 401) redirect(SESION_VENCIDA);
   if (!response.ok) throw new Error(`No se pudo cargar el catálogo (${response.status})`);
   const data: ApiProducto[] = await response.json();
   return data.map(mapProducto);
@@ -37,7 +55,7 @@ export async function getCatalogoTienda(): Promise<Producto[]> {
 
 export async function getMisPedidos(): Promise<Pedido[]> {
   const response = await apiFetchTienda("/api/tienda/mis-pedidos/");
-  if (response.status === 401) redirect("/tienda");
+  if (response.status === 401) redirect(SESION_VENCIDA);
   if (!response.ok) throw new Error(`No se pudieron cargar tus pedidos (${response.status})`);
   const data: ApiPedido[] = await response.json();
   return data.map(mapPedido);

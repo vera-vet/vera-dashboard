@@ -40,7 +40,9 @@ export default function PagoSimuladoPage({ params }: { params: Promise<{ pedidoI
 
   return (
     <div className="space-y-4 rounded-2xl border border-border bg-card p-6 text-center">
-      <p className="text-sm text-muted-foreground">Pantalla de pago simulado (desarrollo) -- pedido #{pedidoId}.</p>
+      <p className="text-sm text-muted-foreground">
+        Pago de prueba del pedido #{pedidoId}: con el proveedor de pago real, aquí se paga con tarjeta.
+      </p>
       <button
         type="button" onClick={pagar} disabled={procesando}
         className="w-full rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-60"

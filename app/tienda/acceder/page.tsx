@@ -25,6 +25,9 @@ function AccederContent() {
         if (data.ok) {
           vaciarCarrito();
           router.push("/tienda/catalogo");
+          // El layout de la tienda se renderizó sin sesión: se refresca para que diga de qué
+          // clínica es y muestre la navegación.
+          router.refresh();
         } else {
           setError(data.error || "No se pudo entrar. Pide un link nuevo.");
         }
